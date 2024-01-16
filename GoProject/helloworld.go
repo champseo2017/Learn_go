@@ -5,11 +5,11 @@ import (
 )
 
 /*
- ประกาศตัวแปร name ด้วย := ไว้ภายในฟังก์ชัน main
- := จะต้องประกาศตัวแปรไว้ภายในฟังก์ชันใดฟังก์ชันหนึ่งเท่านั้น
+ ประกาศตัวแปร name ด้วย := ไว้นอก functions ผิด
 */
 
+name := "Orapin"
+
 func main() {
-	name := "Orapin"
 	fmt.Println("Hello World! ", name)
 }
