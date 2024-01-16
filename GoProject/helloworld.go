@@ -5,23 +5,21 @@ import (
 )
 
 /*
-แสดงการประกาศตัวแปรหลายตัว
+ขอบเขตของตัวแปร
 */
+
+// global_var เป็น global variable
+var global_var int = 10
 
 func main() {
 
-	var (
-		prd_id1   = "D001"
-		prd_name1 = "T-Shirt"
-		price1    = 250
-	)
+	// local_var เป็น local variable
+	var local_var int = 20
 
-	var (
-		prd_id2   = "D002"
-		prd_name2 = "Shoe"
-		price2    = 499
-	)
+	fmt.Println("global variable is ", global_var)
+	fmt.Println("local variable is ", local_var)
+}
 
-	fmt.Println("Product : ", prd_id1, " | ", prd_name1, " | ", price1, "Baht")
-	fmt.Println("product : ", prd_id2, " | ", prd_name2, " | ", price2, "Baht")
+func show() {
+	fmt.Println("global variable is ", global_var)
 }
