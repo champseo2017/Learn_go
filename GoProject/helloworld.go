@@ -1,17 +1,17 @@
 package main
 
+import (
+	"fmt"
+)
+
 /*
- การประกาศตัวแปรหลายตัว
+แสดงการประกาศตัวแปรหลายตัว
 */
+var prd_id1, prd_id2 = "D001", "D002"
 
 func main() {
-	var num1, num2, num3 = 10, 20, 30
-	var n1, n2, n3 int = 100, 200, 300
-	var (
-		product = "Perfume"
-		price   = 2500
-		inStock = true
-	)
-	str1, str2 := "aaa", "bbb"
-	name, age := "Somsri", 18
+	prd_name1, price1 := "T-Shirt", 250
+	prd_name2, price2 := "Shoe", 499
+	fmt.Println("Product : ", prd_id1, " | ", prd_name1, " | ", price1, "Baht")
+	fmt.Println("product : ", prd_id2, " | ", prd_name2, " | ", price2, "Baht")
 }
