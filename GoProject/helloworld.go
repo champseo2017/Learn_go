@@ -5,16 +5,15 @@ import (
 )
 
 /*
-ตัวแปรแบบโกลบอล และ โลคอลของ บล็อกการทำงาน
+ใช้ชื่อตัวแปร ซ้ำกันของตัวแปรแบบโกลบอล และ โลคอล
+จะพิจารณา ค่าข้อมูลของตัวแปรแบบ โลคอลเป็นหลัก (ถ้าซ้ำกัน)
 */
+
+var num int = 10
 
 func main() {
 
-	var myvar1 int = 10
-	{
-		var myvar2 int = 20
-		fmt.Println("variable1 is ", myvar1)
-		fmt.Println("variable2 is ", myvar2)
-	}
+	var num int = 20
+	fmt.Println("my number is ", num)
 
 }
