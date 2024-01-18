@@ -5,17 +5,20 @@ import (
 )
 
 /*
-แสดงการเปลี่ยนแปลงค่าของตัวแปร
+แสดงการประกาศตัวแปรเป็นชนิดข้อมูลแบบเลขจำนวนเต็ม
 */
 
 func main() {
 
-	var num1 int = 20
-	num1 = 30
+	var number int = 100
+	var number2 int
+	number2 = -200
+	var number3 uint8 = 250
+	number4 := 300
 
-	num2 := 200
-	num2 = 300
-
-	fmt.Println("two number is ", num1, num2)
+	fmt.Println(number)
+	fmt.Println(number2)
+	fmt.Println(number3)
+	fmt.Println(number4)
 
 }
