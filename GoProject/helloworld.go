@@ -5,17 +5,17 @@ import (
 )
 
 /*
-การประกาศตัวแปรแบบไม่กำหนดค่าเริ่มต้นให้ตัวแปร
+แสดงการเปลี่ยนแปลงค่าของตัวแปร
 */
 
 func main() {
 
-	var num int
-	var str string
-	var b bool
+	var num1 int = 20
+	num1 = 30
 
-	fmt.Println("Default value of num", num)
-	fmt.Println("Default value of str", str)
-	fmt.Println("Default value of b", b)
+	num2 := 200
+	num2 = 300
+
+	fmt.Println("two number is ", num1, num2)
 
 }
