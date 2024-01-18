@@ -5,23 +5,17 @@ import (
 )
 
 /*
-ประกาศตัวแปรแบบค่าคงที่หลายตัว
+การประกาศตัวแปรแบบไม่กำหนดค่าเริ่มต้นให้ตัวแปร
 */
 
 func main() {
 
-	const (
-		TAX = 0.12
-		VAT = 0.1
-	)
+	var num int
+	var str string
+	var b bool
 
-	const PRODUCT_TAG = "Nat"
-	const PRODUCT_QA = 2500
-	TAX = 0.15
-
-	fmt.Println("product tag = ", PRODUCT_TAG)
-	fmt.Println("product quantity = ", PRODUCT_QA)
-	fmt.Println("tax = ", TAX)
-	fmt.Println("vat = ", VAT)
+	fmt.Println("Default value of num", num)
+	fmt.Println("Default value of str", str)
+	fmt.Println("Default value of b", b)
 
 }
