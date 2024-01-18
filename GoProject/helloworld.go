@@ -5,16 +5,25 @@ import (
 )
 
 /*
-ประกาศตัวแปรเป็นชนิดข้อมูลแบบเลขทศนิยม
-
-%v พิมพ์ค่าข้อมูลของตัวแปรในรูปแบบ default format
-%.2f พิมพ์ค่าข้อมูลเลขทศนิยมแบบแสดงจุดทศนิยม 2 หลักโดยมีการปัดเศษ จาก .65 เป็น .66
+ประกาศตัวแปรเป็นชนิดข้อมูลแบบ จำนวนเชิงซ้อน
 */
 
 func main() {
 
-	var myFloat = 587.6599
-	fmt.Printf("Type of myFloat is %T \n", myFloat)
-	fmt.Printf("Type of myFloat is %v (%.2f)\n", myFloat, myFloat)
+	var a float32 = 5
+	var b float32 = 10
+
+	x := 20 + 30i
+	var y complex64 = complex(1, 2)
+	z := complex(a, b)
+
+	addComplex := y + z
+
+	fmt.Printf("Type of x is %T, value of x is %v\n", x, x)
+	fmt.Printf("Type of x is %T, value of x is %v\n", y, y)
+	fmt.Printf("Type of x is %T, value of x is %v\n", z, z)
+	fmt.Printf("y+z = %v\n", addComplex)
+	fmt.Println("Real of y + z = ", real(addComplex))
+	fmt.Println("Imaginary of y + z = ", imag(addComplex))
 
 }
