@@ -5,13 +5,23 @@ import (
 )
 
 /*
-โปรแกรมแสดงการประกาศตัวแปรแบบค่าคงที่ 1 ตัว
+ประกาศตัวแปรแบบค่าคงที่หลายตัว
 */
 
 func main() {
 
-	const PI = 3.14
-	var circumference = 2 * PI * 2
-	fmt.Println("circumference = ", circumference)
+	const (
+		TAX = 0.12
+		VAT = 0.1
+	)
+
+	const PRODUCT_TAG = "Nat"
+	const PRODUCT_QA = 2500
+	TAX = 0.15
+
+	fmt.Println("product tag = ", PRODUCT_TAG)
+	fmt.Println("product quantity = ", PRODUCT_QA)
+	fmt.Println("tax = ", TAX)
+	fmt.Println("vat = ", VAT)
 
 }
