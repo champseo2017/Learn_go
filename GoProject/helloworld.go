@@ -4,26 +4,18 @@ import (
 	"fmt"
 )
 
-/*
-ประกาศตัวแปรเป็นชนิดข้อมูลแบบ จำนวนเชิงซ้อน
-*/
-
 func main() {
+	// ประกาศตัวแปรเป็นชนิดข้อมูลแบบ byte และ rune
+	s1 := "abcd"
+	s2 := "Hello"
 
-	var a float32 = 5
-	var b float32 = 10
+	byte_s := []byte(s1) // แปลง s1 เป็น slice ของ byte
+	rune_s := []rune(s2) // แปลง s2 เป็น slice ของ rune
 
-	x := 20 + 30i
-	var y complex64 = complex(1, 2)
-	z := complex(a, b)
-
-	addComplex := y + z
-
-	fmt.Printf("Type of x is %T, value of x is %v\n", x, x)
-	fmt.Printf("Type of x is %T, value of x is %v\n", y, y)
-	fmt.Printf("Type of x is %T, value of x is %v\n", z, z)
-	fmt.Printf("y+z = %v\n", addComplex)
-	fmt.Println("Real of y + z = ", real(addComplex))
-	fmt.Println("Imaginary of y + z = ", imag(addComplex))
-
+	// ใช้ fmt.Printf สำหรับการจัดรูปแบบข้อความ
+	// %c แสดงข้อมูลในรูปแบบของ character หรือ rune
+	// %T แสดงประเภทของตัวแปร
+	// %v แสดงค่าของตัวแปรในรูปแบบ default
+	fmt.Printf("Type of %c is %T and value is %v\n", byte_s, byte_s, byte_s)
+	fmt.Printf("Type of %c is %T and value is %v\n", rune_s, rune_s, rune_s)
 }
