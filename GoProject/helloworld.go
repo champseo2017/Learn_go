@@ -4,11 +4,27 @@ import (
 	"fmt"
 )
 
-func main() {
-	// ประกาศตัวแปรเป็นชนิดข้อมูลบูลีน
-	var bool_val1 bool
-	bool_val2 := 1 < 2
+/*
+ในภาษา Go, ข้อมูลชนิด string ถือว่าเป็น "immutable" หรือ ไม่สามารถเปลี่ยนแปลงได้
 
-	fmt.Printf("bool_val1 is %v\n", bool_val1)
-	fmt.Printf("bool_val2 is %v\n", bool_val2)
+*/
+
+func main() {
+	// ประกาศตัวแปรเป็นชนิดข้อมูลสตริง
+	str := "Hello, world!"
+	// ลองเปลี่ยนแปลง character ใน string
+	// บรรทัดต่อไปนี้จะทำให้เกิด error เนื่องจาก string ใน Go เป็น immutable
+	// str[0] = 'h'  // ไม่สามารถทำได้
+
+	// วิธีที่ถูกต้องในการเปลี่ยนแปลง string คือการสร้าง string ใหม่
+	newStr := "h" + str[1:]
+
+	x := "\"hello golang\"\n I Love"
+	y := `"Hello golang"\n I Love`
+
+	fmt.Println(x)
+	fmt.Println()
+	fmt.Println(y)
+	fmt.Println(newStr) // จะแสดงผล "hello, world!"
+
 }
