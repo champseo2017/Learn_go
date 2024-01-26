@@ -5,16 +5,20 @@ import (
 )
 
 /*
-ใช้ Scan() รับข้อมูลอินพุตจากหน้าจอโปรแกรม
-
-newline ถูกนับเป็นช่องว่าง โปรแกรมกำหนดให้รับ 2 input หากป้อนค่าไม่ครบ newline ถือว่าเป็นการขึ้นบรรทัดใหม่
+function Scanln() รับข้อมูลอินพุตจากหน้าจอโปรแกรม
 
 */
 
 func main() {
 
-	fmt.Print("Pleases enter your name :")
-	var name, surname string
-	fmt.Scan(&name, &surname)
-	fmt.Printf("Hello, %v %v!\n", name, surname)
+	fmt.Print("Please enter your")
+	var name, surname, dept string
+	count, err := fmt.Scanln(&name, &surname, &dept)
+	fmt.Printf("Number of input is \"%v\"\n", count)
+	if err == nil {
+		fmt.Printf("Hello 1")
+	} else {
+		fmt.Printf(" Req 3")
+		fmt.Printf("Error is \"%v\"\n", err)
+	}
 }
