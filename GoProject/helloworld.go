@@ -5,20 +5,16 @@ import (
 )
 
 /*
-การทำ Type Conversion
+ใช้ Scan() รับข้อมูลอินพุตจากหน้าจอโปรแกรม
+
+newline ถูกนับเป็นช่องว่าง โปรแกรมกำหนดให้รับ 2 input หากป้อนค่าไม่ครบ newline ถือว่าเป็นการขึ้นบรรทัดใหม่
 
 */
 
 func main() {
 
-	var x int = 5
-	var y int = 10
-	var result float32
-
-	// explicit type conversion
-	result = float32(x) * float32(y)
-
-	fmt.Println("x = ", x)
-	fmt.Println("y = ", y)
-	fmt.Println("Multiplication of x and y = ", result)
+	fmt.Print("Pleases enter your name :")
+	var name, surname string
+	fmt.Scan(&name, &surname)
+	fmt.Printf("Hello, %v %v!\n", name, surname)
 }
