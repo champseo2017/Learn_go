@@ -5,20 +5,20 @@ import (
 )
 
 /*
-การทำงานของตัวดำเนินการ ทางตรรกศาสตร์
+การทำ Type Conversion
 
 */
 
 func main() {
 
-	var x int = 25
-	var y int = 30
+	var x int = 5
+	var y int = 10
+	var result float32
 
-	result1 := x < y && y == 30
-	result2 := x > y || y == 30
-	result3 := !(y == 30)
-	fmt.Println("x < y && y == 30 is", result1)
-	fmt.Println("x > y || y == 30 is", result2)
-	fmt.Println("!(y == 30) is", result3)
+	// explicit type conversion
+	result = float32(x) * float32(y)
 
+	fmt.Println("x = ", x)
+	fmt.Println("y = ", y)
+	fmt.Println("Multiplication of x and y = ", result)
 }
