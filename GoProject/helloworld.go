@@ -5,19 +5,21 @@ import (
 )
 
 /*
-แสดงการทำงานของตัวดำเนินการทางคณิตศาสตร์
+การทำงานของตัวดำเนินการเปรียบเทียบ
 
 */
 
 func main() {
 
-	var a int = 20
-	var b int = 6
+	var x int = 100
+	var y int = 50
+	var z int = 100
 
-	fmt.Println("a + b = ", a+b)
-	fmt.Println("a - b = ", a-b)
-	fmt.Println("a * b = ", a*b)
-	fmt.Println("a / b = ", a/b)
-	fmt.Println("a % b = ", a%b)
+	fmt.Println("x == z is ", x == z)
+	fmt.Println("x != y is ", x != y)
+	fmt.Println("x > y is ", x > y)
+	fmt.Println("x < y is ", x < y)
+	fmt.Println("x >= z is ", x >= z)
+	fmt.Println("x <= y is ", x <= y)
 
 }
