@@ -5,23 +5,20 @@ import (
 )
 
 /*
-Sscanln สแกนอ่านข้อมูลจากสตริงที่กำหนด
+Sscanf() สแกนอ่านข้อมูลจาก สตริงที่กำหนด
 
-Sscanln() แตก string ออกเป็นส่วนๆ และ นำไปใช้งาน Sscanln() จะหยุด scan เมื่อพบ \n
+fmt.Sscanf("string to parse", "format string", &var1, &var2, ...)
 
 */
 
 func main() {
 
-	message := "I love golang \n Golang programming"
+	var dept_id, dept_name, emp string
+	var num int
 
-	var s1, s2, s3, s4 string
-	var ss1, ss2, ss3, ss4 string
+	fmt.Sscanf("82201 : IT", "%s : %s", &dept_id, &dept_name)
+	fmt.Sscanf("82201 : IT", "%s : %s IT", &num, &emp)
 
-	fmt.Sscan(message, &s1, &s2, &s3, &s4)
-	fmt.Printf("%s %s %s %s", s1, s2, s3, s4)
-	fmt.Println()
-	fmt.Sscanln(message, &ss1, &ss2, &ss3, &ss4)
-	fmt.Printf("%s %s %s %s", ss1, ss2, ss3, ss4)
+	fmt.Printf("IT : %s\n", dept_name)
 
 }
