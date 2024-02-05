@@ -5,20 +5,17 @@ import (
 )
 
 /*
-function Scanln() รับข้อมูลอินพุตจากหน้าจอโปรแกรม
+แม่ 2 และ แม่ 3 ใช้คำสั่ง Nested-for
 
 */
 
 func main() {
 
-	fmt.Print("Please enter your")
-	var name, surname, dept string
-	count, err := fmt.Scanln(&name, &surname, &dept)
-	fmt.Printf("Number of input is \"%v\"\n", count)
-	if err == nil {
-		fmt.Printf("Hello 1")
-	} else {
-		fmt.Printf(" Req 3")
-		fmt.Printf("Error is \"%v\"\n", err)
+	for i:= 2; i <=3; i++ {
+		fmt.Printf("%d times table\n", i)
+		for j := 1; j <= 12; j++ {
+			fmt.Printf("%d*%d \t = \t %d\n", i, j, i * j)
+		}
+		fmt.Println()
 	}
 }
