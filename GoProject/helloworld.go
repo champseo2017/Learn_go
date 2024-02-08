@@ -6,20 +6,24 @@ import (
 )
 
 /*
- ParseBool() แปลงค่าสตริงไปเป็นบูลีน
+ แปลงค่าเลขจำนวนเต็มไปเป็นสตริง
+
+ Itoa()
+ FormatInt()
+ FormatUint()
 
 */
 
 func main() {
 
-	str1 := "1"
-	str2 := "0"
-	str3 := "true"
-	str4 := "false"
+	s1 := strconv.Itoa(97)
+	s2 := strconv.FormatInt(97, 10)
+	s3 := strconv.FormatInt(-97, 16)
+	s4 := strconv.FormatUint(97, 16)
 
-	fmt.Println(strconv.ParseBool(str1))
-	fmt.Println(strconv.ParseBool(str2))
-	fmt.Println(strconv.ParseBool(str3))
-	fmt.Println(strconv.ParseBool(str4))
+	fmt.Printf("Itoa() \"%s\"\n", s1)
+	fmt.Printf("FormatInt() \"%s\"\n", s2)
+	fmt.Printf("FormatInt() \"%s\"\n", s3)
+	fmt.Printf("FormatUint() \"%s\"\n", s4)
 
 }
