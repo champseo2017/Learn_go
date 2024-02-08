@@ -6,19 +6,20 @@ import (
 )
 
 /*
- ParseFloat() แปลงค่าสตริงไปเป็นเลขทศนิยม
+ ParseBool() แปลงค่าสตริงไปเป็นบูลีน
 
 */
 
 func main() {
 
-	var str = "3.14156"
-	number, err := strconv.ParseFloat(str, 64)
-	
-	if err == nil {
-		fmt.Printf("string \"%s\" with int32 base 10 : %f\n", str, number)
-	} else {
-		fmt.Printf("Error is %v\n", err)
-	}
+	str1 := "1"
+	str2 := "0"
+	str3 := "true"
+	str4 := "false"
+
+	fmt.Println(strconv.ParseBool(str1))
+	fmt.Println(strconv.ParseBool(str2))
+	fmt.Println(strconv.ParseBool(str3))
+	fmt.Println(strconv.ParseBool(str4))
 
 }
