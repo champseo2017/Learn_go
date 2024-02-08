@@ -2,23 +2,25 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 /*
-Sscanf() สแกนอ่านข้อมูลจาก สตริงที่กำหนด
-
-fmt.Sscanf("string to parse", "format string", &var1, &var2, ...)
+ ฟังค์ชั่น Atoi() แปลงค่าสตริงไปเป็นเลขจำนวนเต็ม int ฐาน 10
 
 */
 
 func main() {
 
-	var dept_id, dept_name, emp string
-	var num int
+	var str = "9876"
+	number, err := strconv.Atoi(str)
+	number2, err := strconv.ParseInt(str, 10, 0)
 
-	fmt.Sscanf("82201 : IT", "%s : %s", &dept_id, &dept_name)
-	fmt.Sscanf("82201 : IT", "%s : %s IT", &num, &emp)
-
-	fmt.Printf("IT : %s\n", dept_name)
+	if err == nil {
+		fmt.Printf("string \"%s\" with Atoi() to int : %d\n", str, number)
+		fmt.Printf("string \"%s\" with ParseInt() to int : %d\n", str, number2)
+	} else {
+		fmt.Printf("Error is %v\n", err)
+	}
 
 }
