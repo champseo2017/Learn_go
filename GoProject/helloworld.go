@@ -4,23 +4,20 @@ import (
 	"fmt"
 )
 
-// ประเภทโครงสร้าง (Structure types)
-type Person struct {
-    Name string
-    Age int
+// ประเภทฟังก์ชัน (Function types)
+// ประกาศฟังก์ชัน add ที่รับพารามิเตอร์เป็น x และ y และคืนค่าเป็นผลบวกของ x และ y
+func add(x int, y int) int {
+    return x + y
 }
 
-
 func main() {
-  // สร้างตัวแปร p ประเภท Person และกำหนดค่าให้กับฟิลด์
-  p := Person{Name: "John Doe", Age: 30}
-  // แสดงค่าของ p ออกมา
-  fmt.Println(p)
-  // การเข้าถึงฟิลด์ของโครงสร้างและแสดงค่า
-  fmt.Printf("%s is %d years old.\n", p.Name, p.Age)
+  // เรียกใช้ฟังก์ชัน add ด้วยค่า 5 และ 7
+  result := add(5, 7)
+  // แสดงผลลัพธ์
+  fmt.Println("The result of adding 5 and 7 is:", result)
   /* 
-    เราได้ประกาศโครงสร้าง Person ที่มีฟิลด์ Name และ Age
-    ในฟังก์ชัน main, เราสร้างตัวแปร p ประเภท Person และกำหนดค่าให้กับฟิลด์ Name และ Age
-    จากนั้นเราใช้ fmt.Println เพื่อแสดงค่าของ p และ fmt.Printf เพื่อแสดงชื่อและอายุของ p ออกมาในรูปแบบข้อความ
+    เราได้ประกาศฟังก์ชัน add ที่รับพารามิเตอร์สองตัวคือ x และ y ทั้งคู่เป็นประเภท int และคืนค่าเป็นผลบวกของ x และ y
+    ในฟังก์ชัน main, เราเรียกใช้ฟังก์ชัน add โดยส่งค่า 5 และ 7 เข้าไป และเก็บผลลัพธ์ที่ได้ในตัวแปร result
+    จากนั้นเราใช้ fmt.Println เพื่อแสดงผลลัพธ์ออกมา ซึ่งในกรณีนี้คือ "The result of adding 5 and 7 is: 12"
   */
 }
