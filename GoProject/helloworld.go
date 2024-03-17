@@ -2,21 +2,16 @@ package main
 
 import "fmt"
 
-// Arithmetic
+// Relational operators
 
 func main() {
-	var a int = 10
-	var b int = 3
+	var a int = 5
+	var b int = 10
 
-	fmt.Println("a + b = ", a+b) // บวก
-	fmt.Println("a - b = ", a-b) // ลบ
-	fmt.Println("a * b = ", a*b) // คูณ
-	fmt.Println("a / b = ", a/b) // หาร
-	fmt.Println("a % b =", a%b)  // หารเอาเศษ
-
-	a++ // เพิ่มค่า a ขึ้นหนึ่ง
-	fmt.Println("a++ = ", a)
-
-	b-- // ลดค่า b ลงหนึ่ง
-	fmt.Println("b-- = ", b)
+	fmt.Println("a == b:", a == b) // เท่ากับ
+	fmt.Println("a != b:", a != b) // ไม่เท่ากับ
+	fmt.Println("a > b:", a > b)   // มากกว่า
+	fmt.Println("a < b:", a < b)   // น้อยกว่า
+	fmt.Println("a >= b:", a >= b) // มากกว่าหรือเท่ากับ
+	fmt.Println("a <= b:", a <= b) // น้อยกว่าหรือเท่ากับ
 }
