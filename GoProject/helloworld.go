@@ -2,17 +2,35 @@ package main
 
 import "fmt"
 
-// ประกาศตัวแปร p, q, r ที่ระดับ package พร้อมกำหนดค่าเริ่มต้น
-var p, q, r int = 150, 250, 300
+// Operator
 
 func main() {
-    // ประกาศและกำหนดค่าเริ่มต้นให้กับตัวแปร a ในฟังก์ชัน main
-    a := 10
-    // ประกาศและกำหนดค่าเริ่มต้นให้กับตัวแปร x และ y ในฟังก์ชัน main
-    x, y := 100, 200
-    // ไม่จำเป็นต้องประกาศ p, q, r ใหม่ เพราะมีการประกาศไว้นอก main แล้ว
-    // แสดงค่าของตัวแปร a, x, y, p, q, r ออกมา
-    fmt.Println("a:", a)
-    fmt.Println("x:", x, "y:", y)
-    fmt.Println("p:", p, "q:", q, "r:", r)
+	// ตัวอย่างตัวดำเนินการคณิตศาสตร์
+	fmt.Println("5 + 3 =", 5+3) // บวก
+	fmt.Println("5 - 3 =", 5-3) // ลบ
+	fmt.Println("5 * 3 =", 5*3) // คูณ
+	fmt.Println("5 / 3 =", 5/3) // หาร
+	fmt.Println("5 % 3 =", 5%3) // หารเอาเศษ
+
+	// ตัวอย่างตัวดำเนินการเปรียบเทียบ
+	fmt.Println("5 == 3:", 5 == 3) // เท่ากับ
+	fmt.Println("5 != 3:", 5 != 3) // ไม่เท่ากับ
+	fmt.Println("5 < 3:", 5 < 3)   // น้อยกว่า
+	fmt.Println("5 > 3:", 5 > 3)   // มากกว่า
+
+	// ตัวอย่างตัวดำเนินการตรรกะ
+	fmt.Println("true && false =", true && false) // และ
+	fmt.Println("true || false =", true || false) // หรือ
+	fmt.Println("!true =", !true)                 // ไม่
+
+	// ตัวอย่างตัวดำเนินการบิตไวส์
+	fmt.Println("5 & 3 =", 5&3)   // AND
+	fmt.Println("5 | 3 =", 5|3)   // OR
+	fmt.Println("5 ^ 3 =", 5^3)   // XOR
+	fmt.Println("5 &^ 3 =", 5&^3) // AND NOT
+
+	// ตัวอย่างตัวดำเนินการกำหนดค่า
+	var a int = 5
+	a += 3 // a = a + 3
+	fmt.Println("a += 3:", a)
 }
