@@ -1,15 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 /*
-การกำหนดค่าใหม่ให้กับตัวแปรที่มีอยู่แล้วในบล็อกโค้ดเดียวกัน
-
+เราสามารถพิมพ์ประเภทของตัวแปรใน Golang ได้อย่างไร?
 */
 
 func main() {
-	a := 10
-	a, b := 20, 30 // การประกาศใหม่ที่ถูกต้อง เนื่องจากมีการแนะนำ b ซึ่งเป็นตัวแปรใหม่
-	fmt.Println("value of a:", a)
-	fmt.Println("value of b:", b)
+	var x = 10.5
+	fmt.Println("Type of x:", reflect.TypeOf(x))
 }
