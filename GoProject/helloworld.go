@@ -2,16 +2,28 @@ package main
 
 import "fmt"
 
-// Relational operators
+/*
+ตัวดำเนินการทางตรรกะ อ้างอิงตารางต่อไปนี้:
+
+&& ตัวดำเนินการ AND ทางตรรกะ
+|| ตัวดำเนินการ OR ทางตรรกะ
+! เรียกว่าตัวดำเนินการ NOT ทางตรรกะ และใช้เพื่อกลับสถานะตรรกะของ operand หากเงื่อนไขเป็นจริง ตัวดำเนินการ NOT ทางตรรกะจะทำให้เป็นเท็จ
+
+*/
 
 func main() {
-	var a int = 5
-	var b int = 10
-
-	fmt.Println("a == b:", a == b) // เท่ากับ
-	fmt.Println("a != b:", a != b) // ไม่เท่ากับ
-	fmt.Println("a > b:", a > b)   // มากกว่า
-	fmt.Println("a < b:", a < b)   // น้อยกว่า
-	fmt.Println("a >= b:", a >= b) // มากกว่าหรือเท่ากับ
-	fmt.Println("a <= b:", a <= b) // น้อยกว่าหรือเท่ากับ
+	var a int = 10
+	var b int = 20
+	// ตัวดำเนินการ AND ทางตรรกะ
+	if a != b && a <= b {
+		fmt.Println("True") // แสดง "True"
+	}
+	// ตัวดำเนินการ OR ทางตรรกะ
+	if a != b || a <= b {
+		fmt.Println("true") // แสดง "True"
+	}
+	// ตัวดำเนินการ NOT ทางตรรกะ
+	if !(a == b) {
+		fmt.Println("true") // แสดง "True"
+	}
 }
