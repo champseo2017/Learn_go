@@ -1,29 +1,36 @@
 package main
 
-// แพ็คเกจใน Golang
+import "fmt"
 
-// การนำเข้าแพ็คเกจ fmt
+// การประกาศฟังก์ชัน
+func add(x int, y int) int {
+	return x + y
+}
 
-/*
-เราสามารถพิมพ์ประเภทของตัวแปรใน Golang ได้อย่างไร?
-*/
+// การคืนค่าหลายค่า
+func swap(x, y string) (string, string) {
+	return y, x
+}
+
+// การคืนค่าที่มีชื่อ
+func split(sum int) (x, y int) {
+	x = sum * 4 / 9
+	y = sum - x
+	return
+}
 
 func main() {
-	// ความแตกต่างระหว่างตัวดำเนินการ = และ :=
-	var x int = 10 // ใช้ = เมื่อประกาศตัวแปรพร้อมกำหนดประเภท
-	y := 20        // ใช้ := เมื่อประกาศตัวแปรโดยไม่ต้องระบุประเภท (type inference)
-	// สตริงลิเทอรัลใน Golang
-	var str string = "Hello, World"
-	// ค่าเริ่มต้นของตัวแปรในฟังก์ชันใน Golang
-	var localVariable int // ค่าเริ่มต้นของ int คือ 0
-	// การประกาศตัวแปรแบบมีประเภทคงที่ใน Golang
-	var staticTypeVariable int = 30
-	// เราหาความยาวของสตริงใน Golang ได้อย่างไร?
-	length := len("Hello, World") // ใช้ฟังก์ชัน len
-	// ประเภทข้อมูลสตริงใน Golang
-	var myString string = "Golang"
-	// คุณสามารถเปลี่ยนตัวอักษรเฉพาะในสตริงได้หรือไม่?
-	// ใน Golang, สตริงเป็น immutable ไม่สามารถเปลี่ยนค่าตัวอักษรเฉพาะได้โดยตรง
-	s := "hello"
-	s = "j" + s[1:] // สร้างสตริงใหม่ "jello" และกำหนดให้กับตัวแปร s คำสั่ง s[1:] ใน Go เป็นการใช้ "slicing" กับสตริง s ถ้า s := "hello" แล้ว s[1:] จะได้ "ello" เพราะมันเลือกสตริงตั้งแต่ตัวอักษร 'e' (ตำแหน่งที่ 1) ไปจนถึง 'o' (ตัวอักษรสุดท้าย)
+	// เรียกใช้ฟังก์ชัน add ด้วยการส่งค่า 42 และ 13 
+    // และแสดงผลลัพธ์ด้วย fmt.Println
+	fmt.Println(add(42, 13))
+
+	 // เรียกใช้ฟังก์ชัน swap ด้วยการส่งค่า "hello" และ "world"
+    // และกำหนดผลลัพธ์ให้กับตัวแปร a และ b
+	a, b := swap("hello", "world")
+	fmt.Println(a, b)
+
+	// เรียกใช้ฟังก์ชัน split ด้วยการส่งค่า 17
+    // และแสดงผลลัพธ์ทั้งสองค่าที่ได้จากฟังก์ชัน split ด้วย fmt.Println
+	x, y := split(17)
+	fmt.Println(x, y)
 }
