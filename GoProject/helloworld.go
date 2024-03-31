@@ -3,29 +3,17 @@ package main
 import "fmt"
 
 /*
-ภาษา Go อนุญาตให้ตั้งชื่อให้กับพารามิเตอร์ที่เป็นค่าคืนกลับ (return หรือ result) ของฟังก์ชันได้ในการประกาศฟังก์ชัน นอกจากนี้ Go ยังมีการรองรับการคืนค่าหลายค่า (multiple return values) ในตัว ความสามารถนี้ถูกใช้เพื่อคืนทั้งค่าผลลัพธ์และค่าข้อผิดพลาด (error) จากฟังก์ชัน
+ในภาษา Go ฟังก์ชันสามารถคืนค่าหลายค่าได้โดยใช้คำสั่ง return ชนิดของค่าที่คืนจะขึ้นอยู่กับชนิดของพารามิเตอร์ที่กำหนดในรายการพารามิเตอร์ ดังที่แสดงด้านล่าง
 */
 
-func divide(a, b float64) (result float64, err error) {
-	if b == 0 {
-		err = fmt.Errorf("cannot divide by zero")
-		return
-	}
-	result = a / b
-	return
+// ฟังก์ชัน testfunc คืนค่า 2 ค่าที่เป็นชนิด int
+func testfunc(x, y int) (int, int) {
+	return x + y, x - y
 }
 
 func main() {
-	result, err := divide(10, 2)
-	if err != nil {
-		fmt.Println("Error:", err)
-	} else {
-		fmt.Println("Result:", result)
-	}
-	result, err = divide(10, 0)
-	if err != nil {
-		fmt.Println("Error:", err)
-	} else {
-		fmt.Println("Result", result)
-	}
+	// กำหนดค่าที่คืนจากฟังก์ชันให้กับตัวแปรต่างกัน
+	testVar1 , testVar2 := testfunc(10, 20)
+	fmt.Printf("ผลบวก: %d", testVar1)
+	fmt.Printf("\nผลลบ: %d", testVar2)
 }
