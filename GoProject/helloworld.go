@@ -1,21 +1,22 @@
 package main
 
-/*
-ฟังก์ชัน (Function) ในภาษา Go
-ฟังก์ชันคือส่วนย่อยของโค้ดที่ทำงานอิสระ
-มีหน้าที่รับค่าอินพุต (input) ประมวลผล และส่งค่าเอาต์พุต (output) กลับไป
-ประกอบด้วยกลุ่มของคำสั่ง (statement) ที่ทำงานตามลำดับเพื่อให้ได้ผลลัพธ์ที่ต้องการ
-เป็นส่วนสำคัญในการสร้างโปรแกรม Go ช่วยแบ่งโค้ดเป็นส่วนย่อยที่มีหน้าที่เฉพาะและง่ายต่อการทำความเข้าใจ
+import "fmt"
 
-ตัวอย่างโครงสร้างของฟังก์ชันในภาษา Go:
-func functionName(parameter1 type1, parameter2 type2) returnType {
-    // function body
-    // statements
-    return result
-}
+/*
+ในภาษา Go การกำหนดฟังก์ชันมีรูปแบบดังนี้
 */
 
+func add(x int, y int) int {
+	return x + y
+}
 
+func greet(name string) {
+	fmt.Printf("Hello, %s!\n", name)
+}
+
+func swap(x, y string) (string, string) {
+	return y, x
+}
 
 func main() {
 	
