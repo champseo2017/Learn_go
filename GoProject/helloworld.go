@@ -20,4 +20,5 @@ func main() {
 
 	replace(x)
 	fmt.Printf("\nvalue of x after function call = %d", x)
+	// จะเห็นว่าค่าของ x ไม่เปลี่ยนแปลง เพราะการเปลี่ยนค่าใน replace ไม่มีผลต่อ x ใน main
 }
