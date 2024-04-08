@@ -1,64 +1,101 @@
 package main
 
+import "fmt"
+
 /*
-กล่าวถึงโครงสร้างควบคุมการทำงานในภาษา Go ซึ่งใช้ในการเปลี่ยนแปลงลำดับการทำงานของโปรแกรมและทำให้โปรแกรมสามารถเรียกใช้โค้ดตามเงื่อนไขที่กำหนด โดยจะครอบคลุมเรื่องการตัดสินใจในภาษา Go โดยใช้คำสั่ง if, if…else, if…else if…else, switch…case และ fallthrough นอกจากนี้ยังครอบคลุมแนวคิดเกี่ยวกับการวนลูป ได้แก่ for loop, nested for loop และคำสั่งควบคุมลูป เช่น break, goto, continue เป็นต้น
-
-คำสั่ง if และ if…else:
-if condition {
-    // code to execute if condition is true
+ตัวอย่างการใช้คำสั่ง if…else:
+if age >= 18 {
+    fmt.Println("You are eligible to vote")
 } else {
-    // code to execute if condition is false
+    fmt.Println("You are not eligible to vote")
 }
-ถ้าเงื่อนไข condition เป็นจริง โค้ดภายในบล็อก if จะถูกเรียกใช้งาน
-ถ้าเงื่อนไข condition เป็นเท็จ โค้ดภายในบล็อก else จะถูกเรียกใช้งาน
 
-คำสั่ง if…else if…else:
-if condition1 {
-    // code to execute if condition1 is true
-} else if condition2 {
-    // code to execute if condition2 is true
+ตัวอย่างการใช้คำสั่ง if…else if…else:
+if grade >= 80 {
+    fmt.Println("Grade: A")
+} else if grade >= 70 {
+    fmt.Println("Grade: B")
+} else if grade >= 60 {
+    fmt.Println("Grade: C")
 } else {
-    // code to execute if all conditions are false
+    fmt.Println("Grade: F")
 }
-ถ้าเงื่อนไข condition1 เป็นจริง โค้ดภายในบล็อก if จะถูกเรียกใช้งาน
-ถ้าเงื่อนไข condition1 เป็นเท็จ แต่เงื่อนไข condition2 เป็นจริง โค้ดภายในบล็อก else if จะถูกเรียกใช้งาน
-ถ้าทุกเงื่อนไขเป็นเท็จ โค้ดภายในบล็อก else จะถูกเรียกใช้งาน
 
-คำสั่ง switch…case:
-switch expression {
-case value1:
-    // code to execute if expression matches value1
-case value2:
-    // code to execute if expression matches value2
+ตัวอย่างการใช้คำสั่ง switch…case:
+switch dayNumber {
+case 1:
+    fmt.Println("Monday")
+case 2:
+    fmt.Println("Tuesday")
+case 3:
+    fmt.Println("Wednesday")
+case 4:
+    fmt.Println("Thursday")
+case 5:
+    fmt.Println("Friday")
+case 6:
+    fmt.Println("Saturday")
+case 7:
+    fmt.Println("Sunday")
 default:
-    // code to execute if no case matches
+    fmt.Println("Invalid day number")
 }
-expression จะถูกประเมินและเปรียบเทียบกับค่าในแต่ละ case
-ถ้าค่าของ expression ตรงกับค่าในกรณีใด โค้ดภายในกรณีนั้นจะถูกเรียกใช้งาน
-ถ้าไม่มีกรณีใดตรงกับค่าของ expression โค้ดภายในบล็อก default จะถูกเรียกใช้งาน
 
-คำสั่ง for loop:
-for initialization; condition; update {
-    // code to execute in each iteration
+ตัวอย่างการใช้ for loop:
+for i := 1; i <= 5; i++ {
+    fmt.Println(i)
 }
-initialization คือการกำหนดค่าเริ่มต้นของตัวแปรที่ใช้ในลูป
-condition คือเงื่อนไขในการทำงานของลูป ลูปจะทำงานต่อไปจนกว่าเงื่อนไขจะเป็นเท็จ
-update คือการอัปเดตค่าของตัวแปรที่ใช้ในลูปหลังจากแต่ละรอบ
 
-คำสั่งควบคุมลูป (break, continue):
-for condition {
-    if anotherCondition {
-        break
+ตัวอย่างการใช้ nested for loop:
+for i := 1; i <= 3; i++ {
+    for j := 1; j <= 3; j++ {
+        fmt.Printf("(%d, %d) ", i, j)
     }
-    if yetAnotherCondition {
+    fmt.Println()
+}
+
+ตัวอย่างการใช้ break และ continue:
+for i := 1; i <= 5; i++ {
+    if i == 3 {
         continue
     }
-    // code to execute in each iteration
+    if i == 4 {
+        break
+    }
+    fmt.Println(i)
 }
-break ใช้เพื่อหยุดการทำงานของลูปทันที
-continue ใช้เพื่อข้ามการทำงานในรอบปัจจุบันและไปเริ่มต้นรอบถัดไปของลูป
 */
 
 func main() {
+	// nested for loop:
+	// for i := 1; i <= 3; i++ {
+	// 	for j := 1; j <= 3; j++ {
+	// 		fmt.Printf("(%d, %d) ", i, j)
+	// 	}
+	// 	fmt.Println()
+	// }
+	// ตัวอย่างการใช้คำสั่ง fallthrough:
+	switch num := 2; num {
+	case 1:
+		fmt.Println("One")
+	case 2:
+		fmt.Println("Two")
+		fallthrough
+		// คำสั่ง fallthrough มักใช้ในกรณีที่ต้องการให้โปรแกรมเรียกใช้โค้ดในกรณีถัดไปโดยอัตโนมัติ
+	case 3:
+		fmt.Println("Three")
+	}
+	/* 
+	กำหนด switch แบบปกติ
+	num := 2
+	switch num {
+	case 1:
+		fmt.Println("One")
+	case 2:
+		fmt.Println("Two")
+	case 3:
+		fmt.Println("Three")
+	}
 	
+	*/
 }
