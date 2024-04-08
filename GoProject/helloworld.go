@@ -5,17 +5,66 @@ import (
 )
 
 /*
-defer เป็นกลไกในภาษา Go ที่ช่วยเลื่อนการเรียกใช้ฟังก์ชันออกไปจนกว่าฟังก์ชันที่ครอบอยู่จะทำงานเสร็จสิ้น ไม่ว่าจะเป็นการจบการทำงานแบบปกติหรือผ่านการเกิด panic defer มักใช้เพื่อลดความซับซ้อนของฟังก์ชันที่ต้องทำงานทำความสะอาดต่างๆ หลังจากเสร็จสิ้นการทำงานหลัก
+ไวยากรณ์ในการสร้างฟังก์ชันในภาษา Go:
+func functionName(parameter1 type1, parameter2 type2) (returnType1, returnType2) {
+    // function body
+    // statements
+    return value1, value2
+}
 
-ภายในฟังก์ชัน `main()`:
-   - เรียกใช้ `defer fmt.Println("GO")` ซึ่งจะเลื่อนการแสดงผลข้อความ "GO" ออกไปจนกว่าฟังก์ชัน `main()` จะทำงานเสร็จสิ้น
-   - เรียกใช้ `fmt.Println("Book")` เพื่อแสดงผลข้อความ "Book" ทันที
-5. เมื่อฟังก์ชัน `main()` ทำงานเสร็จสิ้น ข้อความที่ถูกเลื่อนด้วย `defer` จะถูกแสดงผลตามลำดับที่ถูกเรียกใช้ ในที่นี้คือ "GO"
+ความแตกต่างระหว่าง multiple returns และ named returns:
+func multipleReturns(x, y int) (int, int) {
+    return x + y, x - y
+}
 
-*/
+func namedReturns(x, y int) (sum, diff int) {
+    sum = x + y
+    diff = x - y
+    return
+}
 
+ตัวอย่างโปรแกรม Go ที่อธิบาย call by value:
+func callByValue(x int) {
+    x = x + 1
+    fmt.Println("Inside function:", x)
+}
 
 func main() {
-	defer fmt.Println("GO")
-	fmt.Println("Book")
+    x := 10
+    callByValue(x)
+    fmt.Println("Outside function:", x)
+}
+
+ฟังก์ชันแบบ variadic:
+func variadicFunction(numbers ...int) {
+    sum := 0
+    for _, num := range numbers {
+        sum += num
+    }
+    fmt.Println("Sum:", sum)
+}
+
+func main() {
+    variadicFunction(1, 2, 3)
+    variadicFunction(4, 5, 6, 7)
+}
+
+การใช้งานคำสั่ง defer:
+func deferExample() {
+    defer fmt.Println("Deferred message")
+    fmt.Println("Normal message")
+}
+
+func main() {
+    deferExample()
+}
+*/
+
+func deferExample() {
+	defer fmt.Println("Deferred message")
+	fmt.Println("Normal message")
+}
+
+func main() {
+	deferExample()
 }
