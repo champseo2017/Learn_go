@@ -3,99 +3,43 @@ package main
 import "fmt"
 
 /*
-ตัวอย่างการใช้คำสั่ง if…else:
-if age >= 18 {
-    fmt.Println("You are eligible to vote")
-} else {
-    fmt.Println("You are not eligible to vote")
-}
+คำสั่งควบคุมลูป (Loop control statements) ใช้สำหรับเปลี่ยนแปลงการทำงานของโปรแกรม เมื่อการทำงานของลูปออกจากขอบเขตของมัน วัตถุที่ถูกสร้างภายในขอบเขตนั้นจะถูกทำลายไปด้วย ภาษา Go รองรับคำสั่งควบคุมลูป 3 ประเภท ได้แก่ break, goto และ continue
 
-ตัวอย่างการใช้คำสั่ง if…else if…else:
-if grade >= 80 {
-    fmt.Println("Grade: A")
-} else if grade >= 70 {
-    fmt.Println("Grade: B")
-} else if grade >= 60 {
-    fmt.Println("Grade: C")
-} else {
-    fmt.Println("Grade: F")
-}
 
-ตัวอย่างการใช้คำสั่ง switch…case:
-switch dayNumber {
-case 1:
-    fmt.Println("Monday")
-case 2:
-    fmt.Println("Tuesday")
-case 3:
-    fmt.Println("Wednesday")
-case 4:
-    fmt.Println("Thursday")
-case 5:
-    fmt.Println("Friday")
-case 6:
-    fmt.Println("Saturday")
-case 7:
-    fmt.Println("Sunday")
-default:
-    fmt.Println("Invalid day number")
-}
-
-ตัวอย่างการใช้ for loop:
-for i := 1; i <= 5; i++ {
-    fmt.Println(i)
-}
-
-ตัวอย่างการใช้ nested for loop:
-for i := 1; i <= 3; i++ {
-    for j := 1; j <= 3; j++ {
-        fmt.Printf("(%d, %d) ", i, j)
-    }
-    fmt.Println()
-}
-
-ตัวอย่างการใช้ break และ continue:
-for i := 1; i <= 5; i++ {
-    if i == 3 {
-        continue
-    }
-    if i == 4 {
-        break
-    }
-    fmt.Println(i)
-}
 */
 
 func main() {
-	// nested for loop:
-	// for i := 1; i <= 3; i++ {
-	// 	for j := 1; j <= 3; j++ {
-	// 		fmt.Printf("(%d, %d) ", i, j)
+	// i := 0
+	// Here:
+	// 	fmt.Println(i)
+	// 	i++
+	// 	if i < 5 {
+	// 		goto Here
 	// 	}
-	// 	fmt.Println()
+		/* 
+		ดังนั้น ถึงแม้ว่าโค้ดนี้จะไม่มีโครงสร้างลูปแบบปกติ แต่ก็สามารถสร้างการทำงานแบบลูปได้โดยใช้คำสั่ง goto เพื่อกระโดดกลับไปยังจุดเริ่มต้นของลูปเมื่อเงื่อนไขเป็นจริง
+		*/
+
+	// คำสั่ง break
+	// for i := 0; i < 5; i++ {
+	// 	if i == 3 {
+	// 		break
+	// 	}
+	// 	fmt.Println(i)
 	// }
-	// ตัวอย่างการใช้คำสั่ง fallthrough:
-	switch num := 2; num {
-	case 1:
-		fmt.Println("One")
-	case 2:
-		fmt.Println("Two")
-		fallthrough
-		// คำสั่ง fallthrough มักใช้ในกรณีที่ต้องการให้โปรแกรมเรียกใช้โค้ดในกรณีถัดไปโดยอัตโนมัติ
-	case 3:
-		fmt.Println("Three")
+	/* 
+	คำสั่ง break ใช้สำหรับหยุดการทำงานของลูปทันที เมื่อเงื่อนไขเป็นจริง
+	ในตัวอย่างนี้ เมื่อ i มีค่าเท่ากับ 3 คำสั่ง break จะถูกเรียกใช้ และลูปจะหยุดการทำงานทันที
+	*/
+	// คำสั่ง continue
+	for i := 0; i < 5; i++ {
+		if i == 3 {
+			continue
+		}
+		fmt.Println(i)
 	}
 	/* 
-	กำหนด switch แบบปกติ
-	num := 2
-	switch num {
-	case 1:
-		fmt.Println("One")
-	case 2:
-		fmt.Println("Two")
-	case 3:
-		fmt.Println("Three")
-	}
-	
+	คำสั่ง continue ใช้สำหรับข้ามการทำงานในรอบปัจจุบันของลูป และเริ่มต้นรอบถัดไปทันที
+ในตัวอย่างนี้ เมื่อ i มีค่าเท่ากับ 3 คำสั่ง continue จะถูกเรียกใช้ และโปรแกรมจะข้ามการทำงานในรอบนั้น แล้วเริ่มต้นรอบถัดไป
 	*/
 }
