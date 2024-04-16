@@ -8,11 +8,11 @@ import "fmt"
 
 func main() {
 	x := [...]int{10, 20, 30, 40, 50}
-	for index, value := range x {
-		fmt.Printf("x[%d] = %d\n", index, value)
+	for _, value := range x {
+		fmt.Println(value)
 	}
 }
 
 /*
-โปรแกรมนี้คล้ายกับโปรแกรมก่อนหน้า แต่ใช้ตัวดำเนินการ range เพื่อวนซ้ำผ่าน array แทน for loop แบบปกติ range จะคืนค่าดัชนีและค่าของแต่ละองค์ประกอบใน array
+ไม่สนใจดัชนี ดังนั้นเราจึงกำหนดให้เป็นตัวระบุเปล่า (_) และแสดงเฉพาะค่าขององค์ประกอบโดยใช้ fmt.Println()
 */
