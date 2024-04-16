@@ -10,23 +10,25 @@ import "fmt"
 - สำหรับ array ที่ไม่มีขนาดกำหนด: `func function_name(variable_name []type)`
 */
 
-func arr_sum(a [5]int, size int) int {
-	var i, sum int
+// This function accepts array as an argument
+func arr_avg(a [4]int, size int) int {
+	var i, sum, avg int
 	for i = 0; i < size; i++ {
 		sum += a[i]
 	}
-	return sum
+	avg = sum / size
+	return avg
 }
 
+// Main function
 func main() {
 	// Create and initialize array
-	var x = [5]int{10, 20, 30, 40, 50}
-
+	var x = [4]int{20, 40, 60, 80}
 	// Pass array as an argument
-	sum := arr_sum(x, 5)
-	fmt.Printf("Sum of array elements: %d", sum)
+	avg := arr_avg(x, 4)
+	fmt.Printf("Average of array elements: %d ", avg)
 }
 
 /*
-โปรแกรมนี้มีฟังก์ชันชื่อ arr_sum() ซึ่งยอมรับ array เป็นอาร์กิวเมนต์ ในฟังก์ชัน main เราส่ง x[5] ของประเภท int ไปยังฟังก์ชันพร้อมกับขนาดของ array และฟังก์ชันจะคืนค่าผลรวมขององค์ประกอบใน array
+ใช้ฟังก์ชันชื่อ arr_avg() ซึ่งยอมรับ array เป็นอาร์กิวเมนต์ ในฟังก์ชัน main เราส่ง x[4] ของประเภท int ไปยังฟังก์ชันพร้อมกับขนาดของ array และฟังก์ชันจะคืนค่าเฉลี่ยขององค์ประกอบใน array
 */
