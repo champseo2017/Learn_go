@@ -1,32 +1,33 @@
 package main
 
+import "fmt"
+
 /*
-การประกาศ Slice
-การประกาศ slice จะคล้ายกับการประกาศ array แต่จะไม่ระบุขนาดของ slice ดังนั้น slice จึงมีความยืดหยุ่นและมีขนาดแบบไดนามิกเพื่อให้เหมาะกับความต้องการ
+ในการสร้าง slice ใน Go นั้น slice จะประกอบด้วย 3 ส่วนหลักๆ ได้แก่ pointer, length และ capacity โดย pointer จะเป็นตัวชี้ไปยัง underlying array ที่ slice นั้นๆ อ้างอิงถึง ส่วน length จะเป็นความยาวของ segment ของ array ที่ slice นั้นๆ ครอบคลุม และ capacity จะเป็นขนาดสูงสุดที่ segment นั้นสามารถขยายได้
 */
 
 func main() {
-	var my_slice []int
-	// สร้าง slice ชื่อ team ที่มีความยาวเป็น 0
-	var team []int
-	// ประกาศ my_slice1 ของ integers โดยไม่ระบุขนาด
-	var my_slice1 []int
-	// ประกาศ slice ของ strings โดยไม่ระบุขนาด
-	var my_slice_string []string
-	// ประกาศ slice ของ floats โดยไม่ระบุขนาด
-	var my_slice_float []float64
-	// ประกาศ slice แบบสั้นโดยใช้ := 
-	my_slice := []int{1, 2, 3}
-	// ประกาศ slice แบบระบุขนาดเริ่มต้น
-	my_slice := make([]int, 5)
+	// สร้าง underlying array
+	arr := [5]int{1, 2, 3, 4, 5}
+	// สร้าง slice ที่อ้างอิงถึง arr โดยเริ่มต้นที่ index 1 และสิ้นสุดที่ index 3 (ไม่รวม index 3)
+	slice := arr[1:3]
+	// แสดงค่าของ slice, len(slice) และ cap(slice)
+	fmt.Printf("slice = %v, len = %d, cap = %d\n", slice, len(slice), cap(slice))
+	// เปลี่ยนแปลงค่าใน slice
+	slice[0] = 10
+	// ค่าใน underlying array จะเปลี่ยนแปลงตามไปด้วย
+	fmt.Printf("arr = %v\n", arr)
 }
 
 /* 
-- ประกาศ slice ของ integers ชื่อ `my_slice` โดยไม่ระบุขนาด ทำให้มีความยืดหยุ่นและสามารถเปลี่ยนแปลงขนาดได้
-- ประกาศ slice ของ strings ชื่อ `my_slice_string` โดยไม่ระบุขนาด
-- ประกาศ slice ของ floats ชื่อ `my_slice_float` โดยไม่ระบุขนาด
-- ประกาศ slice แบบสั้นโดยใช้ `:=` และระบุค่าเริ่มต้น `{1, 2, 3}`
-- ประกาศ slice แบบระบุขนาดเริ่มต้นโดยใช้ฟังก์ชัน `make` และระบุขนาดเป็น 5
+การใช้ %v เป็นวิธีที่สะดวกในการแสดงค่าของตัวแปรโดยไม่ต้องกังวลเกี่ยวกับประเภทข้อมูล เพราะ Printf จะเลือกรูปแบบการแสดงผลที่เหมาะสมให้โดยอัตโนมัติตามประเภทของตัวแปรที่ถูกส่งเข้ามา
 
-การประกาศ slice โดยไม่ระบุขนาดทำให้เราสามารถเปลี่ยนแปลงขนาดของ slice ได้ในภายหลังโดยใช้ฟังก์ชัน `append` หรือ `copy` ซึ่งทำให้ slice มีความยืดหยุ่นและสามารถปรับเปลี่ยนได้ตามความต้องการในขณะรันโปรแกรม
+นอกจาก %v แล้ว ยังมี verbs อื่นๆ เช่น %d สำหรับแสดงค่าตัวเลขจำนวนเต็ม, %f สำหรับแสดงค่าตัวเลขทศนิยม, %s สำหรับแสดงค่า string เป็นต้น ซึ่งเราสามารถเลือกใช้ให้เหมาะสมกับความต้องการในการแสดงผลข้อมูลได้
+
+อธิบาย:
+- เริ่มต้นโดยสร้าง underlying array `arr` ที่มี 5 elements
+- สร้าง slice `slice` โดยอ้างอิงถึง `arr` เริ่มต้นที่ index 1 และสิ้นสุดที่ index 3 (ไม่รวม index 3) ดังนั้น `slice` จะมีค่าเป็น `[2 3]`
+- `len(slice)` จะเท่ากับ 2 เนื่องจาก slice มี 2 elements
+- `cap(slice)` จะเท่ากับ 4 เนื่องจาก slice สามารถขยายได้ถึง index สุดท้ายของ underlying array
+- เมื่อเปลี่ยนแปลงค่าใน `slice` เช่น `slice[0] = 10` ค่าใน underlying array `arr` ก็จะเปลี่ยนแปลงตามไปด้วย เนื่องจาก slice และ underlying array ใช้ memory เดียวกัน
 */
