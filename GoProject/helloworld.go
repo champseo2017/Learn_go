@@ -3,29 +3,28 @@ package main
 import "fmt"
 
 /*
-Slice ใน Go เป็น reference type และอ้างอิงไปยัง array ที่อยู่เบื้องหลัง ดังนั้น การแก้ไของค์ประกอบของ slice จะส่งผลต่อการแก้ไของค์ประกอบที่สอดคล้องกันใน array ที่ถูกอ้างอิง และ slice อื่นๆ ที่อ้างอิงไปยัง array เดียวกันก็จะเห็นการแก้ไขนั้นด้วยเช่นกัน
+ในภาษา Go เราสามารถใช้ตัวดำเนินการ == เพื่อตรวจสอบว่า slice เป็น nil หรือไม่ โดยถ้า slice เป็น nil ผลการเปรียบเทียบจะเป็น true แต่ถ้า slice ไม่เป็น nil ผลการเปรียบเทียบจะเป็น false
 */
 
 func main() {
-	a := [7]string{"One", "Two", "Three", "Four", "Five", "Six", "Seven"}
-	slice1 := a[1:]
-	slice2 := a[3:]
+	// creating slices
+	s1 := []int{1, 2, 3, 4, 5}
+	var s2 []int
 
-	fmt.Println("***** Before Modifications *****")
-	fmt.Println("Array =", a)
-	fmt.Println("Slice1 =", slice1)
-	fmt.Println("Slice2 =", slice2)
+	// Check if slice is nil or not
+	fmt.Println(s1 == nil)
+	fmt.Println(s2 == nil)
 
-	slice1[0] = "TWO"
-	slice1[2] = "FOUR"
-	slice2[1] = "FIVE"
-
-	fmt.Println("\n***** After Modifications *****")
-	fmt.Println("Array =", a)
-	fmt.Println("slice1 = ", slice1)
-	fmt.Println("slice2 = ", slice2)
 }
 
 /* 
-จากผลลัพธ์ จะเห็นได้ว่าการแก้ไขค่าใน slice1 และ slice2 ส่งผลต่อการแก้ไขค่าใน array a ด้วย เนื่องจาก slice อ้างอิงไปยัง array ที่อยู่เบื้องหลัง และเมื่อมีการแก้ไขค่าใน slice ค่าใน array ที่ถูกอ้างอิงก็จะถูกแก้ไขด้วย นอกจากนี้ slice อื่นๆ ที่อ้างอิงไปยัง array เดียวกันก็จะเห็นการแก้ไขนั้นเช่นกัน
+ในโปรแกรมนี้ เราสร้าง slice s1 โดยใช้ slice literal และกำหนดค่าเริ่มต้นเป็น {1, 2, 3, 4, 5} และสร้าง slice s2 โดยใช้การประกาศตัวแปรแบบ var โดยไม่ได้กำหนดค่าเริ่มต้น ซึ่งจะเป็น zero value slice
+
+จากนั้น เราใช้ตัวดำเนินการ == เพื่อตรวจสอบว่า slice s1 และ s2 เป็น nil หรือไม่ โดยเปรียบเทียบกับ nil
+
+จากผลลัพธ์ จะเห็นได้ว่าเมื่อเปรียบเทียบ slice s1 กับ nil ผลลัพธ์เป็น false เนื่องจาก s1 ไม่เป็น nil slice เพราะมีการกำหนดค่าเริ่มต้นให้กับ slice แล้ว
+
+ในขณะที่เมื่อเปรียบเทียบ slice s2 กับ nil ผลลัพธ์เป็น true เนื่องจาก s2 เป็น nil slice หรือ zero value slice ที่ไม่มีการกำหนดค่าเริ่มต้น
+
+โปรแกรมนี้แสดงให้เห็นถึงวิธีการตรวจสอบว่า slice เป็น nil หรือไม่โดยใช้ตัวดำเนินการ == ในภาษา Go ซึ่งเป็นประโยชน์ในการตรวจสอบสถานะของ slice ก่อนทำการดำเนินการใดๆ กับ slice นั้น
 */
