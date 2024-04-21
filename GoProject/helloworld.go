@@ -3,16 +3,27 @@ package main
 import "fmt"
 
 /*
-Go เราสามารถสร้าง slice จาก array ได้โดยระบุ index ต่ำสุดและสูงสุดที่คั่นด้วยเครื่องหมายโคลอน (:) ในรูปแบบ array_name[low:high] โดย slice ที่ได้จะประกอบด้วยองค์ประกอบตั้งแต่ index ต่ำสุดจนถึงก่อนหน้า index สูงสุด นอกจากนี้ index ต่ำสุดและสูงสุดยังสามารถละไว้ได้ โดยค่าเริ่มต้นของ index ต่ำสุดคือ 0 และค่าเริ่มต้นของ index สูงสุดคือความยาวของ slice
+Go เราสามารถสร้าง slice ใหม่จาก slice ที่มีอยู่แล้วได้ โดยระบุ index ต่ำสุดและสูงสุดของ slice ต้นทางในรูปแบบเดียวกับการสร้าง slice จาก array
 */
 
 func main() {
-	var a = [6]string{"Jaipur", "Gorakhpur", "Pune", "Bengaluru", "Mumbai", "Delhi"}
-	var s []string = a[1:5]
-	fmt.Println("Array a =", a)
-	fmt.Println("Slice s =", s)
+	a := [8]string{"Shanghai", "Hiroshima", "Jaipur", "Gorakhpur", "Nagpur", "Mumbai", "Nashik", "Lucknow"}
+	ind_cities := a[2:]
+	maha_cities := ind_cities[2:5]
+	fmt.Println("Cities =", a)
+	fmt.Println("Indian Cities =", ind_cities)
+	fmt.Println("Maharashtra Cities =", maha_cities)
 }
 
 /* 
-ในโปรแกรมนี้ เราสร้าง array a ที่มี 6 องค์ประกอบ จากนั้นเราสร้าง slice s จาก array a โดยระบุ index ต่ำสุดเป็น 1 และ index สูงสุดเป็น 5 ดังนั้น slice s จะประกอบด้วยองค์ประกอบตั้งแต่ index 1 ถึง 4 ของ array a เมื่อเราแสดงค่าของ array a และ slice s ผลลัพธ์ที่ได้คือ "Array a = [Jaipur Gorakhpur Pune Bengaluru Mumbai Delhi]" และ "Slice s = [Gorakhpur Pune Bengaluru Mumbai]"
+ในโปรแกรมนี้ เราสร้าง array a ที่มี 8 องค์ประกอบเป็นชื่อเมืองต่างๆ จากนั้นเราสร้าง slice ind_cities จาก array a โดยระบุ index ต่ำสุดเป็น 2 ซึ่งหมายความว่า slice ind_cities จะประกอบด้วยองค์ประกอบตั้งแต่ index 2 ถึงสุดท้ายของ array a
+
+ต่อมา เราสร้าง slice maha_cities จาก slice ind_cities โดยระบุ index ต่ำสุดเป็น 2 และ index สูงสุดเป็น 5 ซึ่งหมายความว่า slice maha_cities จะประกอบด้วยองค์ประกอบตั้งแต่ index 2 ถึง 4 ของ slice ind_cities
+
+เมื่อเราแสดงค่าของ array a, slice ind_cities และ slice maha_cities ผลลัพธ์ที่ได้คือ
+"Cities = [Shanghai Hiroshima Jaipur Gorakhpur Nagpur Mumbai Nashik Lucknow]"
+"Indian Cities = [Jaipur Gorakhpur Nagpur Mumbai Nashik Lucknow]"
+"Maharashtra Cities = [Nagpur Mumbai Nashik]"
+
+จากผลลัพธ์ จะเห็นได้ว่า slice ind_cities ประกอบด้วยองค์ประกอบตั้งแต่ index 2 ถึงสุดท้ายของ array a ซึ่งเป็นชื่อเมืองในประเทศอินเดีย และ slice maha_cities ประกอบด้วยองค์ประกอบตั้งแต่ index 2 ถึง 4 ของ slice ind_cities ซึ่งเป็นชื่อเมืองในรัฐมหาราษฏระของอินเดีย
 */
