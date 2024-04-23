@@ -3,16 +3,17 @@ package main
 import "fmt"
 
 /*
-ในภาษา Go, Zero-value slice หรือ Nil slice คือ slice ที่ไม่มีองค์ประกอบใดๆ อยู่ภายใน ดังนั้น ความยาว (length) และความจุ (capacity) ของ slice นี้จึงเป็น 0 นอกจากนี้ Nil slice ยังไม่มีการอ้างอิงถึง array ใดๆ อีกด้วย
+Go, เราสามารถใช้ตัวดำเนินการ == เพื่อตรวจสอบว่า slice เป็น nil หรือไม่ โดยการเปรียบเทียบ slice กับ nil ถ้า slice เป็น nil ผลลัพธ์จะเป็น true แต่ถ้า slice ไม่เป็น nil ผลลัพธ์จะเป็น false
 */
 
 func main() {
-	// สร้าง zero value slice
-	var my_slice []string
-	// แสดงความยาวของ slice
-	fmt.Printf("Length of Slice = %d\n", len(my_slice))
-	// แสดงความจุของ slice
-	fmt.Printf("Capacity of Slice = %d", cap(my_slice))
+	// สร้าง slice s1
+	s1 := []int{1, 2, 3, 4, 5}
+	// สร้าง slice s2 เป็น nil slice
+	var s2 []int
+	// ตรวจสอบว่า slice เป็น nil หรือไม่
+	fmt.Println(s1 == nil)
+	fmt.Println(s2 == nil)
 }
 
 /* 
@@ -22,9 +23,11 @@ func main() {
 
 3. เรากำหนดฟังก์ชัน main() ซึ่งเป็นจุดเริ่มต้นของโปรแกรม
 
-4. เราประกาศตัวแปร my_slice เป็น zero value slice ชนิด string โดยใช้ var my_slice []string
+4. เราสร้าง slice s1 ด้วยค่าเริ่มต้น [1, 2, 3, 4, 5] โดยใช้ s1 := []int{1, 2, 3, 4, 5}
 
-5. เราใช้ฟังก์ชัน len() เพื่อแสดงความยาวของ slice และใช้ fmt.Printf() เพื่อแสดงผลลัพธ์
+5. เราสร้าง slice s2 เป็น nil slice โดยใช้ var s2 []int
 
-6. เราใช้ฟังก์ชัน cap() เพื่อแสดงความจุของ slice และใช้ fmt.Printf() เพื่อแสดงผลลัพธ์
+6. เราใช้ fmt.Println(s1 == nil) เพื่อตรวจสอบว่า slice s1 เป็น nil หรือไม่ และแสดงผลลัพธ์
+
+7. เราใช้ fmt.Println(s2 == nil) เพื่อตรวจสอบว่า slice s2 เป็น nil หรือไม่ และแสดงผลลัพธ์
 */
