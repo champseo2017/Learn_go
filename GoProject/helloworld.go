@@ -2,55 +2,37 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
 /*
-ในภาษา Go เราสามารถเรียงลำดับองค์ประกอบใน slice ได้ โดยใช้ package sort ที่มีอยู่ในไลบรารีมาตรฐานของ Go ซึ่งมีเมธอดสำหรับการเรียงลำดับ slice ของ int, float64 และ string
+Go เราสามารถวนลูปเพื่อเข้าถึงองค์ประกอบใน slice ได้ทีละตัว โดยใช้ for loop แบบปกติ หรือใช้ for loop ร่วมกับ range keyword
 */
 
 func main() {
-	// สร้าง Slice
-	slice1 := []string{"India", "Japan", "China", "Russia", "Singapore"}
-	slice2 := []int{200, 500, 700, 400, 800, 300, 600, 900}
+	// ตัวอย่างการวนลูปเข้าถึงองค์ประกอบใน slice ด้วย for loop แบบปกติ:
+	// สร้าง slice1
+	slice1 := []int{10, 20, 30, 40, 50}
+	// วนลูปเข้าถึงองค์ประกอบใน slice ด้วย for loop
+	for i := 0; i < len(slice1); i++ {
+		fmt.Printf("slice1[%d] = %d\n", i, slice1[i])
+	}
+	/* 
+		1. เราสร้าง slice ชื่อ slice ด้วยค่าเริ่มต้น {10, 20, 30, 40, 50}
+		2. เราใช้ for loop เพื่อวนลูปเข้าถึงองค์ประกอบใน slice โดยใช้ตัวแปร i เป็นตัวนับ เริ่มจาก 0 ถึง len(slice) - 1
+		3. ในแต่ละรอบของลูป เราใช้ fmt.Printf() เพื่อแสดงค่าของ slice[i] พร้อมกับตำแหน่งของมัน
+	*/
+	// สร้าง slice2
+	slice2 := []string{"apple", "banana", "cherry", "durian"}
+	// วนลูปเข้าถึงองค์ประกอบใน slice2 ด้วย for loop ร่วมกับ range
+	for index, value := range slice2 {
+		fmt.Printf("slice[%d] = %s\n", index, value)
+	}
+	/* 
+		1. เราสร้าง slice ชื่อ slice ด้วยค่าเริ่มต้น {"apple", "banana", "cherry", "durian"}
+		2. เราใช้ for loop ร่วมกับ range เพื่อวนลูปเข้าถึงองค์ประกอบใน slice โดยในแต่ละรอบของลูป ตัวแปร index จะเก็บตำแหน่งขององค์ประกอบ และตัวแปร value จะเก็บค่าขององค์ประกอบ
+		3. ในแต่ละรอบของลูป เราใช้ fmt.Printf() เพื่อแสดงค่าของ value พร้อมกับตำแหน่ง index ของมัน
 
-	fmt.Println("***** Before sorting *****")
-	fmt.Println("Slice 1:", slice1)
-	fmt.Println("Slice 2:", slice2)
-
-	// เรียงลำดับ slice
-	sort.Strings(slice1)
-	sort.Ints(slice2)
-
-	fmt.Println("\n***** After sorting *****")
-    fmt.Println("Slice 1:", slice1)
-    fmt.Println("Slice 2:", slice2)
+		การใช้ for loop ร่วมกับ range จะทำให้โค้ดอ่านง่ายและกระชับกว่าการใช้ for loop แบบปกติ เพราะเราไม่ต้องกังวลเรื่องตัวนับและการเข้าถึงองค์ประกอบผ่านตำแหน่ง
+	*/
 }
 
-/* 
-1. เราประกาศ package main เพื่อระบุว่านี่คือโปรแกรมหลัก
-
-2. เรานำเข้า package "fmt" เพื่อใช้ในการแสดงผลลัพธ์ และ package "sort" เพื่อใช้ในการเรียงลำดับ slice
-
-3. เรากำหนดฟังก์ชัน main() ซึ่งเป็นจุดเริ่มต้นของโปรแกรม
-
-4. เราสร้าง slice1 ด้วยค่าเริ่มต้น {"India", "Japan", "China", "Russia", "Singapore"} และ slice2 ด้วยค่าเริ่มต้น {200, 500, 700, 400, 800, 300, 600, 900}
-
-5. เราใช้ fmt.Println() เพื่อแสดงค่าของ slice1 และ slice2 ก่อนการเรียงลำดับ
-
-6. เราใช้ฟังก์ชัน sort.Strings(slice1) เพื่อเรียงลำดับ slice1 ตามลำดับตัวอักษร และใช้ sort.Ints(slice2) เพื่อเรียงลำดับ slice2 จากน้อยไปมาก
-
-7. เราใช้ fmt.Println() เพื่อแสดงค่าของ slice1 และ slice2 หลังการเรียงลำดับ
-
-เมื่อรันโปรแกรมนี้ ผลลัพธ์ที่ได้จะเป็น:
-
-***** Before sorting *****
-Slice 1: [India Japan China Russia Singapore]
-Slice 2: [200 500 700 400 800 300 600 900]
-
-***** After sorting *****
-Slice 1: [China India Japan Russia Singapore]
-Slice 2: [200 300 400 500 600 700 800 900]
-
-ซึ่งแสดงให้เห็นว่า slice1 ถูกเรียงลำดับตามตัวอักษร และ slice2 ถูกเรียงลำดับจากน้อยไปมาก หลังจากใช้ฟังก์ชันเรียงลำดับจาก package sort
-*/
