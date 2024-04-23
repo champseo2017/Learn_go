@@ -1,35 +1,32 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 /*
-Go เราสามารถใช้ for loop เพื่อวนลูปและเข้าถึงองค์ประกอบแต่ละตัวใน slice ได้ โดยใช้ตัวแปรนับ (เช่น i) เพื่อระบุตำแหน่งขององค์ประกอบ และใช้ len(slice) เพื่อระบุจำนวนองค์ประกอบทั้งหมดใน slice
+ภาษา Go เราสามารถใช้ range ใน for loop เพื่อวนลูปและเข้าถึงทั้งตำแหน่งและค่าขององค์ประกอบแต่ละตัวใน slice ได้ โดยในแต่ละรอบของลูป ตัวแปรแรก (เช่น index) จะเก็บตำแหน่งขององค์ประกอบ และตัวแปรที่สอง (เช่น element) จะเก็บค่าขององค์ประกอบ
 */
 
 func main() {
 	// สร้าง slice
-	my_slice := []string{"Golang", "program", "to", "iterate", "over", "slice", "using", "for", "loop"}
-	// วนลูปโดยใช้ for loop
-	for i := 0; i < len(my_slice); i++ {
-		fmt.Println(my_slice[i])
+	my_slice := []string{"Golang", "program", "to", "iterate", "over", "slice", "using", "range", "in", "for", "loop"}
+	// วนลูปโดยใช้ range ใน for loop
+	for index, element := range my_slice {
+		fmt.Printf("Index = %d and Element = %s\n", index, element)
 	}
 	/* 
-		1. เราประกาศ package main เพื่อระบุว่านี่คือโปรแกรมหลัก
+	1. เราประกาศ package main เพื่อระบุว่านี่คือโปรแกรมหลัก
 
-		2. เรานำเข้า package "fmt" เพื่อใช้ในการแสดงผลลัพธ์
+	2. เรานำเข้า package "fmt" เพื่อใช้ในการแสดงผลลัพธ์
 
-		3. เรากำหนดฟังก์ชัน main() ซึ่งเป็นจุดเริ่มต้นของโปรแกรม
+	3. เรากำหนดฟังก์ชัน main() ซึ่งเป็นจุดเริ่มต้นของโปรแกรม
 
-		4. เราสร้าง slice ชื่อ my_slice ด้วยค่าเริ่มต้น {"Golang", "program", "to", "iterate", "over", "slice", "using", "for", "loop"}
+	4. เราสร้าง slice ชื่อ my_slice ด้วยค่าเริ่มต้น {"Golang", "program", "to", "iterate", "over", "slice", "using", "range", "in", "for", "loop"}
 
-		5. เราใช้ for loop เพื่อวนลูปและเข้าถึงองค์ประกอบแต่ละตัวใน my_slice
-		- ตัวแปร i ใช้เป็นตัวนับ เริ่มต้นที่ 0
-		- เงื่อนไขการวนลูป คือ i < len(my_slice) ซึ่งหมายความว่า ลูปจะทำงานต่อไปเรื่อยๆ จนกว่า i จะมีค่าเท่ากับหรือมากกว่าจำนวนองค์ประกอบใน my_slice
-		- ในแต่ละรอบของลูป เราเข้าถึงองค์ประกอบที่ตำแหน่ง i ใน my_slice โดยใช้ my_slice[i] และแสดงค่าขององค์ประกอบนั้นด้วย fmt.Println()
+	5. เราใช้ range ใน for loop เพื่อวนลูปและเข้าถึงทั้งตำแหน่งและค่าขององค์ประกอบแต่ละตัวใน my_slice
+	- ในแต่ละรอบของลูป ตัวแปร index จะเก็บตำแหน่งขององค์ประกอบ และตัวแปร element จะเก็บค่าขององค์ประกอบ
+	- เราใช้ fmt.Printf() เพื่อแสดงค่าของ index และ element ในรูปแบบ "Index = %d and Element = %s\n"
 
-		6. เมื่อ i เพิ่มค่าจนเท่ากับหรือมากกว่า len(my_slice) ลูปจะสิ้นสุดการทำงาน
+	6. ลูปจะทำงานต่อไปเรื่อยๆ จนกว่าจะครบทุกองค์ประกอบใน my_slice
 	
 	*/
 }
