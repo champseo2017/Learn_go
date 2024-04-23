@@ -3,28 +3,28 @@ package main
 import "fmt"
 
 /*
-ในภาษา Go เราสามารถใช้ตัวดำเนินการ == เพื่อตรวจสอบว่า slice เป็น nil หรือไม่ โดยถ้า slice เป็น nil ผลการเปรียบเทียบจะเป็น true แต่ถ้า slice ไม่เป็น nil ผลการเปรียบเทียบจะเป็น false
+ในภาษา Go, Zero-value slice หรือ Nil slice คือ slice ที่ไม่มีองค์ประกอบใดๆ อยู่ภายใน ดังนั้น ความยาว (length) และความจุ (capacity) ของ slice นี้จึงเป็น 0 นอกจากนี้ Nil slice ยังไม่มีการอ้างอิงถึง array ใดๆ อีกด้วย
 */
 
 func main() {
-	// creating slices
-	s1 := []int{1, 2, 3, 4, 5}
-	var s2 []int
-
-	// Check if slice is nil or not
-	fmt.Println(s1 == nil)
-	fmt.Println(s2 == nil)
-
+	// สร้าง zero value slice
+	var my_slice []string
+	// แสดงความยาวของ slice
+	fmt.Printf("Length of Slice = %d\n", len(my_slice))
+	// แสดงความจุของ slice
+	fmt.Printf("Capacity of Slice = %d", cap(my_slice))
 }
 
 /* 
-ในโปรแกรมนี้ เราสร้าง slice s1 โดยใช้ slice literal และกำหนดค่าเริ่มต้นเป็น {1, 2, 3, 4, 5} และสร้าง slice s2 โดยใช้การประกาศตัวแปรแบบ var โดยไม่ได้กำหนดค่าเริ่มต้น ซึ่งจะเป็น zero value slice
+1. เราประกาศ package main เพื่อระบุว่านี่คือโปรแกรมหลัก
 
-จากนั้น เราใช้ตัวดำเนินการ == เพื่อตรวจสอบว่า slice s1 และ s2 เป็น nil หรือไม่ โดยเปรียบเทียบกับ nil
+2. เรานำเข้า package "fmt" เพื่อใช้ในการแสดงผลลัพธ์
 
-จากผลลัพธ์ จะเห็นได้ว่าเมื่อเปรียบเทียบ slice s1 กับ nil ผลลัพธ์เป็น false เนื่องจาก s1 ไม่เป็น nil slice เพราะมีการกำหนดค่าเริ่มต้นให้กับ slice แล้ว
+3. เรากำหนดฟังก์ชัน main() ซึ่งเป็นจุดเริ่มต้นของโปรแกรม
 
-ในขณะที่เมื่อเปรียบเทียบ slice s2 กับ nil ผลลัพธ์เป็น true เนื่องจาก s2 เป็น nil slice หรือ zero value slice ที่ไม่มีการกำหนดค่าเริ่มต้น
+4. เราประกาศตัวแปร my_slice เป็น zero value slice ชนิด string โดยใช้ var my_slice []string
 
-โปรแกรมนี้แสดงให้เห็นถึงวิธีการตรวจสอบว่า slice เป็น nil หรือไม่โดยใช้ตัวดำเนินการ == ในภาษา Go ซึ่งเป็นประโยชน์ในการตรวจสอบสถานะของ slice ก่อนทำการดำเนินการใดๆ กับ slice นั้น
+5. เราใช้ฟังก์ชัน len() เพื่อแสดงความยาวของ slice และใช้ fmt.Printf() เพื่อแสดงผลลัพธ์
+
+6. เราใช้ฟังก์ชัน cap() เพื่อแสดงความจุของ slice และใช้ fmt.Printf() เพื่อแสดงผลลัพธ์
 */
