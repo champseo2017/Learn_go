@@ -3,17 +3,28 @@ package main
 import "fmt"
 
 /*
-Go, เราสามารถใช้ตัวดำเนินการ == เพื่อตรวจสอบว่า slice เป็น nil หรือไม่ โดยการเปรียบเทียบ slice กับ nil ถ้า slice เป็น nil ผลลัพธ์จะเป็น true แต่ถ้า slice ไม่เป็น nil ผลลัพธ์จะเป็น false
+Go, multi-dimensional slice คือ slice ที่มีหลายมิติ คล้ายกับ multi-dimensional array แต่ slice ไม่ต้องระบุขนาด เราสามารถสร้างและเข้าถึง multi-dimensional slice ได้เหมือนกับ multi-dimensional array
 */
 
 func main() {
-	// สร้าง slice s1
-	s1 := []int{1, 2, 3, 4, 5}
-	// สร้าง slice s2 เป็น nil slice
-	var s2 []int
-	// ตรวจสอบว่า slice เป็น nil หรือไม่
-	fmt.Println(s1 == nil)
-	fmt.Println(s2 == nil)
+	// สร้าง multi-dimensional slice s1
+	s1 := [][]int {
+		{10, 20},
+		{40, 80},
+		{50, 100},
+		{200, 400},
+	}
+	// เข้าถึง multi-dimensional slice s1
+	fmt.Println("Slice 1 :", s1)
+
+	// สร้าง multi-dimensional slice s2
+	s2 := [][]string {
+		{"Rajasthan", "Jaipur"},
+        {"Maharashtra", "Mumbai"},
+       {"Karnataka", "Bengaluru"},
+	}
+	// เข้าถึง multi-dimensional slice s2
+	fmt.Println("Slice 2: ", s2)
 }
 
 /* 
@@ -23,11 +34,16 @@ func main() {
 
 3. เรากำหนดฟังก์ชัน main() ซึ่งเป็นจุดเริ่มต้นของโปรแกรม
 
-4. เราสร้าง slice s1 ด้วยค่าเริ่มต้น [1, 2, 3, 4, 5] โดยใช้ s1 := []int{1, 2, 3, 4, 5}
+4. เราสร้าง multi-dimensional slice s1 ด้วยค่าเริ่มต้น {{10, 20}, {40, 80}, {50, 100}, {200, 400}}
 
-5. เราสร้าง slice s2 เป็น nil slice โดยใช้ var s2 []int
+5. เราใช้ fmt.Println("Slice 1 :", s1) เพื่อแสดงค่าของ slice s1
 
-6. เราใช้ fmt.Println(s1 == nil) เพื่อตรวจสอบว่า slice s1 เป็น nil หรือไม่ และแสดงผลลัพธ์
+6. เราสร้าง multi-dimensional slice s2 ด้วยค่าเริ่มต้น {{"Rajasthan", "Jaipur"}, {"Maharashtra", "Mumbai"}, {"Karnataka", "Bengaluru"}}
 
-7. เราใช้ fmt.Println(s2 == nil) เพื่อตรวจสอบว่า slice s2 เป็น nil หรือไม่ และแสดงผลลัพธ์
+7. เราใช้ fmt.Println("Slice 2 :", s2) เพื่อแสดงค่าของ slice s2
+
+เมื่อรันโปรแกรมนี้ ผลลัพธ์ที่ได้จะเป็น:
+
+Slice 1 : [[10 20] [40 80] [50 100] [200 400]]
+Slice 2 : [[Rajasthan Jaipur] [Maharashtra Mumbai] [Karnataka Bengaluru]]
 */
