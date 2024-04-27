@@ -3,63 +3,37 @@ package main
 import "fmt"
 
 /*
-Maps ใน Golang เป็นการรวบรวมคู่ key-value ที่ไม่เรียงลำดับ ช่วยให้สามารถค้นหา ดึง อัปเดต หรือลบค่าต่างๆ ได้อย่างรวดเร็วด้วยการอ้างอิงผ่าน keys เมื่อมีคู่ key และ value สามารถเก็บ value ลงใน map object ได้ หลังจากเก็บ value แล้ว ก็สามารถเรียกค่าใน map ได้โดยอ้างอิงผ่าน keys ที่เกี่ยวข้อง
 
-โครงสร้างของบทนี้ประกอบด้วย:
-- Maps ใน Go คืออะไร
-- การประกาศ Maps ใน Go
-- การกำหนดค่าเริ่มต้นให้ Maps ใน Go
-- การวนลูปเพื่ออ่านค่าใน Maps
-- การเพิ่มคู่ key-value ใน Maps
-- การอัปเดตคู่ key-value ใน Maps
-- การดึงค่า value ของ key ใน Maps
-- การตรวจสอบว่ามี key ใน Maps หรือไม่
-- การลบ key ออกจาก Maps
-- Maps เป็น reference types
-
-วัตถุประสงค์ของบทนี้คือ อธิบายแนวคิดพื้นฐานของ map และวิธีใช้งานใน Go โดยครอบคลุมการประกาศ กำหนดค่าเริ่มต้น วนลูป ดึงค่า อัปเดต ลบ และตรวจสอบการมีอยู่ของ key ใน map Maps ใช้ในการค้นหา value ผ่าน key ที่เกี่ยวข้อง
-*/
+ */
 
 func main() {
-	// ประกาศ map ว่างเปล่าชื่อ m1 ที่มี key เป็น string และ value เป็น int
-	// var m1 map[string]int
-	// ประกาศและกำหนดค่าเริ่มต้นให้ map m2
-	m2 := map[string]int {
-		"apple": 5,
-		"banana": 10,
-		"oraange": 2,
-	}
-	// เข้าถึงค่า value ของ key "apple"
-	fmt.Println(m2["apple"]) // ผลลัพธ์: 5
-	// เพิ่มคู่ key-value ใหม่
-	m2["grape"] = 7
-	// อัปเดตค่า value ของ key ที่มีอยู่
-	m2["banana"] = 8
-	// วนลูปอ่านค่าทั้งหมดใน map
-	for key, value := range m2 {
-		fmt.Printf("%s: %d\n", key, value)
-	}
-
-	// ตรวจสอบว่ามี key ใน map หรือไม่
-	// comma ok idiom (comma ok pattern)
+	// ในภาษา Go มีวิธีการประกาศ map โดยใช้ syntax ดังนี้
+	// var m map[key_type]value_type
+	// เราสามารถประกาศ map ที่มี key เป็น string และ value เป็น int
+	// var m map[string]int
 	/* 
-	- `m2["mango"]` เป็นการพยายามเข้าถึงค่าใน map `m2` ด้วย key "mango"
-	- `:=` เป็นการประกาศตัวแปรและกำหนดค่าให้กับตัวแปรนั้นในคำสั่งเดียว
-	- `_` (underscore) เป็นตัวแปรที่ไม่ได้ใช้งาน ใช้เพื่อละเว้นค่าที่ส่งกลับมาตัวแรก (ในที่นี้คือค่าของ key "mango") เพราะเราสนใจแค่ตัวที่สอง
-	- `ok` เป็นตัวแปรบูลีนที่ระบุว่า key มีอยู่ใน map หรือไม่ ถ้ามี `ok` จะเป็น `true` ถ้าไม่มี จะเป็น `false`
-
-	value := m2["mango"]
-	value จะได้รับค่าแรกที่ส่งกลับมาเท่านั้น ซึ่งอาจเป็นค่าจริงของ key "mango" หรือค่า zero value ก็ได้ ขึ้นอยู่กับว่า "mango" มีอยู่ใน m2 หรือไม่ แต่เราจะไม่รู้ว่า key มีอยู่จริงหรือเปล่า
+	ค่า zero value ของ map คือ nil ซึ่ง map ที่เป็น nil จะไม่มี key ใดๆ ดังนั้น ถ้าเราพยายามเพิ่ม key ลงใน map ที่เป็น nil จะเกิด runtime error ขึ้น
 	*/
-	if _, ok := m2["mango"]; ok {
-		fmt.Println("Mango exists")
+	var m1 map[string]int
+	fmt.Println(m1)
+
+	if m1 == nil {
+		/* 
+		คำเตือน "tautological condition: nil == nilnilnesscond" ในภาษา Go หมายความว่า เงื่อนไขในคำสั่ง if เป็นเงื่อนไขที่มีผลลัพธ์เป็นจริงเสมอ (tautology) และไม่มีประโยชน์
+		*/
+		fmt.Println("Map is empty")
 	} else {
-		fmt.Println("Mango does not exist")
+		fmt.Println("Map is not empty")
 	}
-	// ลบ key ออกจาก map
-	delete(m2, "orange")
+	// Attempt to add keys to a nil map will throw runtime error
+    //m1["ten"] = 10
 
 }
 /* 
+- ประกาศตัวแปร `m1` เป็น map ที่มี key เป็น string และ value เป็น int
+- แสดงค่าของ `m1` ออกมา ซึ่งจะเป็น `map[]` เพราะ `m1` ยังไม่ได้ถูกกำหนดค่า (เป็น nil)
+- ตรวจสอบว่า `m1` เป็น nil หรือไม่ ถ้าเป็น nil จะแสดงข้อความ "Map is empty" ถ้าไม่เป็น nil จะแสดงข้อความ "Map is not empty"
+- ถ้าเราลองเพิ่ม key ลงใน `m1` เช่น `m1["ten"] = 10` (ตอนนี้ถูก comment ไว้) จะเกิด runtime error เพราะเรากำลังพยายามเพิ่ม key ลงใน map ที่เป็น nil
 
+ดังนั้น ก่อนที่จะเพิ่ม key-value ลงใน map เราจำเป็นต้องเริ่มต้น (initialize) map ก่อนเสมอ ไม่เช่นนั้นจะเกิด runtime error ขึ้น
 */
