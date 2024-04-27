@@ -3,29 +3,43 @@ package main
 import "fmt"
 
 /*
-	การเริ่มต้น map โดยใช้ function make() เป็นอีกวิธีหนึ่งในการสร้าง map ในภาษา Go เราเพียงแค่ส่งประเภทของ map ไปยัง make() และ function นี้จะคืน map ที่ถูกเริ่มต้นและพร้อมใช้งานกลับมา
+ในภาษา Go เราสามารถวนลูปเพื่อเข้าถึงข้อมูลใน map ได้โดยใช้ range form ของ for loop ซึ่งจะให้คู่ key และ value ในแต่ละรอบของลูป
+อย่างไรก็ตาม map เป็น unordered collection ดังนั้นลำดับการวนลูปใน map จึงไม่ได้รับการการันตีว่าจะเหมือนกันทุกครั้งที่วนลูป ดังนั้นถ้ารันโปรแกรมที่มีการวนลูป map หลายๆ ครั้ง ผลลัพธ์ที่ได้อาจมีลำดับที่แตกต่างกันออกไป
 */
 
 func main() {
-	var m1 = make(map[string]int)
-	fmt.Println(m1)
+	// var my_map = map[string]string {
+	// 	"Maharashtra":   "Mumbai",
+    //     "Uttar_Pradesh": "Lucknow",
+    //     "Rajasthan":     "Jaipur",
+    //     "Karnataka":     "Bengaluru",
+	// }
+	// for state, capital := range my_map {
+	// 	fmt.Println(state, capital)
+	// }
+	/* 
+		- ประกาศตัวแปร `my_map` เป็น map ที่มี key และ value เป็น string โดยมีข้อมูลเป็นคู่ของรัฐ (state) และเมืองหลวง (capital)
+		- ใช้ for loop ร่วมกับ range เพื่อวนลูปใน `my_map`
+		- ในแต่ละรอบ ตัวแปร `state` จะเก็บ key (ชื่อรัฐ) และ `capital` จะเก็บ value (ชื่อเมืองหลวง)
+		- แสดงค่า `state` และ `capital` ในแต่ละรอบของลูป
 
-	if m1 == nil {
-		fmt.Println("Map is empty")
-	} else {
-		fmt.Println("Map is not empty")
+		ผลลัพธ์จะเป็นการแสดงคู่ของรัฐและเมืองหลวงทีละคู่ แต่ลำดับอาจไม่เหมือนกับที่กำหนดใน map เนื่องจาก map เป็น unordered collection
+	*/
+	var my_map2 = map[string]int {
+		"India":     1947,
+        "Singapore": 1965,
+        "Australia": 1901,
+        "Malaysia":  1957,
 	}
-	// make() function returns an initialized and ready to use map
-    // you can add new keys
-	m1["ten"] = 10
-	fmt.Println(m1)
-}
-/* 
-- ประกาศตัวแปร `m1` และใช้ `make()` เพื่อสร้าง map ที่มี key เป็น string และ value เป็น int
-- แสดงค่าของ `m1` ซึ่งจะเป็น empty map (`map[]`)
-- ตรวจสอบว่า `m1` เป็น `nil` หรือไม่ ในกรณีนี้ `m1` ไม่เป็น `nil` เพราะถูกสร้างด้วย `make()` แล้ว ดังนั้นจะข้ามไปทำคำสั่งใน `else` และแสดงข้อความ "Map is not empty"
-- เพิ่มคู่ key-value ใหม่ลงใน `m1` โดยกำหนดให้ key "ten" มีค่าเป็น 10 (แสดงให้เห็นว่า map ที่สร้างด้วย `make()` พร้อมใช้งานทันที)
-- แสดงค่าของ `m1` อีกครั้ง ซึ่งตอนนี้จะมีคู่ key-value ที่เพิ่มเข้าไป
+	for country, year_of_independence := range my_map2 {
+		fmt.Println(country, year_of_independence)
+	}
+	/* 
+	- ประกาศตัวแปร `my_map` เป็น map ที่มี key เป็น string และ value เป็น int โดยมีข้อมูลเป็นคู่ของประเทศ (country) และปีที่ได้รับเอกราช (year of independence)
+	- ใช้ for loop ร่วมกับ range เพื่อวนลูปใน `my_map`
+	- ในแต่ละรอบ ตัวแปร `country` จะเก็บ key (ชื่อประเทศ) และ `year_of_independence` จะเก็บ value (ปีที่ได้รับเอกราช)
+	- แสดงค่า `country` และ `year_of_independence` ในแต่ละรอบของลูป
 
-จะเห็นได้ว่าตอนแรก `m1` เป็น empty map ที่ถูกสร้างด้วย `make()` จากนั้นเราสามารถเพิ่มคู่ key-value ลงไปได้ทันที และ `m1` ก็มีข้อมูลตามที่เพิ่มเข้าไป แสดงให้เห็นว่า map ที่สร้างด้วย `make()` นั้นถูกเริ่มต้นและพร้อมใช้งานทันที
-*/
+	ผลลัพธ์จะเป็นการแสดงคู่ของประเทศและปีที่ได้รับเอกราชทีละคู่ แต่ลำดับอาจไม่เหมือนกับที่กำหนดใน map เนื่องจาก map เป็น unordered collection
+	*/
+}
