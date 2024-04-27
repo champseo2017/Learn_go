@@ -27,7 +27,28 @@ func main() {
 	}
 	// Attempt to add keys to a nil map will throw runtime error
     //m1["ten"] = 10
+	// make() เป็นอีกวิธีหนึ่งในการเริ่มต้น map ในภาษา Go โดยมี syntax ดังนี้
+	// make(map[key_type]value_type, initial_capacity)
+	/* 
+	- `key_type` คือประเภทของ key ใน map
+	- `value_type` คือประเภทของ value ใน map
+	- `initial_capacity` (optional) คือขนาดเริ่มต้นของ map (จำนวน key-value ที่คาดว่าจะเก็บใน map) ซึ่งช่วยเพิ่มประสิทธิภาพในการทำงาน
+	*/
+    var m2 = make(map[string]int)
+	fmt.Println(m2)
 
+	var m3 = make(map[string]int, 5)
+	fmt.Println(m3)
+	/* 
+	- `m2` ถูกสร้างด้วย `make()` โดยไม่ระบุขนาดเริ่มต้น ดังนั้น `m2` จะเป็น empty map
+	- `m3` ถูกสร้างด้วย `make()` โดยระบุขนาดเริ่มต้นเป็น 5 ดังนั้น `m3` จะถูกจองพื้นที่ไว้สำหรับเก็บ key-value ได้ 5 คู่ (แต่ตอนสร้างจะยังเป็น empty map)
+	*/
+	// สร้าง empty map โดยใช้ map literal
+	var m4 = map[string]int{}
+	fmt.Println(m4)
+	/* 
+	ทั้ง make() และ map literal สามารถใช้สร้าง empty map ได้ แต่ make() ให้ความยืดหยุ่นมากกว่าเนื่องจากสามารถระบุขนาดเริ่มต้นของ map ได้
+	*/
 }
 /* 
 - ประกาศตัวแปร `m1` เป็น map ที่มี key เป็น string และ value เป็น int
