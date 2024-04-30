@@ -3,32 +3,40 @@ package main
 import "fmt"
 
 /*
-Go หากเราพยายามเพิ่ม key ที่มีอยู่แล้วในแมป มันจะเป็นการเขียนทับหรืออัปเดตค่าของ key นั้นด้วยค่าใหม่แทน
+ในภาษา Go เราสามารถดึงค่าจากแมปโดยใช้ key ได้ด้วยรูปแบบดังนี้:
+map_name[key]
+ถ้า key ไม่มีอยู่ในแมปที่กำหนด มันจะคืนค่า zero value ซึ่งก็คือ nil แต่ถ้า key มีอยู่ในแมปที่กำหนด มันจะคืนค่าที่เกี่ยวข้องกับ key นั้น
 */
 
 func main() {
 	// สร้างและกำหนดค่าเริ่มต้นให้กับแมป
 	var my_map = map[int]string {
-		1:"US",
+		1: "US",
 		91: "India",
 		86: "China",
 		44: "UK",
 	}
-	fmt.Println("Original Map\n", my_map)
+	fmt.Println("Original Map:", my_map)
+	// ดึงค่าโดยใช้ key
+	v1 := my_map[91]
+	v2 := my_map[93]
+	v3 := my_map[44]
 
-	// อัปเดตค่าในแมป
-	my_map[1] = "United States"
-	my_map[44] = "United Kingdom"
-	fmt.Println("\nAfter updating values of the map \n", my_map)
+	fmt.Println("Value of key[91]:", v1)
+	fmt.Println("Value of key[93]:", v2)
+	fmt.Println("Value of key[44]:", v3)
 }
 
 /* 
 1. เราสร้างแมป `my_map` และกำหนดค่าเริ่มต้นให้กับแมปโดยใช้ `map[int]string` ซึ่งหมายความว่า key เป็นชนิด `int` และ value เป็นชนิด `string`
-2. เราพิมพ์แมปเดิมออกมาโดยใช้ `fmt.Println("Original Map\n", my_map)`
-3. เราอัปเดตค่าในแมปโดยใช้ `my_map[1] = "United States"` และ `my_map[44] = "United Kingdom"` ซึ่งจะเปลี่ยนค่าของ key `1` จาก `"US"` เป็น `"United States"` และเปลี่ยนค่าของ key `44` จาก `"UK"` เป็น `"United Kingdom"`
-4. สุดท้ายเราพิมพ์แมปที่อัปเดตแล้วออกมาโดยใช้ `fmt.Println("\nAfter updating values of the map \n", my_map)`
+2. เราพิมพ์แมปเดิมออกมาโดยใช้ `fmt.Println("Original Map:", my_map)`
+3. เราดึงค่าจากแมปโดยใช้ key ด้วยรูปแบบ `map_name[key]` และกำหนดค่าให้กับตัวแปร `v1`, `v2`, `v3`
+   - `v1 := my_map[91]` จะดึงค่าของ key `91` ซึ่งก็คือ `"India"`
+   - `v2 := my_map[93]` จะดึงค่าของ key `93` ซึ่งไม่มีอยู่ในแมป ดังนั้นจะได้ค่า zero value คือ `""`
+   - `v3 := my_map[44]` จะดึงค่าของ key `44` ซึ่งก็คือ `"UK"`
+4. เราพิมพ์ค่าของตัวแปร `v1`, `v2`, `v3` ออกมาโดยใช้ `fmt.Println()`
 
-จากผลลัพธ์จะเห็นได้ว่าเมื่อเราพยายามเพิ่ม key ที่มีอยู่แล้วในแมป (`1` และ `44`) ค่าของ key เหล่านั้นจะถูกอัปเดตเป็นค่าใหม่ (`"United States"` และ `"United Kingdom"` ตามลำดับ) แทนที่จะเพิ่ม key-value pairs ใหม่ลงในแมป
+จากผลลัพธ์จะเห็นได้ว่าเมื่อเราดึงค่าจากแมปโดยใช้ key ที่มีอยู่ (`91` และ `44`) เราจะได้ค่าที่เกี่ยวข้องกับ key นั้น (`"India"` และ `"UK"` ตามลำดับ) แต่เมื่อเราดึงค่าจากแมปโดยใช้ key ที่ไม่มีอยู่ (`93`) เราจะได้ค่า zero value ซึ่งก็คือ `""` (empty string)
 
-นี่เป็นวิธีการอัปเดตค่าใน key ที่มีอยู่แล้วในแมปอย่างง่ายดายโดยใช้รูปแบบ `map_name[existing_key] = new_value`
+นี่เป็นวิธีการดึงค่าจากแมปโดยใช้ key อย่างง่ายดายด้วยรูปแบบ `map_name[key]` ซึ่งจะคืนค่าที่เกี่ยวข้องกับ key นั้นถ้ามีอยู่ในแมป หรือคืนค่า zero value ถ้าไม่มีอยู่ในแมป
 */
