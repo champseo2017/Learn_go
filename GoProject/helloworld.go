@@ -3,29 +3,46 @@ package main
 import "fmt"
 
 /*
-Q9: เขียนโปรแกรม Go เพื่ออธิบายการลบ key ออกจาก map
+Structs คือ ประเภทข้อมูลที่ผู้ใช้กำหนดเอง ซึ่งประกอบด้วยกลุ่มของฟิลด์ (fields) ที่มีชื่อและคุณสมบัติต่างๆ Struct ใช้จัดกลุ่มข้อมูลที่เกี่ยวข้องกันให้เป็นหน่วยเดียว Golang สามารถประกาศและสร้างประเภทข้อมูลของตัวเองได้โดยการรวมประเภทข้อมูลหนึ่งหรือมากกว่านั้นเข้าด้วยกัน ซึ่งรวมถึงทั้งประเภทข้อมูลในตัว (built-in) และที่ผู้ใช้กำหนดเอง Structs เป็นวิธีเดียวในการสร้างประเภทข้อมูลที่ผู้ใช้กำหนดเองแบบ concrete ใน Golang และช่วยปรับปรุงความเป็นโมดูลและอนุญาตให้สร้างและส่งโครงสร้างข้อมูลที่ซับซ้อนไปรอบๆ ระบบได้
 */
 
-func main() {
-	// สร้าง map
-	numbers := map[string]int {
-		"one":   1,
-        "two":   2,
-        "three": 3,
-        "four":  4,
-	}
-	fmt.Println("Original map:", numbers)
+// ประกาศ struct ชื่อ Person
+type Person struct {
+	Name string
+	Age int
+}
 
-	// ลบ key ออกจาก map
-	delete(numbers, "two")
-	fmt.Println("Map after deletion:", numbers)
-	// ลบ key ที่ไม่มีอยู่ใน map
-	delete(numbers, "five")
-	fmt.Println("Map after deletion again:", numbers)
+func main() {
+	// สร้าง instance ของ struct Person
+	person := Person{Name: "John", Age: 30}
+	// เข้าถึงฟิลด์ของ struct
+	fmt.Println(person.Name) // Output: John
+	fmt.Println(person.Age) // Output: 30
+	// อัปเดตค่าฟิลด์ของ struct
+	person.Age = 31
+	fmt.Println(person.Age) // Output: 31
+	// ประกาศ pointer ไปยัง struct
+	personPtr := &Person{Name: "Alice", Age: 25}
+	// เข้าถึงฟิลด์ผ่าน pointer
+	fmt.Println(personPtr.Name) // Output: Alice
+	// อัปเดตค่าฟิลด์ผ่าน pointer
+	personPtr.Age = 26
+	fmt.Println(personPtr.Age) // Output: 26
 }
 
 /* 
-ในฟังก์ชัน main() เราสร้าง map ชื่อ numbers โดยใช้ map literal
-แสดงค่าเริ่มต้นของ map ด้วย fmt.Println()
-การลบ key ออกจาก map ทำได้โดยใช้ฟังก์ชันbuilin
+1. เราประกาศ struct ชื่อ `Person` ที่มีฟิลด์ `Name` เป็น string และ `Age` เป็น int
+2. เราสร้าง instance ของ struct `Person` โดยระบุค่าของฟิลด์ `Name` และ `Age`
+3. เราเข้าถึงฟิลด์ของ struct โดยใช้เครื่องหมายจุด (dot notation) เช่น `person.Name` และ `person.Age`
+4. เราสามารถอัปเดตค่าของฟิลด์ได้โดยตรง เช่น `person.Age = 31`
+5. เราสามารถประกาศ pointer ไปยัง struct ได้โดยใช้เครื่องหมาย `&` นำหน้าชื่อ struct เช่น `personPtr := &Person{...}`
+6. เราสามารถเข้าถึงและอัปเดตฟิลด์ของ struct ผ่าน pointer ได้เช่นกัน โดยใช้เครื่องหมายจุด
+
+สิ่งสำคัญที่ควรทราบเกี่ยวกับ structs:
+- Structs เป็น value types ซึ่งหมายความว่าเมื่อมีการกำหนดหรือส่งผ่าน struct จะมีการคัดลอกค่าทั้งหมดของ struct
+- Zero value ของ struct คือค่าเริ่มต้นของฟิลด์ทั้งหมดในโครงสร้าง ซึ่งจะเป็นค่า zero ตามประเภทข้อมูลของแต่ละฟิลด์
+- Structs และฟิลด์ของ struct สามารถเป็นแบบ exported (เริ่มต้นด้วยตัวพิมพ์ใหญ่) หรือ unexported (เริ่มต้นด้วยตัวพิมพ์เล็ก) ได้ โดยฟิลด์ที่เป็น exported จะสามารถเข้าถึงได้จากภายนอกแพ็คเกจ ส่วนฟิลด์ที่เป็น unexported จะเข้าถึงได้เฉพาะภายในแพ็คเกจเท่านั้น
+- Structs สามารถเปรียบเทียบความเท่ากันได้โดยใช้เครื่องหมาย `==` หากฟิลด์ทั้งหมดของ struct เท่ากัน
+
+Structs เป็นส่วนสำคัญในการจัดการและจัดกลุ่มข้อมูลที่เกี่ยวข้องกันใน Golang ช่วยให้โค้ดมีความเป็นระเบียบและอ่านง่ายขึ้น นอกจากนี้ยังมีความยืดหยุ่นในการสร้างโครงสร้างข้อมูลที่ซับซ้อนและส่งผ่านไปยังส่วนต่างๆ ของระบบได้อย่างสะดวก
 */
