@@ -1,14 +1,25 @@
 package main
 
+import "fmt"
+
 /*
-Q1: Map ในภาษา Go คืออะไร?
-A: Map ในภาษา Go คือ data structure ที่ใช้สำหรับเก็บข้อมูลแบบคู่ key-value โดยที่ key จะต้องไม่ซ้ำกัน Map ช่วยให้สามารถค้นหา เพิ่ม แก้ไข และลบข้อมูลได้อย่างรวดเร็วโดยใช้ key เป็นตัวอ้างอิง
+เขียนโปรแกรม Go เพื่อสร้าง map โดยใช้ map literal
 */
 
 func main() {
-	
+	// สร้าง map ด้วย map literal
+	capitals := map[string]string {
+		"Thailand": "Bangkok",
+        "Japan":    "Tokyo",
+        "USA":      "Washington D.C.",
+        "Germany":  "Berlin",
+	}
+	fmt.Println("Capitals:", capitals)
 }
 
 /* 
-
+เริ่มต้นด้วยการ import package "fmt" เพื่อใช้ฟังก์ชันพื้นฐานในการแสดงผลข้อความ
+ในฟังก์ชัน main() เราสร้าง map ชื่อ capitals โดยกำหนดให้ key เป็นชนิด string และ value ก็เป็น string เช่นกัน
+เราสามารถกำหนดค่าเริ่มต้นของ map ด้วย map literal คือการระบุคู่ key-value ไว้ในวงเล็บ {} ในรูปแบบ key:value
+หลังจากนั้นเราก็แสดงค่าของ map ด้วย fmt.Println()
 */
