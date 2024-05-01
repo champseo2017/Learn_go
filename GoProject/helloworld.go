@@ -3,34 +3,29 @@ package main
 import "fmt"
 
 /*
-Q8: เขียนโปรแกรม Go เพื่ออธิบายการตรวจสอบว่ามี key อยู่ใน map หรือไม่
+Q9: เขียนโปรแกรม Go เพื่ออธิบายการลบ key ออกจาก map
 */
 
 func main() {
 	// สร้าง map
-	employees := map[string]int {
-		"Alice": 1001,
-        "Bob":   1002,
-        "Charlie": 1003,
+	numbers := map[string]int {
+		"one":   1,
+        "two":   2,
+        "three": 3,
+        "four":  4,
 	}
+	fmt.Println("Original map:", numbers)
 
-	// ตรวจสอบว่ามี key หรือไม่
-	id, exists := employees["Alice"]
-	if exists {
-		fmt.Printf("Alice's ID is %d\n", id)
-	} else {
-		fmt.Println("Alice does not exist")
-	}
-
-	_, exists2 := employees["Eve"]
-	if !exists2 {
-		fmt.Println("Eve does not exist")
-	}
+	// ลบ key ออกจาก map
+	delete(numbers, "two")
+	fmt.Println("Map after deletion:", numbers)
+	// ลบ key ที่ไม่มีอยู่ใน map
+	delete(numbers, "five")
+	fmt.Println("Map after deletion again:", numbers)
 }
 
 /* 
-การตรวจสอบว่ามี key อยู่ในmap หรือไม่ ทำได้โดยการเขียนในรูปแบบ value, ok := mapname[key]
-ถ้า ok เป็น true แสดงว่ามี key นั้นอยู่ใน map และ value จะได้รับค่า value ที่เชื่อมโยงกับ key นั้น
-ถ้า ok เป็น false แสดงว่าไม่มี key นั้นอยู่ใน map และ value จะได้รับ zero value ของ value type นั้น
-ในตัวอย่างนี้ เรามีการตรวจสอบ key "Alice" และ "Eve" ว่ามีอยู่ใน map หรือไม่ พร้อมทั้งแสดงผลลัพธ์ด้วย
+ในฟังก์ชัน main() เราสร้าง map ชื่อ numbers โดยใช้ map literal
+แสดงค่าเริ่มต้นของ map ด้วย fmt.Println()
+การลบ key ออกจาก map ทำได้โดยใช้ฟังก์ชันbuilin
 */
