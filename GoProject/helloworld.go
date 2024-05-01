@@ -3,25 +3,26 @@ package main
 import "fmt"
 
 /*
-อธิบายการสร้าง map โดยใช้ฟังก์ชัน make() ในภาษา Go
+Q4: เขียนโปรแกรม Go เพื่ออธิบายการวนลูปผ่าน map
 */
 
 func main() {
-	// สร้าง map โดยใช้ make()
-	ages := make(map[string]int)
-
-	// เพิ่มค่าลงใน map
-	ages["Alice"] = 25
-	ages["Bob"] = 30
-	ages["Charlie"] = 35
-
-	fmt.Println("Ages:", ages)
+	// สร้าง map
+	scores := map[string]int {
+		"Alice": 85,
+		"Bob": 92,
+		"Charlie": 77,
+	}
+	// วนลูปผ่าน map
+	for name, score := range scores {
+		fmt.Printf("%s got %d points\n", name, score)
+	}
 }
 
 /* 
-เริ่มต้นโดยการ import package "fmt"
-ในฟังก์ชัน main() เราสร้าง map ชื่อ ages โดยใช้ฟังก์ชัน make(map[key_type]value_type)
-ที่นี่เราระบุให้ key เป็นชนิด string และ value เป็นชนิด int
-หลังจากนั้นเราก็สามารถเพิ่มค่าลงใน map ได้โดยการกำหนด ages[key] = value
-สุดท้ายแสดงค่าของ map ด้วย fmt.Println()
+เริ่มต้นด้วยการ import package "fmt"
+ในฟังก์ชัน main() เราสร้าง map ชื่อ scores โดยใช้ map literal
+เราสามารถวนลูปผ่าน map ได้โดยใช้ for range loop ในรูปแบบ for key, value := range mapname
+ในแต่ละรอบของลูป ตัวแปร name จะได้รับค่า key และ score จะได้รับค่า value ของแต่ละคู่ใน map
+เราสามารถนำ key และ value มาใช้ได้ในบล็อกของลูป เช่น การแสดงผลด้วย fmt.Printf()
 */
