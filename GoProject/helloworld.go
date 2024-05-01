@@ -3,31 +3,34 @@ package main
 import "fmt"
 
 /*
-Q7: การดึงค่า value จาก key ใน map โดยการเขียนโปรแกรม Go
+Q8: เขียนโปรแกรม Go เพื่ออธิบายการตรวจสอบว่ามี key อยู่ใน map หรือไม่
 */
 
 func main() {
 	// สร้าง map
-	capitals := map[string]string {
-		"Thailand": "Bangkok",
-        "Japan":    "Tokyo",
-        "USA":      "Washington D.C.",
+	employees := map[string]int {
+		"Alice": 1001,
+        "Bob":   1002,
+        "Charlie": 1003,
 	}
-	// ดึงค่า value จาก key
-	capital := capitals["Thailand"]
-	fmt.Printf("Capital of Thailand: %s\n", capital)
 
-	// ดึงค่า value จากkey ที่ไม่มีอยู่ใน map
-	capital, ok := capitals["Germany"]
-	if ok {
-		fmt.Printf("Capital of Germany: %s\n", capital)
+	// ตรวจสอบว่ามี key หรือไม่
+	id, exists := employees["Alice"]
+	if exists {
+		fmt.Printf("Alice's ID is %d\n", id)
 	} else {
-		fmt.Println("Key 'Germany' does not exist")
+		fmt.Println("Alice does not exist")
+	}
+
+	_, exists2 := employees["Eve"]
+	if !exists2 {
+		fmt.Println("Eve does not exist")
 	}
 }
 
 /* 
-การดึงค่า value จาก key ทำได้โดยการเขียนในรูปแบบ value := mapname[key] เช่น capital := capitals["Thailand"] จะได้ value "Bangkok"
-กรณีที่เราดึงค่า value จาก key ที่ไม่มีอยู่ใน map เช่น key "Germany" เราจะได้ค่า zero value ของ value type นั้นกลับมา (string ก็จะได้ "" กลับมา)
-วิธีตรวจสอบว่า key มีอยู่ในmap หรือไม่ทำได้โดยการใช้คำสั่ง value, ok := mapname[key] ซึ่งจะได้ value กลับมาพร้อมกับ boolean ค่า ok เป็น true ถ้ามีkey นั้นอยู่
+การตรวจสอบว่ามี key อยู่ในmap หรือไม่ ทำได้โดยการเขียนในรูปแบบ value, ok := mapname[key]
+ถ้า ok เป็น true แสดงว่ามี key นั้นอยู่ใน map และ value จะได้รับค่า value ที่เชื่อมโยงกับ key นั้น
+ถ้า ok เป็น false แสดงว่าไม่มี key นั้นอยู่ใน map และ value จะได้รับ zero value ของ value type นั้น
+ในตัวอย่างนี้ เรามีการตรวจสอบ key "Alice" และ "Eve" ว่ามีอยู่ใน map หรือไม่ พร้อมทั้งแสดงผลลัพธ์ด้วย
 */
