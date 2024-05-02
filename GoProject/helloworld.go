@@ -3,37 +3,48 @@ package main
 import "fmt"
 
 /*
-เมื่อมีการกำหนด struct แต่ไม่ได้กำหนดค่าเริ่มต้นให้อย่างชัดเจน ฟิลด์ของ struct จะได้รับการกำหนดค่า zero โดยค่าเริ่มต้น (zero values) ของแต่ละประเภทข้อมูล เช่น สำหรับ string จะเป็น "" (สตริงว่าง) และสำหรับ int จะเป็น 0 นอกจากนี้ เรายังสามารถกำหนดค่าให้กับบางฟิลด์และละเว้นฟิลด์ที่เหลือได้ ซึ่งฟิลด์ที่ละเว้นจะได้รับการกำหนดค่า zero โดยอัตโนมัติ
+ในการเข้าถึงฟิลด์แต่ละตัวของ struct เราต้องใช้เครื่องหมายจุด (.) ตามด้วยชื่อของฟิลด์ที่ต้องการเข้าถึง เราสามารถใช้เครื่องหมายจุดเพื่ออ่านหรือกำหนดค่าให้กับฟิลด์ของ struct ได้
 */
 
-type employee struct {
-	name string
-	age int
-	city string
-	location string
+type bike struct {
+	name, model, color string
+	weight_in_kg float64
 }
 
 func main() {
-	// var emp1 employee // struct ที่มีค่า zero
-	// fmt.Println("Employee1 details:", emp1)
-	/* 
-	- เรากำหนด struct ชื่อ `employee` ที่มีฟิลด์ `name` เป็น string, `age` เป็น int และ `city` เป็น string
-	- ในฟังก์ชัน `main` เราประกาศตัวแปร `emp1` ของ struct `employee` แต่ไม่ได้กำหนดค่าเริ่มต้น
-	- ดังนั้น ฟิลด์ `name` และ `city` จะได้รับค่า zero ของ string ซึ่งเป็น `""` (สตริงว่าง) และฟิลด์ `age` จะได้รับค่า zero ของ int ซึ่งเป็น `0`
-	- ผลลัพธ์ที่ได้จะเป็น `Employee1 details: {0}`
-	*/
-	emp1 := employee {
-		age: 30,
-		location: "Pune",
+	b := bike{
+		name:"Bajaj",
+        model:"Pulsar_150cc",
+        color:"Black Grey",
+        weight_in_kg: 148,
 	}
-	fmt.Println("Employee1 details:", emp1)
+	// เข้าถึงฟิลด์ของ struct โดยใช้เครื่องหมายจุด
+	fmt.Println("bike name:", b.name)
+	fmt.Println("bike color:", b.color)
+	// กำหนดค่าใหม่ให้กับฟิลด์ของ struct
+	b.color = "Neon Red"
+	// แสดงผลลัพธ์
+	fmt.Println("bike:", b)
 }
 
 /* 
-- เรากำหนด struct ชื่อ `employee` ที่มีฟิลด์ `name` เป็น string, `age` เป็น int และ `location` เป็น string
-- ในฟังก์ชัน `main` เราประกาศตัวแปร `emp1` ของ struct `employee` และกำหนดค่าเริ่มต้นโดยระบุเฉพาะฟิลด์ `age` และ `location`
-- ฟิลด์ `name` ที่ไม่ได้ระบุค่าจะได้รับค่า zero ของ string ซึ่งเป็น `""` (สตริงว่าง)
-- ผลลัพธ์ที่ได้จะเป็น `Employee1 details: {30 Pune}`
+1. เรากำหนด struct ชื่อ `bike` ที่มีฟิลด์ดังนี้:
+   - `name` เป็น string
+   - `model` เป็น string
+   - `color` เป็น string
+   - `weight_in_kg` เป็น float64
 
-การทำความเข้าใจเกี่ยวกับ zero values ของ struct เป็นสิ่งสำคัญ เนื่องจากเมื่อเราประกาศตัวแปรของ struct โดยไม่ได้กำหนดค่าเริ่มต้น ฟิลด์ของ struct จะได้รับค่า zero โดยอัตโนมัติตามประเภทข้อมูลของแต่ละฟิลด์ นอกจากนี้ เรายังสามารถกำหนดค่าให้กับบางฟิลด์และละเว้นฟิลด์ที่เหลือได้ ซึ่งฟิลด์ที่ละเว้นจะได้รับค่า zero อยู่เสมอ
+2. ในฟังก์ชัน `main` เราสร้างตัวแปร `b` ของประเภท `bike` และกำหนดค่าเริ่มต้นให้กับฟิลด์ต่างๆ โดยใช้ struct literal
+
+3. เราเข้าถึงฟิลด์ของ struct `b` โดยใช้เครื่องหมายจุด:
+   - `b.name` เพื่อเข้าถึงฟิลด์ `name`
+   - `b.color` เพื่อเข้าถึงฟิลด์ `color`
+
+4. เราแสดงค่าของฟิลด์ `name` และ `color` โดยใช้ `fmt.Println`
+
+5. เรากำหนดค่าใหม่ให้กับฟิลด์ `color` ของ struct `b` โดยใช้เครื่องหมายจุด: `b.color = "Neon Red"`
+
+6. สุดท้าย เราแสดงค่าทั้งหมดของ struct `b` โดยใช้ `fmt.Println`
+
+จะเห็นว่าเราสามารถเข้าถึงและแสดงค่าของฟิลด์ `name` และ `color` ของ struct `b` ได้อย่างถูกต้อง และเมื่อเรากำหนดค่าใหม่ให้กับฟิลด์ `color` ค่าของฟิลด์นั้นก็ถูกอัปเดตอย่างถูกต้องเช่นกัน
 */
