@@ -3,48 +3,36 @@ package main
 import "fmt"
 
 /*
-ในการเข้าถึงฟิลด์แต่ละตัวของ struct เราต้องใช้เครื่องหมายจุด (.) ตามด้วยชื่อของฟิลด์ที่ต้องการเข้าถึง เราสามารถใช้เครื่องหมายจุดเพื่ออ่านหรือกำหนดค่าให้กับฟิลด์ของ struct ได้
+ในภาษา Go, Pointer เป็นตัวแปรที่ใช้สำหรับเก็บที่อยู่ของตัวแปรอื่น โดยตัวแปรจะใช้สำหรับเก็บข้อมูลที่ที่อยู่ในหน่วยความจำของระบบ เราสามารถใช้ Pointer กับ Struct ได้โดยใช้เครื่องหมาย & (Address Operator) ภาษา Go อนุญาตให้โปรแกรมเมอร์เข้าถึง Field ของ Struct โดยใช้ Pointer โดยไม่จำเป็นต้องมีการ Dereference อย่างชัดเจน
 */
 
-type bike struct {
-	name, model, color string
-	weight_in_kg float64
+type my_struct struct {
+	city string
+	country string
 }
 
 func main() {
-	b := bike{
-		name:"Bajaj",
-        model:"Pulsar_150cc",
-        color:"Black Grey",
-        weight_in_kg: 148,
-	}
-	// เข้าถึงฟิลด์ของ struct โดยใช้เครื่องหมายจุด
-	fmt.Println("bike name:", b.name)
-	fmt.Println("bike color:", b.color)
-	// กำหนดค่าใหม่ให้กับฟิลด์ของ struct
-	b.color = "Neon Red"
-	// แสดงผลลัพธ์
-	fmt.Println("bike:", b)
+	// สร้าง Instance ของ my_struct
+	my_struct1 := my_struct{"New Delhi", "India"}
+	// Pointer ไปยัง Struct
+	my_pointer := &my_struct1
+	fmt.Println(my_pointer)
+
+	// เข้าถึง Field ของ Struct โดยใช้ Pointer
+	fmt.Println(my_pointer.country)
+
+	// เข้าถึง Field ของ Struct โดยใช้ Concept ของ Dereferencing
+	fmt.Println((*my_pointer).country)
+
 }
 
 /* 
-1. เรากำหนด struct ชื่อ `bike` ที่มีฟิลด์ดังนี้:
-   - `name` เป็น string
-   - `model` เป็น string
-   - `color` เป็น string
-   - `weight_in_kg` เป็น float64
+1. เราประกาศ Struct ชื่อ `my_struct` ที่มี Field `city` และ `country` เป็น string
+2. ในฟังก์ชัน `main()` เราสร้าง Instance ของ `my_struct` ชื่อ `my_struct1` และกำหนดค่าเริ่มต้นให้กับ Field `city` เป็น "New Delhi" และ `country` เป็น "India"
+3. เราสร้าง Pointer ชื่อ `my_pointer` และกำหนดให้ชี้ไปยัง `my_struct1` โดยใช้เครื่องหมาย & (Address Operator)
+4. เราแสดงค่าของ Pointer `my_pointer` ซึ่งจะเป็นที่อยู่ของ `my_struct1`
+5. เราเข้าถึง Field `country` ของ `my_struct1` ผ่าน Pointer `my_pointer` โดยใช้เครื่องหมายจุด (Dot Notation) โดยไม่จำเป็นต้อง Dereference Pointer
+6. เราเข้าถึง Field `country` ของ `my_struct1` โดยใช้ Concept ของ Dereferencing `(*my_pointer).country` ซึ่งจะให้ผลลัพธ์เหมือนกับการเข้าถึงโดยใช้ Dot Notation
 
-2. ในฟังก์ชัน `main` เราสร้างตัวแปร `b` ของประเภท `bike` และกำหนดค่าเริ่มต้นให้กับฟิลด์ต่างๆ โดยใช้ struct literal
-
-3. เราเข้าถึงฟิลด์ของ struct `b` โดยใช้เครื่องหมายจุด:
-   - `b.name` เพื่อเข้าถึงฟิลด์ `name`
-   - `b.color` เพื่อเข้าถึงฟิลด์ `color`
-
-4. เราแสดงค่าของฟิลด์ `name` และ `color` โดยใช้ `fmt.Println`
-
-5. เรากำหนดค่าใหม่ให้กับฟิลด์ `color` ของ struct `b` โดยใช้เครื่องหมายจุด: `b.color = "Neon Red"`
-
-6. สุดท้าย เราแสดงค่าทั้งหมดของ struct `b` โดยใช้ `fmt.Println`
-
-จะเห็นว่าเราสามารถเข้าถึงและแสดงค่าของฟิลด์ `name` และ `color` ของ struct `b` ได้อย่างถูกต้อง และเมื่อเรากำหนดค่าใหม่ให้กับฟิลด์ `color` ค่าของฟิลด์นั้นก็ถูกอัปเดตอย่างถูกต้องเช่นกัน
+นอกจากนี้ยังช่วยประหยัดหน่วยความจำเนื่องจาก Pointer จะอ้างอิงไปยังที่อยู่ของ Struct โดยตรง ไม่ต้องสร้างสำเนาของ Struct ใหม่
 */
