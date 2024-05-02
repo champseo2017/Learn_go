@@ -3,49 +3,37 @@ package main
 import "fmt"
 
 /*
-ในการประกาศและกำหนดค่าเริ่มต้นให้กับ struct type ในภาษา Go เราเริ่มต้นด้วยคีย์เวิร์ด type ตามด้วยชื่อของ struct ใหม่ และปิดท้ายด้วยคีย์เวิร์ด struct ภายในวงเล็บปีกกา เราระบุชื่อและประเภทของฟิลด์ข้อมูลเป็นชุดๆ เราสามารถกำหนดค่าเริ่มต้นให้กับตัวแปรของ struct type โดยใช้ struct literal และต้องส่งค่าให้กับฟิลด์ตามลำดับที่ประกาศไว้ใน struct
+เมื่อมีการกำหนด struct แต่ไม่ได้กำหนดค่าเริ่มต้นให้อย่างชัดเจน ฟิลด์ของ struct จะได้รับการกำหนดค่า zero โดยค่าเริ่มต้น (zero values) ของแต่ละประเภทข้อมูล เช่น สำหรับ string จะเป็น "" (สตริงว่าง) และสำหรับ int จะเป็น 0 นอกจากนี้ เรายังสามารถกำหนดค่าให้กับบางฟิลด์และละเว้นฟิลด์ที่เหลือได้ ซึ่งฟิลด์ที่ละเว้นจะได้รับการกำหนดค่า zero โดยอัตโนมัติ
 */
 
-// กำหนด struct type
-type city_list struct {
+type employee struct {
+	name string
+	age int
 	city string
-	state string
-	country string
+	location string
 }
 
 func main() {
-	// ประกาศและกำหนดค่าเริ่มต้นให้ struct โดยใช้ struct literal
-	// c1 := city_list{"Mumbai", "Maharashtra", "India"}
-	// c2 := city_list{"Chicago", "Illinois", "US"}
-	// c3 := city_list{"Sydney", "New South Wales", "Australia"}
-
-	// fmt.Println("City1:", c1)
-	// fmt.Println("City2:", c2)
-	// fmt.Println("City3:", c3)
+	// var emp1 employee // struct ที่มีค่า zero
+	// fmt.Println("Employee1 details:", emp1)
 	/* 
-	1. เรากำหนด struct type ชื่อ `city_list` ที่มีฟิลด์ `city`, `state` และ `country` เป็น string
-	2. ในฟังก์ชัน `main` เราประกาศตัวแปร `c1`, `c2` และ `c3` ของ struct type `city_list` และกำหนดค่าเริ่มต้นโดยใช้ struct literal
-	3. เราส่งค่าให้กับฟิลด์ตามลำดับที่ประกาศไว้ใน struct คือ `city`, `state` และ `country`
-	4. สุดท้ายเราแสดงค่าของตัวแปร struct ทั้งสามโดยใช้ `fmt.Println`
-	
+	- เรากำหนด struct ชื่อ `employee` ที่มีฟิลด์ `name` เป็น string, `age` เป็น int และ `city` เป็น string
+	- ในฟังก์ชัน `main` เราประกาศตัวแปร `emp1` ของ struct `employee` แต่ไม่ได้กำหนดค่าเริ่มต้น
+	- ดังนั้น ฟิลด์ `name` และ `city` จะได้รับค่า zero ของ string ซึ่งเป็น `""` (สตริงว่าง) และฟิลด์ `age` จะได้รับค่า zero ของ int ซึ่งเป็น `0`
+	- ผลลัพธ์ที่ได้จะเป็น `Employee1 details: {0}`
 	*/
-
-
-	// กำหนดค่าเริ่มต้นให้กับ struct โดยระบุชื่อฟิลด์ด้วย
-	c1 := city_list{city: "Mumbai", state: "Maharashtra", country: "India"}
-	c2 := city_list{city: "Chicago", state: "Illinois", country: "US"}
-	c3 := city_list{city: "Sydney", state: "New South Wales", country: "Australia"}
-	/* 
-		เราระบุชื่อฟิลด์ในขณะที่กำหนดค่าเริ่มต้นให้กับ struct ด้วยการใช้รูปแบบ `field: value` ซึ่งช่วยให้โค้ดอ่านง่ายและชัดเจนมากขึ้น
-
-		การประกาศและกำหนดค่าเริ่มต้นให้กับ struct type ในภาษา Go เป็นเรื่องง่ายและตรงไปตรงมา เราสามารถกำหนดค่าเริ่มต้นโดยใช้ struct literal และระบุค่าตามลำดับของฟิลด์หรือระบุชื่อฟิลด์ก็ได้ ซึ่งช่วยให้เราสามารถจัดการและจัดกลุ่มข้อมูลที่เกี่ยวข้องกันได้อย่างสะดวกและเป็นระเบียบ
-	*/
-
-	fmt.Println("City1:", c1)
-	fmt.Println("City1:", c2)
-	fmt.Println("City1:", c3)
+	emp1 := employee {
+		age: 30,
+		location: "Pune",
+	}
+	fmt.Println("Employee1 details:", emp1)
 }
 
 /* 
+- เรากำหนด struct ชื่อ `employee` ที่มีฟิลด์ `name` เป็น string, `age` เป็น int และ `location` เป็น string
+- ในฟังก์ชัน `main` เราประกาศตัวแปร `emp1` ของ struct `employee` และกำหนดค่าเริ่มต้นโดยระบุเฉพาะฟิลด์ `age` และ `location`
+- ฟิลด์ `name` ที่ไม่ได้ระบุค่าจะได้รับค่า zero ของ string ซึ่งเป็น `""` (สตริงว่าง)
+- ผลลัพธ์ที่ได้จะเป็น `Employee1 details: {30 Pune}`
 
+การทำความเข้าใจเกี่ยวกับ zero values ของ struct เป็นสิ่งสำคัญ เนื่องจากเมื่อเราประกาศตัวแปรของ struct โดยไม่ได้กำหนดค่าเริ่มต้น ฟิลด์ของ struct จะได้รับค่า zero โดยอัตโนมัติตามประเภทข้อมูลของแต่ละฟิลด์ นอกจากนี้ เรายังสามารถกำหนดค่าให้กับบางฟิลด์และละเว้นฟิลด์ที่เหลือได้ ซึ่งฟิลด์ที่ละเว้นจะได้รับค่า zero อยู่เสมอ
 */
