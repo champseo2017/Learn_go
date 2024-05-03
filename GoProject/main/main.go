@@ -5,7 +5,8 @@ import "fmt"
 /*
 
  */
-// struct เป็น value type
+// ตรวจสอบความเท่ากันของ struct
+
 type Person struct {
 	Name string
 	Age int
@@ -13,10 +14,8 @@ type Person struct {
  
 func main() {
 	p1 := Person{Name: "John", Age: 30}
-	p2 := p1
-	p2.Name = "Alice"
-	fmt.Println(p1.Name)
-	fmt.Println(p2.Name)
+	p2 := Person{Name: "John", Age: 30}
+	fmt.Println(p1 == p2)
 }
 /* 
 
