@@ -5,7 +5,7 @@ import "fmt"
 /*
 
  */
-// เข้าถึงฟิลด์ของ struct
+// อธิบายแนวคิดของพอยน์เตอร์ใน struct
 
 type Person struct {
 	Name string
@@ -14,7 +14,9 @@ type Person struct {
  
 func main() {
 	p := Person{Name: "John", Age: 30}
-	fmt.Println(p.Name)
+	ptr := &p
+	fmt.Println(ptr.Name)
+	ptr.Age = 31
 	fmt.Println(p.Age)
 }
 /* 
