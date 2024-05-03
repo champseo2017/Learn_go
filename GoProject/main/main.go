@@ -3,32 +3,42 @@ package main
 import "fmt"
 
 /*
-
-ใน Go, struct สองตัวจะเท่ากันก็ต่อเมื่อฟิลด์ที่ตรงกันทั้งหมดมีค่าเท่ากัน เราสามารถเปรียบเทียบความเท่ากันของ struct ได้โดยใช้เครื่องหมาย `==`
-
-ตัวอย่างเช่น ในโปรแกรมที่ให้มา มีการสร้าง struct ชื่อ `city` และ instance ของ `city` สองตัว ได้แก่ `c1` และ `c2` ที่มีค่าเริ่มต้นของฟิลด์เหมือนกัน เมื่อเปรียบเทียบความเท่ากันด้วยคำสั่ง `if c1 == c2` ผลลัพธ์จะเป็น `true` และโปรแกรมจะแสดงข้อความ "City list c1 and c2 are same"
-
-การเปรียบเทียบความเท่ากันของ struct มีประโยชน์ในหลายสถานการณ์ เช่น การค้นหาข้อมูล การตรวจสอบความถูกต้องของข้อมูล หรือการเปรียบเทียบ struct ในการทำงานของโปรแกรม ช่วยให้เราสามารถตรวจสอบได้ว่า struct สองตัวมีค่าเหมือนกันหรือไม่
+1. Struct เป็น user-defined type ที่ใช้จัดกลุ่มข้อมูลที่เกี่ยวข้องกันเป็นหน่วยเดียว
+2. ประกาศ struct ด้วยคีย์เวิร์ด `type` ตามด้วยชื่อและคีย์เวิร์ด `struct` และกำหนดฟิลด์และประเภทข้อมูลภายในวงเล็บปีกกา
+3. สร้าง instance ของ struct ด้วย struct literal และเข้าถึงฟิลด์ด้วยเครื่องหมายจุด (`.`)
+4. Struct เป็น value type เมื่อกำหนดค่าหรือส่งเป็นพารามิเตอร์ จะมีการสร้างสำเนาใหม่
+5. เปรียบเทียบความเท่ากันของ struct ด้วยเครื่องหมาย `==` โดยฟิลด์ทั้งหมดต้องเท่ากัน
+6. Struct และฟิลด์ที่ขึ้นต้นด้วยตัวพิมพ์ใหญ่จะถูก export ไปยังแพ็คเกจอื่นได้
+7. ใช้ pointer (`&`) เพื่อชี้ไปยัง struct และเข้าถึงฟิลด์ผ่าน pointer โดยไม่ต้อง dereference
 */
-// สร้าง struct ชื่อ city ที่มีฟิลด์ city1, city2, และ city3 เป็น string
-type city struct {
-	city1 string
-	city2 string
-	city3 string
+// ประกาศ struct ชื่อ Person
+type Person struct {
+	Name string
+	Age int
 }
-func main() {
-	// สร้าง instance ของ city สองตัว (c1 และ c2) ที่มีค่าเริ่มต้นของฟิลด์เหมือนกัน
-	c1 := city{"Pune", "Delhi", "Lucknow"}
-	c2 := city{"Pune", "Delhi", "Lucknow"}
 
-	// เปรียบเทียบความเท่ากันของ c1 และ c2
-	if c1 == c2 {
-		// ถ้า c1 และ c2 เท่ากัน (ฟิลด์ทั้งหมดเท่ากัน) ให้แสดงข้อความนี้
-		fmt.Println("City list c1 and c2 are same")
-	} else {
-		// ถ้า c1 และ c2 ไม่เท่ากัน ให้แสดงข้อความนี้
-		fmt.Println("City list c1 and c2 are not same")
-	}
+func main() {
+	 // สร้าง instance ของ Person
+	 p1 := Person{Name: "John", Age: 30 }
+	 fmt.Println(p1) // Output: {John 30}
+	 // สร้าง pointer ชี้ไปยัง p1
+	 p2 := &p1
+	 fmt.Println(p2) // Output: &{John 30}
+	 // เข้าถึงฟิลด์ของ struct ผ่านทาง instance
+	 fmt.Println(p1.Name) // Output: John
+	 // เข้าถึงฟิลด์ของ struct ผ่านทาง pointer
+	 fmt.Println(p2.Age) // Output: 30
+	 // กำหนดค่า struct ให้กับตัวแปรอื่น (สร้างสำเนา)
+	 p3 := p1
+	 p3.Name = "Alice"
+	 fmt.Println(p1) // Output: {John 30}
+	 fmt.Println(p3) // Output: {Alice 30}
+
+	 // เปรียบเทียบความเท่ากันของ struct
+	 p4 := Person{Name: "John", Age: 30}
+	 fmt.Println(p1 == p4) // Output: true
+
+
 }
 /* 
 
