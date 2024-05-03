@@ -5,15 +5,15 @@ import "fmt"
 /*
 
  */
-// ประกาศและกำหนดค่าเริ่มต้นให้กับ struct
- type Person struct {
+// อธิบายค่า zero value ของ struct
+type Person struct {
 	Name string
 	Age int
- }
-
+}
+ 
 func main() {
-	p := Person{Name: "John", Age: 30}
-	fmt.Println(p)
+	var p Person
+	fmt.Println("Name: %q, Age: %d\n", p.Name, p.Age)
 }
 /* 
 
