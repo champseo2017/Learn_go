@@ -1,18 +1,9 @@
 package main
 
+import "fmt"
+
 /*
-1. Methods คือฟังก์ชันที่เชื่อมโยงกับ Type (ชนิดข้อมูล) เฉพาะ
-2. Methods ประกาศด้วยการเพิ่ม Receiver ระหว่างคีย์เวิร์ด `func` และชื่อ Method
-3. Receiver ระบุ Type ที่ Method เชื่อมโยงด้วย และสามารถเข้าถึงฟิลด์ของ Type นั้นได้
-4. Methods สามารถมีพารามิเตอร์และคืนค่าได้เหมือนฟังก์ชันทั่วไป
-5. ชื่อ Receiver ควรสั้นและใช้ชื่อเดียวกันสำหรับทุก Method เพื่อความสม่ำเสมอ
-6. Methods และ Type ของมันต้องถูกประกาศในแพ็คเกจเดียวกัน ไม่สามารถประกาศ Method ในแพ็คเกจที่แตกต่างจาก Type ได้
-
-Methods ช่วยให้เราสามารถเขียนโค้ดแบบเชิงวัตถุ (Object-Oriented) ในภาษา Go ได้ โดยกำหนดพฤติกรรมเฉพาะให้กับ Type ต่างๆ และทำให้โค้ดมีความเป็นโมดูลาร์ ง่ายต่อการอ่านและบำรุงรักษา
-
-func (receiverName receiverType) methodName(param1 paramType) (returnType1) {
-    // ...
-}
+ในการประกาศ Method สามารถละชื่อ Receiver ได้ โดยระบุเฉพาะ Receiver Type ก็เพียงพอ หากMethod ไม่ได้อ่านหรือแก้ไขฟิลด์ใดๆ ของ Receiver สามารถละชื่อ Receiver ได้ (ถึงแม้ว่าจะไม่ใช่กรณีที่ถูกต้อง เพราะถ้า Method ไม่ได้อ่านหรือแก้ไขฟิลด์ใดๆ ก็ไม่มีความจำเป็นในการประกาศ Method นั้น)
 */
 
 type rectangle struct {
@@ -28,9 +19,25 @@ func (rect rectangle) perimeter() float32 {
 	return 2 * (rect.length + rect.width)
 }
 
+func (rectangle) doSomething() {
+	fmt.Println("I don't know what to do")
+}
+
+/* 
+ประกาศ Method doSomething() ที่มีเฉพาะ Receiver Type เป็น rectangle โดยไม่มีชื่อ Receiver
+Method นี้ไม่ได้อ่านหรือแก้ไขฟิลด์ใดๆ ของ rectangle struct แต่เพียงแค่แสดงข้อความทางหน้าจอ
+*/
+
 func main() {
-	
+	rect := rectangle{12.3, 21.45}
+	a := rect.area()
+	fmt.Println(a)
+	/* 
+	สร้างตัวแปร rect เป็น rectangle struct ด้วยค่า length เป็น 12.3 และ width เป็น 21.45
+	เรียกใช้ Method area() ด้วย rect.area() และเก็บผลลัพธ์ไว้ในตัวแปร a
+	แสดงค่าของ a ทางหน้าจอ
+	*/
 }
 /* 
-
+สรุปได้ว่า การประกาศ Method ใน Go สามารถทำได้โดยระบุ Receiver Type และชื่อ Receiver (ถ้าจำเป็น) การเรียกใช้ Method ทำได้โดยใช้เครื่องหมายจุด (.) กับค่าของ Type ที่ Method นั้นเชื่อมโยงอยู่ และ Method สามารถอ่านหรือแก้ไขฟิลด์ของ Receiver Type ได้ โดย Method และ Type ของมันต้องอยู่ในแพ็คเกจเดียวกัน
 */
