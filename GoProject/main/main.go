@@ -8,21 +8,17 @@ import (
 ตัวอย่างการกำหนด Method ให้กับ Type ต่างๆ
 */
 
-// Method ของ Slice
-type IntSlice []int
+// Method ของ Map
+type StringMap map[string]string
 
-func (s IntSlice) Average() float64 {
-	sum := 0
-	for _, value := range s {
-		sum += value
-	}
-	return float64(sum) / float64(len(s))
+func (m StringMap) GetValue(key string) string {
+	return m[key]
 }
 
 func main() {
-	slices := IntSlice{1, 2, 3, 4, 5}
-	avg := slices.Average()
-	fmt.Println(avg) // Output: 3
+	dict := StringMap{"apple": "fruit", "carrot": "vegetable"}
+	value := dict.GetValue("apple")
+	fmt.Println(value) // Output: fruit
 }
 /* 
 
