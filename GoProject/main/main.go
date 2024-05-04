@@ -3,7 +3,17 @@ package main
 import "fmt"
 
 /*
-ในการประกาศ Method สามารถละชื่อ Receiver ได้ โดยระบุเฉพาะ Receiver Type ก็เพียงพอ หากMethod ไม่ได้อ่านหรือแก้ไขฟิลด์ใดๆ ของ Receiver สามารถละชื่อ Receiver ได้ (ถึงแม้ว่าจะไม่ใช่กรณีที่ถูกต้อง เพราะถ้า Method ไม่ได้อ่านหรือแก้ไขฟิลด์ใดๆ ก็ไม่มีความจำเป็นในการประกาศ Method นั้น)
+Value Receiver และ Pointer Receiver ในภาษา Go:
+
+1. Value Receiver คือการส่งค่าของ Receiver (ตัวแปรที่เป็น Type ของ Method) เข้าไปใน Method
+   - การเปลี่ยนแปลงค่าใน Method ที่ใช้ Value Receiver จะไม่ส่งผลต่อค่าเดิมของ Receiver ในฟังก์ชันที่เรียกใช้
+   - Value Receiver เหมาะสำหรับการอ่านค่าจาก Receiver เท่านั้น
+
+2. Pointer Receiver คือการส่งพอยน์เตอร์ (Memory Address) ของ Receiver เข้าไปใน Method
+   - การเปลี่ยนแปลงค่าใน Method ที่ใช้ Pointer Receiver จะส่งผลต่อค่าเดิมของ Receiver ในฟังก์ชันที่เรียกใช้
+   - Pointer Receiver เหมาะสำหรับการแก้ไขค่าของ Receiver หรือเมื่อต้องการให้การเปลี่ยนแปลงใน Method ส่งผลต่อค่าเดิมของ Receiver
+
+การเลือกใช้ Value Receiver หรือ Pointer Receiver ขึ้นอยู่กับวัตถุประสงค์ของ Method ว่าต้องการแค่อ่านค่าจาก Receiver หรือต้องการแก้ไขค่าของ Receiver ด้วย ซึ่งจะช่วยให้เขียนโค้ดได้อย่างมีประสิทธิภาพและถูกต้องตามวัตถุประสงค์
 */
 
 type rectangle struct {
