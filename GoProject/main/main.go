@@ -1,39 +1,37 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 /*
-สรุปสั้นๆ เกี่ยวกับการใช้ Pointer Receiver ใน Method ของภาษา Go:
+เกี่ยวกับ Pointer Receiver และ Value Receiver ในภาษา Go:
 
-1. Pointer Receiver ใช้เพื่อรับค่าเป็น Pointer (Memory Address) ของ Receiver Type
-2. การประกาศ Method ด้วย Pointer Receiver ทำโดยเพิ่มเครื่องหมายดอกจัน (`*`) ไว้ด้านหน้า Receiver Type
-3. เมื่อใช้ Pointer Receiver ใน Method เราสามารถเข้าถึงและแก้ไขค่าของ Receiver ได้โดยตรง
-4. การเปลี่ยนแปลงค่าใน Method ที่ใช้ Pointer Receiver จะส่งผลต่อค่าเดิมของ Receiver ในฟังก์ชันที่เรียกใช้ Method
-5. Pointer Receiver มีประโยชน์อย่างมากในการเขียนโค้ดที่ต้องการปรับเปลี่ยนค่าของ struct หรือ type ต่างๆ
+1. สามารถเรียกใช้ Method ที่มี Pointer Receiver ด้วยตัวแปรที่ไม่ใช่ Pointer ได้ โดย Go Compiler จะทำการ Referencing (ดึงที่อยู่) ให้โดยอัตโนมัติ
+2. สามารถเรียกใช้ Method ที่มี Value Receiver ด้วยตัวแปรที่เป็น Pointer ได้ โดย Go Compiler จะทำการ Dereferencing (ดึงค่า) ให้โดยอัตโนมัติ
+3. การ Referencing และ Dereferencing จะทำงานได้เฉพาะเมื่อมีการใช้ตัวแปรเท่านั้น ไม่สามารถทำกับ Composite Literal (ค่าที่ประกาศโดยตรง) ได้
+4. Type สามารถมีทั้ง Pointer Receiver และ Value Receiver Method ผสมกันได้ แต่แนะนำให้ใช้อย่างใดอย่างหนึ่งเป็นหลักเพื่อความชัดเจน
+5. Pointer Receiver มีข้อดีกว่า Value Receiver ในแง่ของประสิทธิภาพและความยืดหยุ่นในการปรับเปลี่ยนค่าของ Receiver ในอนาคต
 
-ดังนั้น การเลือกใช้ Pointer Receiver หรือ Value Receiver ใน Method ขึ้นอยู่กับวัตถุประสงค์ของเรา หากต้องการให้การเปลี่ยนแปลงค่าใน Method ส่งผลต่อค่าเดิมของ Receiver ให้ใช้ Pointer Receiver แต่หากต้องการแค่อ่านค่าจาก Receiver โดยไม่เปลี่ยนแปลงค่าเดิม ให้ใช้ Value Receiver
+เมื่อเลือกใช้ Receiver ใน Method ให้พิจารณาถึงวัตถุประสงค์ของ Method และความยืดหยุ่นในการพัฒนาโค้ดต่อไป หากไม่แน่ใจ แนะนำให้ใช้ Pointer Receiver เป็นหลัก และหลีกเลี่ยงการเรียกใช้ Method ที่มี Pointer Receiver ด้วย Composite Literal โดยตรง ควรประกาศตัวแปรเก็บค่าก่อนเพื่อให้โค้ดอ่านง่ายและลดโอกาสเกิดข้อผิดพลาด
 
-การประกาศ Method ด้วย Pointer Receiver
-func (receiverName *receiverType) methodName(param1 paramType) (returnType1) {
-    // ...
-}
 */
 
 type rectangle struct {
-	length float32
-	width float32
+	length float64
+	width float64
 }
 
-func (r *rectangle) increaseLength(a float32) {
-	r.length = r.length + a
+func (r *rectangle) increaseLength(value float64) {
+	r.length += value
 }
 
 func main() {
-	rect := rectangle{12.3, 21.45}
-	rect.increaseLength(3.4)
-	fmt.Println(rect)
+	// ตัวอย่างการเรียกใช้ Method ที่มี Pointer Receiver ด้วยตัวแปรที่ไม่ใช่ Pointer
+	rect := rectangle{10, 20}
+	rect.increaseLength(5)
+	fmt.Println(rect) // Output: {15 20}
+	/* 
+	ในตัวอย่างนี้ increaseLength เป็น Method ที่มี Pointer Receiver (*rectangle) แต่ในฟังก์ชัน main เราเรียกใช้ increaseLength ด้วยตัวแปร rect ซึ่งเป็น Value (ไม่ใช่ Pointer) โดยเขียนเป็น rect.increaseLength(5) ทั้งๆ ที่ rect ไม่ใช่ Pointer แต่ Go Compiler จะทำการ Referencing ให้โดยอัตโนมัติ กล่าวคือจะส่งที่อยู่ (Memory Address) ของ rect ให้กับ increaseLength ทำให้ increaseLength สามารถแก้ไขค่าใน rect ได้โดยตรง
+	*/
 }
 /* 
 
