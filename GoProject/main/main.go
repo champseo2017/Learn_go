@@ -1,26 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 /*
 ตัวอย่างการกำหนด Method ให้กับ Type ต่างๆ
 */
 
-// Method ของ Array
-type IntArray [5]int
+// Method ของ Slice
+type IntSlice []int
 
-func (a IntArray) Sum() int {
+func (s IntSlice) Average() float64 {
 	sum := 0
-	for _, value := range a {
+	for _, value := range s {
 		sum += value
 	}
-	return sum
+	return float64(sum) / float64(len(s))
 }
 
 func main() {
-	arr := IntArray{1, 2, 3, 4, 5}
-	sum := arr.Sum()
-	fmt.Println(sum) // Output: 15
+	slices := IntSlice{1, 2, 3, 4, 5}
+	avg := slices.Average()
+	fmt.Println(avg) // Output: 3
 }
 /* 
 
