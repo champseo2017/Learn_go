@@ -20,17 +20,16 @@ type rectangle struct {
 	width float64
 }
 
-func (r *rectangle) increaseLength(value float64) {
-	r.length += value
+func (r rectangle) area() float64 {
+	return r.length * r.width
 }
 
 func main() {
-	// ตัวอย่างการเรียกใช้ Method ที่มี Pointer Receiver ด้วยตัวแปรที่ไม่ใช่ Pointer
-	rect := rectangle{10, 20}
-	rect.increaseLength(5)
-	fmt.Println(rect) // Output: {15 20}
+	// ตัวอย่างการเรียกใช้ Method ที่มี Value Receiver ด้วยตัวแปรที่เป็น Pointer
+	rect := &rectangle{10, 20}
+	fmt.Println(rect.area()) // Output: 200
 	/* 
-	ในตัวอย่างนี้ increaseLength เป็น Method ที่มี Pointer Receiver (*rectangle) แต่ในฟังก์ชัน main เราเรียกใช้ increaseLength ด้วยตัวแปร rect ซึ่งเป็น Value (ไม่ใช่ Pointer) โดยเขียนเป็น rect.increaseLength(5) ทั้งๆ ที่ rect ไม่ใช่ Pointer แต่ Go Compiler จะทำการ Referencing ให้โดยอัตโนมัติ กล่าวคือจะส่งที่อยู่ (Memory Address) ของ rect ให้กับ increaseLength ทำให้ increaseLength สามารถแก้ไขค่าใน rect ได้โดยตรง
+	นตัวอย่างนี้ area เป็น Method ที่มี Value Receiver (rectangle) แต่ในฟังก์ชัน main เราเรียกใช้ area ด้วยตัวแปร rect ซึ่งเป็น Pointer โดยเขียนเป็น rect.area() ทั้งๆ ที่ rect เป็น Pointer แต่ Go Compiler จะทำการ Dereferencing ให้โดยอัตโนมัติ กล่าวคือจะดึงค่า (Value) ที่ Pointer rect ชี้ไปให้กับ area ทำให้ area สามารถอ่านค่าจาก *rect ได้โดยตรง
 	*/
 }
 /* 
