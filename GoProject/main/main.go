@@ -10,19 +10,20 @@ type A struct {
     C
 }
 
-type B struct {}
-type C struct {}
+type B struct {
+    D
+}
 
-func (b B) m1() {}
+type C struct {}
+type D struct {}
 
 func (c C) m1() {}
-
+func (d D) m1() {}
 
 func main() {
 	a := A{}
-    // a.m1() // error: ambiguous selector a.m1
-    a.B.m1() // calls B's m1
-    a.C.m1() // calls C's m1
+    a.m1()  // calls C's m1 ไม่ Error เพราะ C ไม่ได้อยู่ระดับเดียวกันกับ D
+    a.B.m1() // calls D's m1
 }
 /* 
 
