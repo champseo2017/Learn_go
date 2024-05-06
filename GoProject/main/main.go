@@ -1,45 +1,28 @@
 package main
 
-import "fmt"
-
 /*
-ในภาษา Go ไม่มีการสืบทอดแบบ IS-A (inheritance) แต่เราสามารถใช้การฝังแบบ (embedding) เพื่อให้ได้ฟีเจอร์ที่คล้ายกัน โดยการฝังประเภท (type) หนึ่งไว้ในอีกประเภทหนึ่งโดยไม่ต้องระบุชื่อตัวแปร
-
-ในตัวอย่างโปรแกรม เรามี struct ชื่อ `Person` ที่มีฟิลด์และเมธอดของตัวเอง และเรามี struct ชื่อ `Student` ที่ฝัง `Person` ไว้ข้างใน ทำให้ `Student` สามารถเข้าถึงฟิลด์และเมธอดของ `Person` ได้โดยตรง เหมือนกับการสืบทอด แต่ความสัมพันธ์เป็นแบบ HAS-A แทนที่จะเป็น IS-A
-
-การฝังแบบนี้เรียกว่าการส่งเสริมเมธอด (method promotion) ซึ่งทำให้เมธอดของประเภทที่ถูกฝังสามารถเรียกใช้ได้โดยตรงบนประเภทที่ฝังมัน นอกจากนี้ เรายังสามารถเรียกใช้เมธอดของประเภทที่ถูกฝังโดยระบุชื่อประเภทนั้นก่อนเรียกใช้เมธอดก็ได้
-
+ภาษา Go กระบวนการแก้ไขเมธอด (Method resolution process) ถูกใช้โดยคอมไพเลอร์เพื่อค้นหาเมธอดที่ถูกเรียกใช้ โดยจะค้นหาในประเภท (type) เดียวกันก่อน ถ้าไม่พบจะค้นหาในประเภทที่ถูกฝัง (embedded types) และประเภทที่ถูกฝังซ้อนกันไปเรื่อยๆ
+ถ้าเมธอดเดียวกันถูกกำหนดในสองประเภทที่ถูกฝังในระดับเดียวกัน จะเกิดความกำกวม (ambiguity) และคอมไพเลอร์จะให้ข้อผิดพลาดในการคอมไพล์ ซึ่งสามารถแก้ไขได้โดยระบุประเภทที่ถูกฝังขณะเรียกใช้เมธอด
 */
 
-type Person struct {
-    id int
-    firstName string
-    lastName string
+type A struct {
+    B
+    C
 }
 
-func (p Person) getFullName() string {
-    return p.firstName + " " + p.lastName
-}
+type B struct {}
+type C struct {}
 
-type Student struct {
-    Person
-    marks []float32
-}
+func (b B) m1() {}
 
-func (s Student) getTotalMarks() (total float32) {
-    for _, val := range s.marks {
-        total += val
-    }
-    return
-}
+func (c C) m1() {}
+
 
 func main() {
-	p := Person{101, "Prithvi", "Singh"}
-    marks := []float32{10.2, 23.3, 19.5}
-    s := Student{p, marks}
-
-    fmt.Println(s.getFullName())
-    fmt.Println(s.getTotalMarks())
+	a := A{}
+    // a.m1() // error: ambiguous selector a.m1
+    a.B.m1() // calls B's m1
+    a.C.m1() // calls C's m1
 }
 /* 
 
