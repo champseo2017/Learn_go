@@ -3,23 +3,27 @@ package main
 import "fmt"
 
 /*
-พิจารณาโปรแกรมจากคำถามข้อ 1 ผลลัพธ์จะเป็นอย่างไรหากเราเรียกใช้เมธอด setName() บนแอดเดรสของประเภท person
-ถ้าเราเรียกใช้เมธอด setName() บนแอดเดรสของ person เช่น (&p).setName("Abc") ผลลัพธ์จะเป็น {101 Abc} เพราะการเปลี่ยนแปลงที่ทำภายในเมธอดจะส่งผลต่อค่าของ p ในฟังก์ชัน main
+หาปัญหาในโปรแกรมต่อไปนี้
+
+ปัญหาคือในฟังก์ชัน main การเรียกใช้ b.m1() จะทำให้เกิดข้อผิดพลาดในการคอมไพล์ เพราะ m1 ใน B คาดหวังพารามิเตอร์หนึ่งตัวของประเภท int แต่ในการเรียกใช้ไม่ได้ส่งอาร์กิวเมนต์ใดๆ เลย วิธีแก้ไขคือเพิ่มอาร์กิวเมนต์ให้ตรงกับที่เมธอด m1 ของ B คาดหวัง เช่น b.m1(42)
 */
-type person struct {
-    id   int
-    name string
+type A struct{}
+
+func (a A) m1() {
+    fmt.Println("M1 of A")
 }
 
-func (p *person) setName(name string) {
-    p.name = name
+type B struct {
+    A
 }
 
+func (b B) m1(a int) {
+    fmt.Println("M1 of B")
+}
 
 func main() {
-	p := person{101, "Xyz"}
-    p.setName("Abc")
-    fmt.Println(p)
+    b := B{}
+    b.m1()
 }
 /* 
 
