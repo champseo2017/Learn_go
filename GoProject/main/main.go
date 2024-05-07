@@ -3,49 +3,47 @@ package main
 import "fmt"
 
 /*
-ในภาษา Go อินเทอร์เฟซทำหน้าที่เป็นข้อตกลง (contract) ระหว่างฟังก์ชันและผู้เรียกใช้ฟังก์ชัน หากประเภทใดๆ มีเมธอดตรงตามที่ระบุในอินเทอร์เฟซ ก็สามารถกำหนดค่าให้กับตัวแปรชนิดอินเทอร์เฟซนั้นได้
+Empty interface คือ interface ที่ไม่มี method ใดๆ เลย ทำให้ทุก type สามารถ satisfy interface นี้ได้ เราจึงสามารถกำหนดค่าของ type ใดๆ ให้กับตัวแปรของ empty interface ได้
 
-เมื่อฟังก์ชันมีพารามิเตอร์เป็นอินเทอร์เฟซ เราสามารถส่งค่าของประเภทใดๆ ที่มีเมธอดตรงตามอินเทอร์เฟซนั้นเป็นอาร์กิวเมนต์ได้ ฟังก์ชันจะไม่ทราบรายละเอียดของการ implement จริงๆ ที่ถูกส่งเข้ามา มันรู้แค่ว่าสามารถเรียกเมธอดทั้งหมดของอินเทอร์เฟซได้ และการเรียกจะไปที่การ implement นั้น
+ประโยชน์ของ empty interface คือ เราสามารถใช้มันเป็น parameter ของฟังก์ชันที่ยอมรับ argument หลายๆ type ได้ เช่นในฟังก์ชัน fmt.Println() ที่รับ var-args ของ empty interface ทำให้เราสามารถส่งค่าของ type ใดๆ เข้าไปได้
 
-ในตัวอย่างโปรแกรม มีการสร้างอินเทอร์เฟซ `Bird` ที่มีเมธอด `Fly()` และมีโครงสร้าง `Eagle`, `Pigeon`, `Penguin` ที่ implement อินเทอร์เฟซ `Bird` โดยการ override เมธอด `Fly()`
+ตัวอย่าง code:
 
-จากนั้นมีการกำหนดฟังก์ชัน `flyNow()` ที่รับพารามิเตอร์เป็นอินเทอร์เฟซ `Bird` และเรียกเมธอด `Fly()` บนตัวแปรชนิด `Bird`
-
-ในฟังก์ชัน `main()` มีการเรียกใช้ฟังก์ชัน `flyNow()` โดยส่งค่าของ `Eagle`, `Pigeon`, `Penguin` เป็นอาร์กิวเมนต์ เมื่อฟังก์ชัน `flyNow()` เรียกเมธอด `Fly()` การเรียกจะไปยังการ implement ที่เหมาะสมกับประเภทนั้นๆ นี่คือหลักการของ Polymorphism ผ่านการใช้อินเทอร์เฟซในภาษา Go
-*/
-
-type Bird interface {
-    Fly()
-}
-
-type Eagle struct {}
-func (e Eagle) Fly() {
-    fmt.Println("Eagle is flying over the cloud")
-}
-
-type Pigeon struct {}
-func (p Pigeon) Fly() {
-    fmt.Println("Pigeon is flying on normal height")
-}
-
-type Penguin struct {}
-func (p Penguin) Fly() {
-    fmt.Println("Penguin cannot fly")
-}
-
-func flyNow(b Bird) {
-    b.Fly()
-}
-/* 
-จากนั้นมีการกำหนดฟังก์ชัน flyNow() ที่รับพารามิเตอร์เป็นอินเทอร์เฟซ Bird และเรียกเมธอด Fly() บนตัวแปรชนิด Bird ฟังก์ชันนี้ไม่ทราบว่าจะได้รับการ implement ของ Bird แบบใด มันรู้แค่ว่าการ implement นั้นจะมีเมธอด Fly()
-*/
+```go
+type MyEmpty interface {}
 
 func main() {
-    flyNow(Eagle{})
-    flyNow(Pigeon{})
-    flyNow(Penguin{})
+    var empty MyEmpty
+
+    empty = 10
+    empty = "a"
+    empty = 22.3
+    empty = Student{101, "Shyam"}
+}
+```
+
+ในตัวอย่าง เรากำหนดค่าของ type ต่างๆ เช่น int, string, float32 และ custom type Student ให้กับตัวแปร empty ของ MyEmpty interface ได้ เพราะทุก type สามารถ satisfy empty interface
+*/
+
+type MyEmpty interface {
+
 }
 
-/* 
+type Student struct {
+    id int
+    name string
+}
 
-*/
+func main() {
+    empty := MyEmpty(10)
+    fmt.Println(empty)
+
+    empty = "a"
+    fmt.Println(empty)
+
+    empty = 22.3
+    fmt.Println(empty)
+
+    empty = Student{101, "Shyam"}
+    fmt.Println(empty)
+}
