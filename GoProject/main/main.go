@@ -1,65 +1,51 @@
 package main
 
-import (
-	"fmt"
-	"math"
-)
+import "fmt"
 
 /*
-ในภาษา Go การใช้งานอินเทอร์เฟซเป็นแบบ Implicit Implementation หมายความว่า เมื่อมีโครงสร้างหรือประเภทที่มีเมธอดตรงตามที่ระบุในอินเทอร์เฟซ ก็ถือว่าโครงสร้างหรือประเภทนั้นได้ implement อินเทอร์เฟซนั้นแล้วโดยอัตโนมัติ โดยไม่จำเป็นต้องระบุชัดเจน (explicit)
+ในภาษา Go อินเทอร์เฟซทำหน้าที่เป็นข้อตกลง (contract) ระหว่างฟังก์ชันและผู้เรียกใช้ฟังก์ชัน หากประเภทใดๆ มีเมธอดตรงตามที่ระบุในอินเทอร์เฟซ ก็สามารถกำหนดค่าให้กับตัวแปรชนิดอินเทอร์เฟซนั้นได้
 
-ข้อดีของ Implicit Implementation คือ
+เมื่อฟังก์ชันมีพารามิเตอร์เป็นอินเทอร์เฟซ เราสามารถส่งค่าของประเภทใดๆ ที่มีเมธอดตรงตามอินเทอร์เฟซนั้นเป็นอาร์กิวเมนต์ได้ ฟังก์ชันจะไม่ทราบรายละเอียดของการ implement จริงๆ ที่ถูกส่งเข้ามา มันรู้แค่ว่าสามารถเรียกเมธอดทั้งหมดของอินเทอร์เฟซได้ และการเรียกจะไปที่การ implement นั้น
 
-1. สามารถ implement อินเทอร์เฟซที่เราสร้างขึ้นเองกับโครงสร้างหรือประเภทที่มาจาก third-party library ได้ แม้ว่าเราจะไม่สามารถแก้ไขโค้ดของ library นั้นได้ก็ตาม
+ในตัวอย่างโปรแกรม มีการสร้างอินเทอร์เฟซ `Bird` ที่มีเมธอด `Fly()` และมีโครงสร้าง `Eagle`, `Pigeon`, `Penguin` ที่ implement อินเทอร์เฟซ `Bird` โดยการ override เมธอด `Fly()`
 
-2. เมื่อเราต้องการสร้างอินเทอร์เฟซใหม่ที่มีเมธอดไม่มาก และต้องการ implement อินเทอร์เฟซนั้นในหลายๆ โครงสร้างหรือประเภท เราไม่จำเป็นต้องไปแก้ไขโค้ดในทุกๆ ที่
+จากนั้นมีการกำหนดฟังก์ชัน `flyNow()` ที่รับพารามิเตอร์เป็นอินเทอร์เฟซ `Bird` และเรียกเมธอด `Fly()` บนตัวแปรชนิด `Bird`
 
-ตัวอย่างเช่น เรามีอินเทอร์เฟซ `Shape` และโครงสร้าง `Rectangle` และ `Circle` ที่มีเมธอดตรงตามที่ระบุในอินเทอร์เฟซ `Shape` ถึงแม้เราจะไม่ได้ระบุชัดเจนว่าต้องการ implement อินเทอร์เฟซ `Shape` แต่ก็ถือว่า `Rectangle` และ `Circle` ได้ implement อินเทอร์เฟซ `Shape` แล้วโดยอัตโนมัติ
-
-เราสามารถสร้างตัวแปรชนิด `Shape` และกำหนดค่าเป็น `Rectangle` หรือ `Circle` ได้ และเรียกใช้เมธอดผ่านตัวแปรชนิด `Shape` ได้ ซึ่งแสดงให้เห็นว่า Implicit Implementation ช่วยให้เราใช้งานอินเทอร์เฟซได้อย่างยืดหยุ่นและสะดวกมากขึ้น
+ในฟังก์ชัน `main()` มีการเรียกใช้ฟังก์ชัน `flyNow()` โดยส่งค่าของ `Eagle`, `Pigeon`, `Penguin` เป็นอาร์กิวเมนต์ เมื่อฟังก์ชัน `flyNow()` เรียกเมธอด `Fly()` การเรียกจะไปยังการ implement ที่เหมาะสมกับประเภทนั้นๆ นี่คือหลักการของ Polymorphism ผ่านการใช้อินเทอร์เฟซในภาษา Go
 */
 
-type Shape interface {
-    Area() float64
-    Perimeter() float64
+type Bird interface {
+    Fly()
 }
 
-type Rectangle struct {
-    Width float64
-    Height float64
+type Eagle struct {}
+func (e Eagle) Fly() {
+    fmt.Println("Eagle is flying over the cloud")
 }
 
-type Circle struct {
-    Radius float64
+type Pigeon struct {}
+func (p Pigeon) Fly() {
+    fmt.Println("Pigeon is flying on normal height")
 }
 
-func (r Rectangle) Area() float64 {
-    return r.Width * r.Height
+type Penguin struct {}
+func (p Penguin) Fly() {
+    fmt.Println("Penguin cannot fly")
 }
 
-func (r Rectangle) Perimeter() float64 {
-    return 2 * (r.Width + r.Height)
+func flyNow(b Bird) {
+    b.Fly()
 }
-
-func (c Circle) Area() float64 {
-    return math.Pi * c.Radius * c.Radius
-}
-
-func (c Circle) Perimeter() float64 {
-    return 2 * math.Pi * c.Radius
-}
-
+/* 
+จากนั้นมีการกำหนดฟังก์ชัน flyNow() ที่รับพารามิเตอร์เป็นอินเทอร์เฟซ Bird และเรียกเมธอด Fly() บนตัวแปรชนิด Bird ฟังก์ชันนี้ไม่ทราบว่าจะได้รับการ implement ของ Bird แบบใด มันรู้แค่ว่าการ implement นั้นจะมีเมธอด Fly()
+*/
 
 func main() {
-   s := Shape(Rectangle{Width: 5, Height: 10})
-   fmt.Printf("Area of rectangle: %.2f\n", s.Area())
-   fmt.Printf("Perimeter of rectangle: %.2f\n", s.Perimeter())
-
-   s = Shape(Circle{Radius: 7})
-   fmt.Printf("Area of circle: %.2f\n", s.Area())
-   fmt.Printf("Perimeter of circle: %.2f\n", s.Perimeter())
+    flyNow(Eagle{})
+    flyNow(Pigeon{})
+    flyNow(Penguin{})
 }
 
 /* 
-จะเห็นว่าเราสามารถเรียกใช้เมธอด Area() และ Perimeter() ผ่านตัวแปร s ชนิด Shape ได้ ทั้งๆ ที่ s ถูกกำหนดค่าเป็น Rectangle และ Circle ซึ่งแสดงให้เห็นว่า Implicit Implementation ช่วยให้เราสามารถใช้งานอินเทอร์เฟซได้อย่างยืดหยุ่นและสะดวกมากขึ้น
+
 */
