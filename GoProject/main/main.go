@@ -3,47 +3,33 @@ package main
 import "fmt"
 
 /*
-Empty interface คือ interface ที่ไม่มี method ใดๆ เลย ทำให้ทุก type สามารถ satisfy interface นี้ได้ เราจึงสามารถกำหนดค่าของ type ใดๆ ให้กับตัวแปรของ empty interface ได้
+Method set คือชุดของ method ที่ทำให้ type หนึ่งๆ สามารถ implement interface ได้โดยปริยาย
 
-ประโยชน์ของ empty interface คือ เราสามารถใช้มันเป็น parameter ของฟังก์ชันที่ยอมรับ argument หลายๆ type ได้ เช่นในฟังก์ชัน fmt.Println() ที่รับ var-args ของ empty interface ทำให้เราสามารถส่งค่าของ type ใดๆ เข้าไปได้
+ที่ St{} เกิด error เพราะ St เป็น value type ที่ไม่ได้ implement Itr แต่ \*St ซึ่งเป็น pointer type ต่างหากที่ implement Itr
 
-ตัวอย่าง code:
+เมื่อเรากำหนด method ให้เป็น pointer receiver เช่น func (s \*St) m1() แสดงว่า method นั้นจะถูก implement โดย pointer type (\*St) ไม่ใช่ value type (St)
 
-```go
-type MyEmpty interface {}
+ดังนั้น เมื่อเรากำหนดค่า St{} ซึ่งเป็น value ให้กับตัวแปร interface จึงเกิด error เพราะ St ไม่ได้ implement method ของ interface แต่ถ้ากำหนดเป็น &St{} ซึ่งเป็น pointer จะไม่เกิด error เพราะ \*St implement method ของ interface แล้ว
 
-func main() {
-    var empty MyEmpty
+สรุปคือ:
+- ถ้า method เป็น value receiver (func (s St) m1()) จะถูก implement โดย value type (St)
+- ถ้า method เป็น pointer receiver (func (s \*St) m1()) จะถูก implement โดย pointer type (\*St)
 
-    empty = 10
-    empty = "a"
-    empty = 22.3
-    empty = Student{101, "Shyam"}
-}
-```
-
-ในตัวอย่าง เรากำหนดค่าของ type ต่างๆ เช่น int, string, float32 และ custom type Student ให้กับตัวแปร empty ของ MyEmpty interface ได้ เพราะทุก type สามารถ satisfy empty interface
+เราต้องกำหนดค่าให้ตรงกับ type ที่ implement interface เท่านั้น ถึงจะไม่เกิด error
 */
 
-type MyEmpty interface {
-
+type Itr interface {
+    m1()
+    m2()
 }
 
-type Student struct {
-    id int
-    name string
-}
+type St struct {}
+
+func (s *St) m1() {}
+func (s *St) m2() {}
 
 func main() {
-    empty := MyEmpty(10)
-    fmt.Println(empty)
-
-    empty = "a"
-    fmt.Println(empty)
-
-    empty = 22.3
-    fmt.Println(empty)
-
-    empty = Student{101, "Shyam"}
-    fmt.Println(empty)
+   i := Itr(&St{}) // ถูกต้อง เพราะ *St implement Itr
+   // i := Itr(St{}) ผิด เพราะ St ไม่ได้ implement Itr
+   fmt.Println(i)
 }
