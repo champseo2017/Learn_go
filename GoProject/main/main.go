@@ -3,25 +3,41 @@ package main
 import "fmt"
 
 /*
-อินเทอร์เฟซใน Go เป็นนามธรรมอย่างบริสุทธิ์ เมธอดของอินเทอร์เฟซไม่มีเนื้อหา และเราไม่สามารถสร้างค่า/ออบเจกต์ของอินเทอร์เฟซได้ จุดประสงค์ของอินเทอร์เฟซคือให้บางประเภทนำไปใช้
-การใช้อินเทอร์เฟซใน Go เป็นแบบโดยปริยาย ไม่มีคีย์เวิร์ดเฉพาะ หากประเภทมีเมธอดทั้งหมดที่กำหนดไว้ในอินเทอร์เฟซ ก็จะใช้อินเทอร์เฟซนั้นโดยอัตโนมัติ
-เราสามารถสร้างตัวแปรของอินเทอร์เฟซและกำหนดค่าการใช้จริงให้กับตัวแปรนั้นได้ หากไม่กำหนดค่าการใช้จริง ตัวแปรอินเทอร์เฟซจะเป็น nil และการเรียกใช้เมธอดบนตัวแปรนั้นจะทำให้เกิด panic
+ในโปรแกรม 9.4 มีการกำหนดอินเทอร์เฟซ `Connection` ที่มีสองเมธอด `Open()` และ `Close()` และมีโครงสร้าง `DbConnection` ที่มีเพียงเมธอด `Close()` เท่านั้น
+
+เมื่อพยายามกำหนดค่า `DbConnection{}` ให้กับตัวแปร `conn` ชนิด `Connection` คอมไพเลอร์ของ Go จะตรวจสอบว่าโครงสร้าง `DbConnection` มีเมธอดครบตามที่ระบุในอินเทอร์เฟซ `Connection` หรือไม่
+
+เนื่องจากโครงสร้าง `DbConnection` ขาดเมธอด `Open()` คอมไพเลอร์จึงรายงานข้อผิดพลาด `Error 9.2` ว่าไม่สามารถกำหนดค่า `DbConnection{}` ให้กับตัวแปร `conn` ได้
+
+คอมไพเลอร์ของ Go มีกลไกตรวจสอบความถูกต้องของการใช้อินเทอร์เฟซ ซึ่งช่วยป้องกันข้อผิดพลาดและทำให้โค้ดมีความน่าเชื่อถือ
 */
 
-type Executor interface {
-    Execute()
+type Session struct {}
+
+type Connection interface {
+    Open(uri string) (Session, error)
+    Close() error
 }
 
-type Thread struct{}
+type DbConnection struct {}
 
-func (t Thread) Execute() {
-    fmt.Println("Executing thread")
+func (conn DbConnection) Close() error {
+    fmt.Println("Closing Database Connection")
+    return nil
+}
+
+func (conn DbConnection) Open(uri string) (Session, error) {
+    fmt.Println("Opening Database Connection")
+    return Session{}, nil
 }
 
 func main() {
-    exe := Executor(Thread{})
-    exe.Execute()
+    conn := Connection(DbConnection{})
+    /* 
+    โปรแกรมนี้จะเกิดข้อผิดพลาด Error 9.2 เนื่องจากโครงสร้าง DbConnection ไม่ได้กำหนดเมธอด Open() ตามที่ระบุในอินเทอร์เฟซ Connection ทำให้ไม่สามารถกำหนดค่า DbConnection{} ให้กับตัวแปร conn ได้
+    */
+    conn.Close()
+    /* 
+    เมื่อเพิ่มเมธอด Open() แล้ว โปรแกรมจะสามารถคอมไพล์และทำงานได้อย่างถูกต้อง โดยเมื่อเรียกใช้เมธอด Close() ผ่านตัวแปร conn จะแสดงข้อความ "Closing Database Connection" ออกทางหน้าจอ
+    */
 }
-/* 
-ในฟังก์ชัน main เราได้รวมการประกาศตัวแปร exe กับการกำหนดค่าเริ่มต้นในบรรทัดเดียวกัน โดยใช้การกำหนดค่าแบบสั้น (short variable declaration) := และแปลงค่า Thread{} ให้เป็นชนิด Executor อย่างชัดเจน
-*/
