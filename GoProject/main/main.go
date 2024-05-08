@@ -1,29 +1,49 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 /*
-Stringer interface เป็น interface ใน standard library ของ Go ที่ใช้บ่อย มีเพียงเมธอดเดียวคือ String() ซึ่งคืนค่าเป็น string เมื่อเรา implement Stringer interface กับ type ใดๆ และใช้ fmt.Println() เพื่อแสดงค่าของตัวแปรที่มี type นั้น เมธอด String() จะถูกเรียกใช้โดยอัตโนมัติ และแสดงผลตามที่เมธอดคืนค่ามา
+Interface ใน package sort ของ Go ใช้สำหรับเรียงลำดับ slice ของ user-defined types โดยมีเมธอด 3 ตัวที่ต้อง implement คือ Len, Swap และ Less
 
-ตัวอย่างโค้ดแสดงการสร้าง type ใหม่ชื่อ Dollar และ implement Stringer interface เพื่อแสดงค่าของ Dollar ในรูปแบบที่กำหนดเอง คือมีเครื่องหมาย $ นำหน้า เมื่อแสดงค่าตัวแปรชนิด Dollar ด้วย fmt.Println() ผลลัพธ์ที่ได้จะเป็นไปตามที่กำหนดใน String() method
+หากต้องการใช้ sort.Sort เพื่อเรียงลำดับ slice เราต้องสร้าง type ใหม่ที่เป็น slice ของ type ที่ต้องการเรียงลำดับ และ implement Interface ให้กับ type ใหม่นั้น โดย:
+- Len คืนความยาวของ slice
+- Swap สลับตำแหน่งของ element ใน slice
+- Less เปรียบเทียบว่า element ตัวใดน้อยกว่า
+
+จากนั้นเรียกใช้ sort.Sort โดยส่ง slice ที่ implement Interface เข้าไป ซึ่งจะเรียงลำดับ slice ตามเงื่อนไขที่กำหนดใน Less
+
+ตัวอย่างโค้ดแสดงการสร้าง struct Student และ type ByMarks ที่เป็น slice ของ Student และ implement Interface เพื่อเรียงลำดับ slice ของ Student ตามคะแนน (Marks) จากน้อยไปมาก
 */
 
-type Dollar float64
-
-func (d Dollar) String() string {
-    return fmt.Sprintf("$%f", d)
-    /* 
-        fmt.Sprintf เป็นฟังก์ชันใน package fmt ของ Go ที่ใช้สำหรับจัดรูปแบบข้อความ (string formatting) โดยมีหน้าที่หลักดังนี้
-
-        1. รับ format string ซึ่งเป็นแม่แบบของข้อความที่ต้องการ โดยใน format string จะมีตัวแทน (placeholder) สำหรับค่าที่ต้องการแทรกลงไป เช่น %s สำหรับ string, %d สำหรับ integer, %f สำหรับ float เป็นต้น
-
-        2. รับค่าที่ต้องการแทรกลงใน format string โดยระบุตามลำดับหลังจาก format string
-
-        3. จัดรูปแบบข้อความตาม format string และค่าที่ระบุ แล้วคืนค่าเป็น string ที่จัดรูปแบบแล้ว
-    */
+type Student struct {
+    Name  string
+    Marks int
 }
 
+func (s Student) String() string {
+    return fmt.Sprintf("%s: %d", s.Name, s.Marks)
+}
+
+type ByMarks []Student
+
+func (b ByMarks) Len() int { return len(b) }
+func (b ByMarks) Swap(i, j int)  { b[i], b[j] = b[j], b[i] }
+func (b ByMarks) Less(i, j int) bool { return b[i].Marks < b[j].Marks }
+
 func main() {
-  var d Dollar = 23.3
-  fmt.Println(d)
+    students := []Student{
+        {"Bob", 31},
+        {"John", 42},
+        {"Michael", 17},
+        {"Jenny", 26},
+    }
+    fmt.Println("Before sorting =", students)
+    sort.Sort(ByMarks(students))
+    /* 
+    เรียกใช้ sort.Sort โดยแปลง students เป็น ByMarks เพื่อให้ Sort ใช้ Interface ที่เรา implement ไว้
+    */
+    fmt.Println("After sorting =", students)
 }
