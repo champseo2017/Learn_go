@@ -1,72 +1,45 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 /*
 
-Interface สามารถใช้ภายใน struct ได้ โดยมีวิธีใช้ 2 แบบ คือ:
-1. ใช้ interface เป็น embedded type ใน struct
-2. ประกาศตัวแปร interface ใน struct
+ตัวแปร interface สามารถใช้เป็น field ของ struct ได้ เมื่อสร้าง object ของ struct นั้น เราต้องส่งค่า concrete type ที่ implement interface ให้กับ field ของ struct
+ในตัวอย่างโปรแกรม 9.13 มีการสร้าง struct ชื่อ Process ที่มี field ชื่อ exe เป็นตัวแปรของ interface ชื่อ Executor โดย struct ชื่อ Thread ทำการ implement Executor
+ในฟังก์ชัน main มีการสร้างตัวแปรของ Process และส่งค่า Thread ให้กับ field exe ที่เป็น Executor จากนั้นเรียกใช้เมธอด Execute ผ่าน field exe ของตัวแปร p ซึ่งจะเรียกใช้เมธอด Execute ของ Thread ที่อยู่ใน p
 
-เราไม่สามารถส่งค่า interface โดยตรงตอนสร้าง struct ได้ เพราะ interface เป็นนามธรรม ต้องส่งเป็น concrete type ที่ implement interface แทน
-
-เมื่อเรียกใช้เมธอดของ interface ผ่าน struct การเรียกใช้จะถูกส่งต่อไปยัง concrete type ที่อยู่ใน struct นั้น
-
-ตัวอย่างการใช้ interface ใน struct:
-1. Embedded type:
-```go
-type MyStruct struct {
-    MyInterface
-}
-
-s := MyStruct{MyImpl{}}
-s.Method1()
-```
-
-2. ประกาศตัวแปร interface:
-```go
-type MyStruct struct {
-    Iface MyInterface
-}
-
-s := MyStruct{Iface: MyImpl{}}
-s.Iface.Method1()
-```
-
-ในทั้งสองกรณี เรากำหนด concrete type (MyImpl) ที่ implement MyInterface ให้กับ struct และเรียกใช้เมธอดของ interface ผ่าน struct ซึ่งจะเรียกใช้เมธอดจาก MyImpl ที่อยู่ใน struct
 */
 
-type MyInterface interface {
-    Method1()
-    Method2()
+type Executor interface {
+    Execute()
 }
 
-type MyStruct struct {
-    Iface MyInterface
+type Thread struct{}
+
+func (t Thread) Execute() {
+    fmt.Println("Executing thread")
 }
 
-type MyImpl struct {}
-
-func (m MyImpl) Method1() {
-    fmt.Println("Method1")
-}
-
-func (m MyImpl) Method2() {
-    fmt.Println("Method2")
+type Process struct {
+    exe Executor
 }
 
 func main() {
-    s := MyStruct{Iface: MyImpl{}}
-    s.Iface.Method1()
-    s.Iface.Method2()
+    p := Process{Thread{}}
+    p.exe.Execute()
 }
 
 /* 
-สร้าง interface ชื่อ MyInterface ที่มีเมธอด Method1 และ Method2
-สร้าง struct ชื่อ MyStruct ที่มี field เป็น MyInterface (embedded type)
-สร้าง struct ชื่อ MyImpl ที่ implement MyInterface โดยมีเมธอด Method1 และ Method2
-ในฟังก์ชัน main สร้างตัวแปร s ชนิด MyStruct โดยส่ง MyImpl เข้าไปเป็นค่าของ embedded type
-เรียกใช้ s.Method1() และ s.Method2() ซึ่งจะเรียกใช้เมธอดของ MyImpl ที่อยู่ใน s
+สร้าง interface ชื่อ Executor ที่มีเมธอด Execute
+สร้าง struct ชื่อ Thread
+กำหนดให้ Thread implement interface Executor โดยมีเมธอด Execute ที่แสดงข้อความ "Executing thread"
+สร้าง struct ชื่อ Process ที่มี field ชื่อ exe เป็นตัวแปรของ interface Executor
+ในฟังก์ชัน main สร้างตัวแปร p เป็น object ของ Process และส่งค่า Thread{} ให้กับ field exe
+เรียกใช้เมธอด Execute ผ่าน field exe ของตัวแปร p ซึ่งจะเรียกใช้เมธอด Execute ของ Thread ที่อยู่ใน p
+
+ค่า concrete type ที่ implement interface Executor และถูกส่งให้กับ field exe ของ struct Process คือ Thread{}
+
+ในบรรทัดนี้ p := Process{Thread{}} เราสร้าง object ของ struct Process และกำหนดค่าให้กับ field exe ด้วย Thread{} ซึ่ง Thread เป็น concrete type ที่ implement interface Executor
+เมื่อเรียกใช้ p.exe.Execute() การเรียกใช้เมธอด Execute จะถูกส่งต่อไปยังเมธอด Execute ของ Thread ที่อยู่ใน field exe ของ p นั่นเอง
+ดังนั้น ค่า concrete type ที่ถูกส่งให้กับ field ของ struct Process ในตัวอย่างนี้คือ Thread{}
 */
