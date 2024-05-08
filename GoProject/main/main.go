@@ -44,7 +44,7 @@ type MyInterface interface {
 }
 
 type MyStruct struct {
-    MyInterface
+    Iface MyInterface
 }
 
 type MyImpl struct {}
@@ -58,9 +58,9 @@ func (m MyImpl) Method2() {
 }
 
 func main() {
-    s := MyStruct{MyImpl{}}
-    s.Method1()
-    s.Method2()
+    s := MyStruct{Iface: MyImpl{}}
+    s.Iface.Method1()
+    s.Iface.Method2()
 }
 
 /* 
