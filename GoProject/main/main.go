@@ -3,36 +3,27 @@ package main
 import "fmt"
 
 /*
-การกำหนด address ให้กับตัวแปร interface มีประโยชน์ในแง่ของการเข้าถึงและแก้ไขข้อมูลใน value ของ type ผ่าน method ที่มี pointer receiver
+Stringer interface เป็น interface ใน standard library ของ Go ที่ใช้บ่อย มีเพียงเมธอดเดียวคือ String() ซึ่งคืนค่าเป็น string เมื่อเรา implement Stringer interface กับ type ใดๆ และใช้ fmt.Println() เพื่อแสดงค่าของตัวแปรที่มี type นั้น เมธอด String() จะถูกเรียกใช้โดยอัตโนมัติ และแสดงผลตามที่เมธอดคืนค่ามา
 
-การกำหนด address ให้กับ interface จะมีประโยชน์เฉพาะกับ pointer receiver method เท่านั้น ที่จะสามารถเปลี่ยนแปลงข้อมูลใน value ของ type ได้โดยตรง
+ตัวอย่างโค้ดแสดงการสร้าง type ใหม่ชื่อ Dollar และ implement Stringer interface เพื่อแสดงค่าของ Dollar ในรูปแบบที่กำหนดเอง คือมีเครื่องหมาย $ นำหน้า เมื่อแสดงค่าตัวแปรชนิด Dollar ด้วย fmt.Println() ผลลัพธ์ที่ได้จะเป็นไปตามที่กำหนดใน String() method
 */
 
-type IPrint interface {
-    Print()
-}
+type Dollar float64
 
-type Student struct {
-    name string
-}
+func (d Dollar) String() string {
+    return fmt.Sprintf("$%f", d)
+    /* 
+        fmt.Sprintf เป็นฟังก์ชันใน package fmt ของ Go ที่ใช้สำหรับจัดรูปแบบข้อความ (string formatting) โดยมีหน้าที่หลักดังนี้
 
-func (s *Student) Print() {
-    fmt.Printf("Name: %s\n", s.name)
-}
+        1. รับ format string ซึ่งเป็นแม่แบบของข้อความที่ต้องการ โดยใน format string จะมีตัวแทน (placeholder) สำหรับค่าที่ต้องการแทรกลงไป เช่น %s สำหรับ string, %d สำหรับ integer, %f สำหรับ float เป็นต้น
 
-func (s *Student) ChangeName(newName string) {
-    s.name = newName
+        2. รับค่าที่ต้องการแทรกลงใน format string โดยระบุตามลำดับหลังจาก format string
+
+        3. จัดรูปแบบข้อความตาม format string และค่าที่ระบุ แล้วคืนค่าเป็น string ที่จัดรูปแบบแล้ว
+    */
 }
 
 func main() {
-    s := Student{"John"}
-    
-    i := IPrint(&s)
-    i.Print() // Output: Name: John
-    
-    s.ChangeName("Jane")
-    i.Print() // Output: Name: Jane
-    
-    fmt.Printf("i: %v\n", i) // Output: i: &{Jane}
-    fmt.Printf("i: %v\n", s)
+  var d Dollar = 23.3
+  fmt.Println(d)
 }
