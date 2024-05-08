@@ -3,11 +3,11 @@ package main
 import "fmt"
 
 /*
-ถ้า type T implement interface I โดยกำหนด pointer receiver method แสดงว่าเฉพาะ *T เท่านั้นที่จะ implement interface I ไม่ใช่ T ดังนั้นเราสามารถกำหนดเฉพาะ address ของ T ให้กับตัวแปร interface เท่านั้น
-แต่ถ้า type T implement interface I โดยกำหนด value receiver method แสดงว่าทั้ง T และ *T จะ implement interface I ดังนั้นเราสามารถกำหนดได้ทั้ง value และ address ของ T ให้กับตัวแปร interface
+การกำหนด address ให้กับตัวแปร interface มีประโยชน์ในแง่ของการเข้าถึงและแก้ไขข้อมูลใน value ของ type ผ่าน method ที่มี pointer receiver
+
+การกำหนด address ให้กับ interface จะมีประโยชน์เฉพาะกับ pointer receiver method เท่านั้น ที่จะสามารถเปลี่ยนแปลงข้อมูลใน value ของ type ได้โดยตรง
 */
 
-// กรณี pointer receiver
 type IPrint interface {
     Print()
 }
@@ -17,10 +17,22 @@ type Student struct {
 }
 
 func (s *Student) Print() {
-    fmt.Println("Name:", s.name)
+    fmt.Printf("Name: %s\n", s.name)
+}
+
+func (s *Student) ChangeName(newName string) {
+    s.name = newName
 }
 
 func main() {
-  i := IPrint(&Student{"John"})
-  fmt.Printf("%s", i)
+    s := Student{"John"}
+    
+    i := IPrint(&s)
+    i.Print() // Output: Name: John
+    
+    s.ChangeName("Jane")
+    i.Print() // Output: Name: Jane
+    
+    fmt.Printf("i: %v\n", i) // Output: i: &{Jane}
+    fmt.Printf("i: %v\n", s)
 }
