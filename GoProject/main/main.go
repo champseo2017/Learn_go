@@ -2,50 +2,31 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 /*
 
-Polymorphism (พอลิมอร์ฟิซึม) เป็นแนวคิดในการเขียนโปรแกรมเชิงวัตถุ ที่ออบเจกต์สามารถมีหลายรูปแบบหรือพฤติกรรมที่แตกต่างกันได้ แม้ว่าจะถูกอ้างอิงผ่านตัวแปรหรือพารามิเตอร์ชนิดเดียวกัน
 
-เปรียบเหมือนกับรูปร่างต่างๆ เช่น สี่เหลี่ยม วงกลม และสามเหลี่ยม ซึ่งถือเป็น "รูปร่าง" เหมือนกัน แต่มีวิธีคำนวณพื้นที่แตกต่างกัน อย่างไรก็ตาม เราสามารถใช้คำสั่งเดียวกันเพื่อให้ทุกรูปร่างคำนวณพื้นที่ของตัวเองได้
 
-ในภาษา Go เราใช้ interface เพื่อทำ Polymorphism โดยกำหนด method ที่จำเป็นใน interface และให้แต่ละ type ไปเขียน method เหล่านั้น เมื่อเราสร้างฟังก์ชันที่รับ interface เป็นพารามิเตอร์ เราสามารถส่งออบเจกต์ของ type ต่างๆ ที่ implement interface นั้นเข้าไปได้
+ */
 
-*/
-
-type Shape interface {
-    Area() float64
+type I interface {
+    m1()
 }
 
-type Rectangle struct {
-    Width  float64
-    Height float64
+type T struct {
 }
 
-func (r Rectangle) Area() float64 {
-    return r.Width * r.Height
+func (t *T) m1() {
+    fmt.Println("M1 of T")
 }
-
-type Circle struct {
-    Radius float64
-}
-
-func (c Circle) Area() float64 {
-    return math.Pi * c.Radius * c.Radius
-}
-
 
 func main() {
-    shapes := []Shape{
-        Rectangle{Width: 5, Height: 6},
-        Circle{Radius: 7},
-    }
-
-    for _, s := range shapes {
-        fmt.Println(s.Area())
-    }
+    var i I
+    t := T{}
+    // i = t // กำหนดค่า i = t ซึ่งจะเกิด error เพราะ T ไม่ได้ implement method m1() แต่ *T ต่างหากที่ implement
+    i = &t // เพราะว่า i เป็น interface I ซึ่งมี method m1() และ *T (pointer ของ T) นั้น implement method m1() ตาม interface I ดังนั้นเราจึงต้องกำหนดค่าให้ i ด้วย &t ซึ่งเป็นการส่ง address ของ t (หรือ pointer ไปยัง t) เพื่อให้ i ชี้ไปยัง instance ของ type ที่ implement interface I นั่นเอง
+    i.m1()
 }
 
 /* 
