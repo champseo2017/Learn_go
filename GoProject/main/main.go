@@ -2,68 +2,38 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 /*
 
-ในภาษา Go เราสามารถฝัง (embed) interface ลงใน struct ได้ เมื่อเราฝัง interface ลงใน struct เราจะสามารถเรียกใช้ method ทั้งหมดของ interface ผ่าน struct ได้โดยตรง
+แสดงให้เห็นถึงการฝัง (embed) interface เข้าไปใน struct โดยตรง ซึ่งแตกต่างจากโปรแกรม 9.13 ที่ใช้ interface เป็น field ของ struct
 
-ข้อควรระวังคือ เมื่อเราสร้าง value ของ struct ที่มีการฝัง interface เราจำเป็นต้องส่งค่า implementation ที่ถูกต้องของ interface เข้าไปด้วย ไม่เช่นนั้นโปรแกรมจะเกิด panic เมื่อมีการเรียกใช้ method ของ interface
+การฝัง interface เข้าไปใน struct ทำให้เราสามารถเรียกใช้ method ของ interface ผ่าน struct ได้โดยตรง โดยไม่ต้องผ่าน field ของ struct ที่เป็น interface เหมือนในโปรแกรม 9.13
 
-การฝัง interface ลงใน struct ช่วยให้เราสามารถเขียนโค้ดได้อย่างยืดหยุ่นและมีประสิทธิภาพมากขึ้น โดยเราสามารถใช้ struct เดียวกันกับ implementation ที่แตกต่างกันของ interface ได้ ทำให้โค้ดของเรามีความ reusable มากขึ้น
+ในโปรแกรมนี้ เรามี interface `Executor` ที่มี method `Execute()` และมี struct `Thread` ที่ implement method นี้ เราสร้าง struct `Process` ที่ฝัง interface `Executor` เข้าไปโดยตรง และสร้าง instance ของ `Process` ด้วย `Thread` เพื่อเรียกใช้ method `Execute()` ผ่าน `Process` ได้เลย
 
 */
 
-type Shape interface {
-    Area() float64
+type Executor interface {
+    Execute()
 }
 
-type Rectangle struct {
-    Width  float64
-    Height float64
+type Thread struct {
 }
 
-func (r Rectangle) Area() float64 {
-    return r.Width * r.Height
+func (t Thread) Execute() {
+    fmt.Println("Executing thread")
 }
 
-type Circle struct {
-    Radius float64
-}
-
-func (c Circle) Area() float64 {
-    return math.Pi * c.Radius * c.Radius
-}
-
-type MyShape struct {
-    Shape
+type Process struct {
+    Executor
 }
 
 func main() {
-    r := Rectangle{Width: 5, Height: 6}
-    c := Circle{Radius: 7}
-
-    shapes := []MyShape{
-        {
-            Shape: r,
-        },
-        {
-            Shape: c,
-        },
-    }
-
-    for _, s := range shapes {
-        fmt.Println(s.Area())
-    }
-    
+    p := Process{Thread{}}
+    p.Execute()
 }
 
 /* 
-1. เราสร้าง interface `Shape` ที่มี method `Area() float64`
-2. เราสร้าง struct `Rectangle` และ `Circle` ที่ implement method `Area() float64` ตาม interface `Shape`
-3. เราสร้าง struct `MyShape` ที่ฝัง interface `Shape` เข้าไป
-4. ในฟังก์ชัน `main()` เราสร้าง value ของ `Rectangle` และ `Circle`
-5. เราสร้าง slice ของ `MyShape` และเก็บ value ของ `Rectangle` และ `Circle` เข้าไป โดยระบุ field `Shape` ให้ตรงกับ type ที่ต้องการ
-6. เราวน loop ผ่าน slice ของ `MyShape` และเรียกใช้ method `Area()` ผ่าน `MyShape` ได้โดยตรง เนื่องจาก `MyShape` มีการฝัง interface `Shape` เอาไว้
+จากโปรแกรมนี้ เราจะเห็นว่าการฝัง interface เข้าไปใน struct โดยตรง ทำให้เราสามารถเรียกใช้ method ของ interface ผ่าน struct ได้เลย โดยไม่ต้องผ่าน field ของ struct ที่เป็น interface เหมือนในโปรแกรม 9.13
 */
