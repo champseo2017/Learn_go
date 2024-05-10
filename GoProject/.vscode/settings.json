@@ -11,5 +11,8 @@
   "security.workspace.trust.untrustedFiles": "open",
   "workbench.editor.enablePreview": false,
   "vsicons.dontShowNewVersionMessage": true,
-  "window.zoomLevel": 2
+  "window.zoomLevel": 2,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  }
 }
