@@ -4,25 +4,30 @@ import (
 	"fmt"
 )
 
-// While Loop
-func For_Loop_Example_Form2(i int) {
-	j := 0 // กำหนดค่าเริ่มต้นให้กับตัวแปร j เป็น 0
-
-	// ใช้ For Loop เหมือน While Loop โดยมีเพียงส่วนเงื่อนไข (j < i)
-	for j < i {
-		fmt.Println("The value of j in this iteration is", j)
-		j++ // เพิ่มค่าของ j ขึ้นทีละ 1 ในแต่ละรอบของการวนลูป
-	}
-}
-
-// Infinite Loop
-func For_Loop_Example_Form3(i int) {
-	for { // ใช้ For Loop โดยไม่ระบุเงื่อนไข เพื่อสร้าง Infinite Loop
-		fmt.Println("The value of j in this iteration is", i)
+/*
+Switch Case เป็นโครงสร้างควบคุมที่ใช้สำหรับการตรวจสอบเงื่อนไขเมื่อมีเงื่อนไขจำนวนมาก และช่วยให้โค้ดมีความชัดเจนและเหมาะสมกว่าการใช้ if-else หลายๆ ครั้ง
+*/
+func Switch_Case_Example(x string) {
+	switch x {
+	case "Rahul": // ถ้า x เป็น "Rahul"
+		{
+			fmt.Println("This is Rahul") // แสดงข้อความ "This is Rahul"
+		}
+	case "Vikas": // ถ้า x เป็น "Vikas"
+		{
+			fmt.Println("This is Vikas") // แสดงข้อความ "This is Vikas"
+		}
+	case "Arjun": // ถ้า x เป็น "Arjun"
+		{
+			fmt.Println("This is Arjun") // แสดงข้อความ "This is Arjun"
+		}
+	default: // ถ้า x ไม่ตรงกับเคสใดๆ
+		{
+			fmt.Println("He has no name") // แสดงข้อความ "He has no name"
+		}
 	}
 }
 
 func main() {
-	// For_Loop_Example_Form2(10)
-	// For_Loop_Example_Form3(1)
+	Switch_Case_Example("Arjun")
 }
