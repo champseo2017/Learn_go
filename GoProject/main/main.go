@@ -5,27 +5,51 @@ import (
 )
 
 /*
-Tagless Switch เป็นประเภทของ switch ที่ไม่มีการตรวจสอบเงื่อนไขที่ switch statement แต่จะมีการตรวจสอบที่ case statement แต่ละอัน
+Break และ Continue ใน Golang ทำงานเหมือนกับในภาษาอื่นๆ โดยใช้ภายในลูป Break จะหยุดการทำงานของลูปและออกจากลูปทันที ส่วน Continue จะข้ามการทำงานของโค้ดหลังจากนั้นในรอบนั้นๆ และทำต่อในรอบถัดไป
 */
 
-func Tagless_Switch_Case_Example(x string) {
-	switch {
-	case x == "Rahul":
-		// ถ้า x เท่ากับ "Rahul" ให้แสดงข้อความ "This is Rahul"
-		fmt.Println("This is Rahul")
-	case x == "Arjun":
-		// ถ้า x เท่ากับ "Arjun" ให้แสดงข้อความ "This is Arjun"
-		fmt.Println("This is Arjun")
-	case x == "Vikas":
-		// ถ้า x เท่ากับ "Vikas" ให้แสดงข้อความ "This is Vikas"
-		fmt.Println("This is Vikas")
-	default:
-		// ถ้าไม่ตรงกับเงื่อนไขใดเลย ให้แสดงข้อความ "He has no name"
-		fmt.Println("He has no name")
+func Break_Example() {
+	i := 10
+	for j := 0; j < i; j++ {
+		if j == 5 {
+			// ถ้า j เท่ากับ 5 ให้ออกจากลูปทันที
+			break
+		}
+		fmt.Println("The value of j is", j)
 	}
 }
 
+/*
+code Break_Example:
+1. กำหนดค่า `i` เป็น 10
+2. เริ่มลูป for โดยกำหนดให้ `j` เริ่มต้นที่ 0 และเพิ่มค่าทีละ 1 จนกว่า `j` จะน้อยกว่า `i`
+3. ในแต่ละรอบของลูป ถ้า `j` เท่ากับ 5 จะเจอคำสั่ง `break` ซึ่งจะทำให้ออกจากลูปทันที
+4. ถ้า `j` ไม่เท่ากับ 5 จะแสดงข้อความ "The value of j is" ตามด้วยค่าของ `j`
+5. เมื่อออกจากลูปแล้ว ฟังก์ชันจะจบการทำงาน
+*/
+
+func Continue_Example() {
+	i := 10
+	for j := 0; j < i; j++ {
+		if j == 5 {
+			// ถ้า j เท่ากับ 5 ให้ข้ามการทำงานในรอบนี้และไปทำต่อในรอบถัดไป
+			continue
+		}
+		fmt.Println("The value of j is", j)
+	}
+}
+
+/*
+1. กำหนดค่า `i` เป็น 10
+2. เริ่มลูป for โดยกำหนดให้ `j` เริ่มต้นที่ 0 และเพิ่มค่าทีละ 1 จนกว่า `j` จะน้อยกว่า `i`
+3. ในแต่ละรอบของลูป ถ้า `j` เท่ากับ 5 จะเจอคำสั่ง `continue` ซึ่งจะทำให้ข้ามโค้ดที่เหลือในรอบนั้นและไปทำต่อในรอบถัดไป
+4. ถ้า `j` ไม่เท่ากับ 5 จะแสดงข้อความ "The value of j is" ตามด้วยค่าของ `j`
+5. เมื่อจบลูป ฟังก์ชันจะจบการทำงาน
+*/
+
 func main() {
-	// เรียกใช้ฟังก์ชัน Tagless_Switch_Case_Example โดยส่งค่า "Arjun" เข้าไป
-	Tagless_Switch_Case_Example("Arjun")
+	// เรียกใช้ฟังก์ชัน Break_Example
+	// Break_Example()
+	// เรียกใช้ฟังก์ชัน Continue_Example
+	Continue_Example()
 }
