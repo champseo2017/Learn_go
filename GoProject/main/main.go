@@ -5,29 +5,20 @@ import (
 )
 
 /*
-Switch Case เป็นโครงสร้างควบคุมที่ใช้สำหรับการตรวจสอบเงื่อนไขเมื่อมีเงื่อนไขจำนวนมาก และช่วยให้โค้ดมีความชัดเจนและเหมาะสมกว่าการใช้ if-else หลายๆ ครั้ง
+ในภาษา Go มีวิธีการสร้าง pointer ชี้ไปยัง array ได้ 2 วิธี คือการใช้คีย์เวิร์ด `var` และการใช้ operator `:=` ในโปรแกรม 10.9 ได้แสดงการประกาศ pointer ชี้ไปยัง array โดยใช้คีย์เวิร์ด `var` โดยประกาศตัวแปร `arr1` เป็น pointer ชี้ไปยัง array ของ int ขนาด 5 ตัว และประกาศตัวแปร `arr2` เป็น array ของ int ที่มีค่าเริ่มต้นเป็น `{1, 2, 3, 4, 5}` จากนั้นกำหนดให้ `arr1` ชี้ไปยังที่อยู่ของ `arr2` และแสดงค่าของ element ตำแหน่งที่ 0 ของ `arr1` ซึ่งจะได้ผลลัพธ์เป็น 1 เนื่องจาก `arr1` ชี้ไปยัง `arr2` ที่มีค่า 1 ในตำแหน่งที่ 0
+
+การเข้าถึงค่าใน pointer array สามารถทำได้โดยใช้ `*` นำหน้า เช่น `(*arr1)[0]` แต่ไม่จำเป็นต้องใช้ `*` ก็ได้ สามารถเข้าถึงได้เหมือนกับ array ปกติ ดังที่แสดงในโปรแกรม 10.10
 */
-func Switch_Case_Example(x string) {
-	switch x {
-	case "Rahul": // ถ้า x เป็น "Rahul"
-		{
-			fmt.Println("This is Rahul") // แสดงข้อความ "This is Rahul"
-		}
-	case "Vikas": // ถ้า x เป็น "Vikas"
-		{
-			fmt.Println("This is Vikas") // แสดงข้อความ "This is Vikas"
-		}
-	case "Arjun": // ถ้า x เป็น "Arjun"
-		{
-			fmt.Println("This is Arjun") // แสดงข้อความ "This is Arjun"
-		}
-	default: // ถ้า x ไม่ตรงกับเคสใดๆ
-		{
-			fmt.Println("He has no name") // แสดงข้อความ "He has no name"
-		}
-	}
-}
 
 func main() {
-	Switch_Case_Example("Arjun")
+	var arr1 *[5]int                 // ประกาศตัวแปร arr1 เป็น pointer ชี้ไปยัง array ของ int ขนาด 5 ตัว
+	var arr2 = [5]int{1, 2, 3, 4, 5} // ประกาศตัวแปร arr2 เป็น array ของ int ที่มีค่าเริ่มต้นเป็น {1, 2, 3, 4, 5}
+
+	arr1 = &arr2 // กำหนดให้ arr1 ชี้ไปยังที่อยู่ของ arr2
+
+	fmt.Println((*arr1)[0]) // แสดงค่าของ element ตำแหน่งที่ 0 ของ arr1 โดยใช้ * เพื่อเข้าถึงค่าใน pointer array
+	fmt.Println(arr1[0])    // เข้าถึงค่า element ที่ 0 ของ arr1 โดยไม่ใช้ *
+	/*
+		การเข้าถึงค่าใน pointer array สามารถทำได้ทั้งแบบใช้ * นำหน้า เช่น (*arr1)[0] และแบบไม่ใช้ * เช่น arr1[0]
+	*/
 }
