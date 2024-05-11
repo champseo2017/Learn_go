@@ -5,17 +5,27 @@ import (
 )
 
 /*
-ในภาษา Go การส่ง slice เข้าไปใน function แทนการส่ง address ของ array โดยตรงถือเป็นแนวปฏิบัติที่ดีกว่า เพราะ slice มีประสิทธิภาพและความยืดหยุ่นมากกว่า array และการแก้ไขค่าใน slice ก็ยังส่งผลต่อ underlying array เดิมอยู่
-
-การเปลี่ยนแปลงค่าใน slice ภายใน modify function ส่งผลต่อ arr ใน main function ด้วย เนื่องจาก slice ที่ส่งเข้าไปใน modify มี underlying data structure เป็น arr เดิม
+Tagless Switch เป็นประเภทของ switch ที่ไม่มีการตรวจสอบเงื่อนไขที่ switch statement แต่จะมีการตรวจสอบที่ case statement แต่ละอัน
 */
 
-func modify(arr []int) { // function ที่รับ slice ของ int เป็น parameter
-	arr[0] = 100 // เปลี่ยนค่า element ที่ 0 ของ slice เป็น 100
+func Tagless_Switch_Case_Example(x string) {
+	switch {
+	case x == "Rahul":
+		// ถ้า x เท่ากับ "Rahul" ให้แสดงข้อความ "This is Rahul"
+		fmt.Println("This is Rahul")
+	case x == "Arjun":
+		// ถ้า x เท่ากับ "Arjun" ให้แสดงข้อความ "This is Arjun"
+		fmt.Println("This is Arjun")
+	case x == "Vikas":
+		// ถ้า x เท่ากับ "Vikas" ให้แสดงข้อความ "This is Vikas"
+		fmt.Println("This is Vikas")
+	default:
+		// ถ้าไม่ตรงกับเงื่อนไขใดเลย ให้แสดงข้อความ "He has no name"
+		fmt.Println("He has no name")
+	}
 }
 
 func main() {
-	arr := [5]int{10, 20, 30, 40, 50}  // ประกาศและกำหนดค่าเริ่มต้นให้กับ array arr
-	modify(arr[:])                     // สร้าง slice จาก arr ด้วย arr[:] และส่งเข้าไปใน modify function
-	fmt.Println("Slice Elements", arr) // แสดงค่า element ของ arr
+	// เรียกใช้ฟังก์ชัน Tagless_Switch_Case_Example โดยส่งค่า "Arjun" เข้าไป
+	Tagless_Switch_Case_Example("Arjun")
 }
