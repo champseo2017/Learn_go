@@ -5,31 +5,35 @@ import (
 )
 
 /*
-วิธีแก้ไขปัญหานี้คือใช้ pointer ชี้ไปยัง slice แทนการส่ง slice เข้าไปใน function โดยตรง
+สามารถเข้าถึงค่า field ของ struct ผ่าน pointer ได้โดยใช้หรือไม่ใช้เครื่องหมาย asterisk และเมื่อเราเปลี่ยนแปลงค่า field ของ struct ผ่าน pointer การเปลี่ยนแปลงนั้นจะสะท้อนกลับไปยัง struct ต้นฉบับด้วย
 */
 
-func modify(s1 *[]int) {
-	(*s1)[0] = 100
-	// แก้ไขค่าสมาชิกตำแหน่งที่ 0 ของ slice ที่ pointer s1 ชี้ไปเป็น 100
-
-	*s1 = append(*s1, 60)
-	// เพิ่มสมาชิก 60 เข้าไปใน slice ที่ pointer s1 ชี้ไป
-
-	*s1 = append(*s1, 70)
-	// เพิ่มสมาชิก 70 เข้าไปใน slice ที่ pointer s1 ชี้ไป
+// กำหนดโครงสร้างข้อมูล person ที่ประกอบด้วย field id และ name
+type person struct {
+	id   int
+	name string
 }
 
 func main() {
-	s1 := []int{10, 20, 30, 40, 50}
-	// สร้าง slice s1 ที่มีสมาชิกเป็น 10, 20, 30, 40, 50
+	p1 := person{101, "XYX"}
+	// สร้าง struct p1 ด้วยค่าเริ่มต้น id เป็น 101 และ name เป็น "XYX"
 
-	modify(&s1)
-	// เรียกใช้ function modify โดยส่ง pointer ของ s1 เป็นอาร์กิวเมนต์
+	p2 := &p1
+	// สร้าง pointer p2 ที่ชี้ไปยัง struct p1
 
-	fmt.Println("Slice Elements", s1)
-	// แสดงผลสมาชิกของ s1 หลังจากเรียกใช้ function modify
+	fmt.Println("Person *p2.id:", (*p2).id)
+	// แสดงค่า id ของ struct ที่ pointer p2 ชี้ไป โดยใช้ *p2 เพื่อ dereference
+
+	fmt.Println("Person p2.id:", p2.id)
+	// แสดงค่า id ของ struct ที่ pointer p2 ชี้ไป โดยไม่ต้องใช้ *p2
+
+	p2.name = "ABC"
+	// เปลี่ยนค่า name ของ struct ที่ pointer p2 ชี้ไปเป็น "ABC"
+
+	fmt.Println("Person p1:", p1)
+	// แสดงค่าของ struct p1
 }
 
 /*
-เราส่ง pointer ของ s1 เข้าไปใน function modify แทนที่จะส่ง s1 โดยตรง ดังนั้นเมื่อมีการแก้ไขค่าสมาชิกหรือเพิ่มสมาชิกใหม่ผ่าน pointer ใน function จะส่งผลโดยตรงต่อ slice s1 ใน main function ด้วย
-*/
+
+ */
