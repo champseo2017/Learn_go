@@ -5,33 +5,31 @@ import (
 )
 
 /*
-สามารถเข้าถึงค่า field ของ struct ผ่าน pointer ได้โดยใช้หรือไม่ใช้เครื่องหมาย asterisk และเมื่อเราเปลี่ยนแปลงค่า field ของ struct ผ่าน pointer การเปลี่ยนแปลงนั้นจะสะท้อนกลับไปยัง struct ต้นฉบับด้วย
+เกี่ยวกับ Pointer ในภาษา Go:
+
+1. Pointer คือตัวแปรที่เก็บ memory address ของตัวแปรอื่น
+2. ใช้ & เพื่อเข้าถึง address ของตัวแปร และใช้ * เพื่อเข้าถึงค่าที่ address นั้น
+3. ตัวแปร pointer ต้องได้รับการกำหนดค่า address ของตัวแปรอื่นก่อนเข้าถึงค่า
+4. ชนิดของตัวแปร pointer ต้องตรงกับชนิดของตัวแปรที่มันชี้ไป
+5. ตัวดำเนินการเปรียบเทียบเพียงตัวเดียวที่ใช้กับ pointer คือ equality
+6. แนะนำให้ส่ง slice ของ array เข้าไปในฟังก์ชันแทนการใช้ pointer ของ array
+7. หากต้องการเพิ่มค่าใน slice ที่เป็น argument ของฟังก์ชัน ให้กำหนด argument เป็น pointer ไปยัง slice
+8. เมื่อเปลี่ยนแปลงค่าของตัวแปรผ่าน pointer ในฟังก์ชัน การเปลี่ยนแปลงจะสะท้อนกลับมาที่ตัวแปรต้นฉบับด้วย
 */
 
-// กำหนดโครงสร้างข้อมูล person ที่ประกอบด้วย field id และ name
 type person struct {
 	id   int
 	name string
 }
 
+func modify(p1 *person) {
+	p1.name = "NewXYZ"
+}
+
 func main() {
-	p1 := person{101, "XYX"}
-	// สร้าง struct p1 ด้วยค่าเริ่มต้น id เป็น 101 และ name เป็น "XYX"
-
-	p2 := &p1
-	// สร้าง pointer p2 ที่ชี้ไปยัง struct p1
-
-	fmt.Println("Person *p2.id:", (*p2).id)
-	// แสดงค่า id ของ struct ที่ pointer p2 ชี้ไป โดยใช้ *p2 เพื่อ dereference
-
-	fmt.Println("Person p2.id:", p2.id)
-	// แสดงค่า id ของ struct ที่ pointer p2 ชี้ไป โดยไม่ต้องใช้ *p2
-
-	p2.name = "ABC"
-	// เปลี่ยนค่า name ของ struct ที่ pointer p2 ชี้ไปเป็น "ABC"
-
+	p1 := person{101, "XYZ"}
+	modify(&p1)
 	fmt.Println("Person p1:", p1)
-	// แสดงค่าของ struct p1
 }
 
 /*
