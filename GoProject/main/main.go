@@ -5,28 +5,30 @@ import (
 )
 
 /*
-การสร้าง slice ในภาษา Go และอธิบายว่า slice ถูกสร้างขึ้นมาพร้อมกับ underlying array ที่มีขนาดถูกกำหนดตอนรันไทม์ นอกจากนี้ยังแสดงการสร้าง slice ใหม่จาก slice ที่มีอยู่แล้ว
+Map ใน Go เป็นแบบ unordered collection หมายความว่าลำดับของ key-value ใน map ไม่ได้ถูกกำหนดแน่นอนตายตัว และอาจมีการจัดเรียงลำดับใหม่ในแต่ละครั้งที่เรา loop map
 */
 
-func Slice_from_Another_Slice_With_More_Size() {
-	// สร้าง slice z ที่มีสมาชิกเป็นตัวเลขจำนวนเต็ม
-	z := []int{10, 32, 42, 23, 12, 41, 5}
+func Loop_Map() {
+	// สร้าง map ที่มี key เป็น string และ value เป็น int
+	scores := map[string]int{
+		"Alice":   90,
+		"Bob":     80,
+		"Charlie": 95,
+	}
 
-	// สร้าง slice x จาก slice z โดยระบุ index เริ่มต้นและสิ้นสุด
-	// ในที่นี้ x จะมีขนาดมากกว่า z เพราะระบุ index สิ้นสุดเกินขนาดของ z
-	x := z[0:7]
-
-	// เปลี่ยนค่าสมาชิกตัวแรกของ slice x เป็น 30000
-	x[0] = 30000
-
-	// แสดงค่าของ slice z
-	fmt.Println(z)
+	// loop map ด้วย for และ range
+	for name, score := range scores {
+		fmt.Printf("Name: %s, Score: %d\n", name, score)
+	}
 }
 
 func main() {
-	Slice_from_Another_Slice_With_More_Size()
+	Loop_Map()
 }
 
 /*
-เมื่อเปลี่ยนค่าสมาชิกใน x เช่น x[0] = 30000 มันจะส่งผลต่อค่าใน z ด้วย เพราะทั้งสอง slice ใช้ underlying array ร่วมกัน
+ เมื่อเรา loop map scores ด้วย for และ range ลำดับของ key-value ที่ถูกแสดงผลอาจแตกต่างกันในแต่ละครั้งที่ run เนื่องจาก map ใน Go เป็นแบบ unordered
+
+ การที่ map เป็น unordered ช่วยให้การเข้าถึง value ด้วย key เป็นไปอย่างรวดเร็ว เพราะไม่จำเป็นต้องเก็บลำดับของ key-value เอาไว้ แต่ผลข้างเคียงคือเมื่อเรา loop map ลำดับที่ได้อาจไม่เหมือนเดิมในแต่ละครั้ง
+	ดังนั้นหากต้องการ loop map และต้องการลำดับที่แน่นอน เราอาจต้องเรียง key ของ map ก่อนแล้วค่อย loop ตาม key ที่เรียงลำดับแล้ว จึงจะได้ลำดับที่แน่นอนเหมือนกันในทุกครั้งที่ run
 */
