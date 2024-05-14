@@ -6,6 +6,7 @@ import (
 
 /*
 Map ใน Go เป็นแบบ unordered collection หมายความว่าลำดับของ key-value ใน map ไม่ได้ถูกกำหนดแน่นอนตายตัว และอาจมีการจัดเรียงลำดับใหม่ในแต่ละครั้งที่เรา loop map
+fix-key
 */
 
 func Loop_Map() {
