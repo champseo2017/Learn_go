@@ -18,6 +18,9 @@ func Loop_Map() {
 	}
 
 	// สร้าง slice ของ key ทั้งหมดใน map
+	/*
+		Go ไม่มีการเรียงลำดับในตัวสำหรับ map เนื่องจาก map เป็นคอลเลกชันที่ไม่เรียงลำดับ ดังนั้น การเรียงลำดับของ key ใน map โดยตรงจึงเป็นไปไม่ได้ เราจำเป็นต้องสร้าง slice ของ key ทั้งหมดใน map ก่อน แล้วจึงเรียงลำดับ slice นั้น
+	*/
 	keys := make([]string, 0, len(scores))
 	for key := range scores {
 		keys = append(keys, key)
