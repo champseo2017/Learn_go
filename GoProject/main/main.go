@@ -2,46 +2,31 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
 /*
-ต้องการให้การ loop ผ่าน map มีลำดับที่แน่นอน เราสามารถทำได้โดยการเรียงลำดับ key ของ map ก่อนแล้วค่อย loop ตาม key
+Go เราสามารถสร้าง slice ใหม่จาก slice ที่มีอยู่แล้วได้
 */
 
-func Loop_Map() {
-	// สร้าง map ที่มี key เป็น string และ value เป็น int
-	scores := map[string]int{
-		"Alice":   90,
-		"Bob":     80,
-		"Charlie": 95,
-	}
+func Slice_from_Another_Slice() {
+	// สร้าง slice ชื่อ z
+	z := []int{10, 32, 42, 23, 12, 41, 5}
 
-	// สร้าง slice ของ key ทั้งหมดใน map
-	/*
-		Go ไม่มีการเรียงลำดับในตัวสำหรับ map เนื่องจาก map เป็นคอลเลกชันที่ไม่เรียงลำดับ ดังนั้น การเรียงลำดับของ key ใน map โดยตรงจึงเป็นไปไม่ได้ เราจำเป็นต้องสร้าง slice ของ key ทั้งหมดใน map ก่อน แล้วจึงเรียงลำดับ slice นั้น
-	*/
-	keys := make([]string, 0, len(scores))
-	for key := range scores {
-		keys = append(keys, key)
-	}
+	// สร้าง slice ใหม่ x จาก slice z โดยใช้ส่วนของ z ตั้งแต่ index 0 ถึง 2
+	x := z[0:3]
 
-	// เรียงลำดับ key
-	sort.Strings(keys)
+	// แก้ไขค่าใน slice x ที่ index 0
+	x[0] = 30000
 
-	// loop map ด้วย for ตามลำดับ key ที่เรียงแล้ว
-	for _, key := range keys {
-		fmt.Printf("Name: %s, Score: %d\n", key, scores[key])
-	}
+	// แสดงผล slice z
+	// เนื่องจาก x เป็นการอ้างอิงไปยังข้อมูลใน z การแก้ไขใน x จึงมีผลกับ z ด้วย
+	fmt.Println(z)
 }
 
 func main() {
-	Loop_Map()
+	Slice_from_Another_Slice()
 }
 
 /*
- เมื่อเรา loop map scores ด้วย for และ range ลำดับของ key-value ที่ถูกแสดงผลอาจแตกต่างกันในแต่ละครั้งที่ run เนื่องจาก map ใน Go เป็นแบบ unordered
 
- การที่ map เป็น unordered ช่วยให้การเข้าถึง value ด้วย key เป็นไปอย่างรวดเร็ว เพราะไม่จำเป็นต้องเก็บลำดับของ key-value เอาไว้ แต่ผลข้างเคียงคือเมื่อเรา loop map ลำดับที่ได้อาจไม่เหมือนเดิมในแต่ละครั้ง
-	ดังนั้นหากต้องการ loop map และต้องการลำดับที่แน่นอน เราอาจต้องเรียง key ของ map ก่อนแล้วค่อย loop ตาม key ที่เรียงลำดับแล้ว จึงจะได้ลำดับที่แน่นอนเหมือนกันในทุกครั้งที่ run
-*/
+ */
