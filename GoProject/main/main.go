@@ -5,26 +5,19 @@ import (
 )
 
 /*
-Go เราสามารถสร้าง slice ใหม่จาก slice ที่มีอยู่แล้วได้
+โปรแกรมแรกจะเกิด compilation error เพราะเราไม่สามารถกำหนดค่าที่อยู่ของตัวแปรชนิด float ให้กับตัวแปรพอยน์เตอร์ชนิด int ได้
+
+โปรแกรมที่สองจะเกิด runtime error เนื่องจากมีการdereference ตัวแปรพอยน์เตอร์ a ซึ่งมีค่าเป็น nil
 */
 
-func Slice_from_Another_Slice() {
-	// สร้าง slice ชื่อ z
-	z := []int{10, 32, 42, 23, 12, 41, 5}
-
-	// สร้าง slice ใหม่ x จาก slice z โดยใช้ส่วนของ z ตั้งแต่ index 0 ถึง 2
-	x := z[0:3]
-
-	// แก้ไขค่าใน slice x ที่ index 0
-	x[0] = 30000
-
-	// แสดงผล slice z
-	// เนื่องจาก x เป็นการอ้างอิงไปยังข้อมูลใน z การแก้ไขใน x จึงมีผลกับ z ด้วย
-	fmt.Println(z)
-}
-
 func main() {
-	Slice_from_Another_Slice()
+	// var a *int      // ประกาศตัวแปรพอยน์เตอร์ a ชนิด int
+	// b := 10.3       // ประกาศและกำหนดค่าให้ตัวแปร b เป็น 10.3 (float64)
+	// a = &b          // กำหนดที่อยู่ของ b ให้กับ a (compilation error เพราะชนิดข้อมูลไม่ตรงกัน)
+	// fmt.Println(*a) // พยายาม dereference a ซึ่งจะทำให้เกิด error เพราะ a ไม่ได้ชี้ไปที่ valid memory address
+
+	var a *int      // ประกาศตัวแปรพอยน์เตอร์ a ชนิด int (ค่าเริ่มต้นเป็น nil)
+	fmt.Println(*a) // พยายาม dereference a ซึ่งมีค่าเป็น nil ทำให้เกิด runtime error (nil pointer dereference)
 }
 
 /*
