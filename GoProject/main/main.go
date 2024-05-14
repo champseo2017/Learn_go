@@ -10,12 +10,10 @@ import (
 
 func main() {
 
-	// 3. x และ y เป็นพอยน์เตอร์ที่ชี้ไปยังตำแหน่งความจำที่แตกต่างกัน
+	// ไม่สามารถเปรียบเทียบค่าของตัวแปรกับพอยน์เตอร์ได้โดยตรง จะเกิด compilation error
 	a := 10
-	b := 10
-	x := &a
-	y := &b
-	fmt.Println(x == y) // ผลลัพธ์เป็น false
+	b := &a
+	fmt.Println(a == b) // compilation error: invalid operation: a == b (mismatched types int and *int)
 }
 
 /*
