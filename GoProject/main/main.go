@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 /*
-Map ใน Go เป็นแบบ unordered collection หมายความว่าลำดับของ key-value ใน map ไม่ได้ถูกกำหนดแน่นอนตายตัว และอาจมีการจัดเรียงลำดับใหม่ในแต่ละครั้งที่เรา loop map
-fix-key
+ต้องการให้การ loop ผ่าน map มีลำดับที่แน่นอน เราสามารถทำได้โดยการเรียงลำดับ key ของ map ก่อนแล้วค่อย loop ตาม key
 */
 
 func Loop_Map() {
@@ -17,9 +17,18 @@ func Loop_Map() {
 		"Charlie": 95,
 	}
 
-	// loop map ด้วย for และ range
-	for name, score := range scores {
-		fmt.Printf("Name: %s, Score: %d\n", name, score)
+	// สร้าง slice ของ key ทั้งหมดใน map
+	keys := make([]string, 0, len(scores))
+	for key := range scores {
+		keys = append(keys, key)
+	}
+
+	// เรียงลำดับ key
+	sort.Strings(keys)
+
+	// loop map ด้วย for ตามลำดับ key ที่เรียงแล้ว
+	for _, key := range keys {
+		fmt.Printf("Name: %s, Score: %d\n", key, scores[key])
 	}
 }
 
