@@ -26,7 +26,7 @@ func main() {
 	go f1("F2") // เริ่มต้น goroutine ใหม่เพื่อเรียกฟังก์ชัน f1 โดยส่งค่า "F2"
 
 	fmt.Println("Sleeping for 5 second")
-	time.Sleep(5 * time.Second) // หน่วงเวลา main goroutine เป็นเวลา 5 วินาที
+	time.Sleep(10 * time.Second) // การเพิ่มเวลาหน่วงใน main goroutine เป็น 10 วินาทีจะทำให้ goroutines มีเวลาเพียงพอในการทำงานจนครบ loop ก่อนที่ main goroutine จะจบการทำงานและ terminate goroutines ลูก
 	fmt.Println("Main completed")
 
 }
