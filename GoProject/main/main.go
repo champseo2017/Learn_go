@@ -6,28 +6,31 @@ import (
 )
 
 /*
-ในการเริ่มต้นฟังก์ชันเป็น goroutine ใหม่ เราต้องเพิ่มคีย์เวิร์ด go ไว้ด้านหน้าการเรียกฟังก์ชัน ซึ่งจะทำให้ goroutine ใหม่มี call stack แยกต่างหาก และจะเป็น child ของ main goroutine เมื่อ main goroutine จบการทำงาน Go runtime จะทำการ terminate goroutines ลูกทั้งหมด
+โปรแกรมนี้สร้าง goroutines สองตัวโดยเรียกฟังก์ชัน f1 สองครั้งพร้อมกัน แต่ละ goroutine จะพิมพ์ชื่อ (F1 หรือ F2) และดัชนีของลูปจาก 0 ถึง 9 โดยหยุดพักเป็นเวลา 1 วินาทีในแต่ละรอบ อย่างไรก็ตาม ฟังก์ชัน main หยุดพักเพียง 5 วินาที ดังนั้นมันจะไม่รอให้ goroutines ทำงานจนเสร็จสมบูรณ์ก่อนที่จะจบโปรแกรม ทำให้ผลลัพธ์ที่ได้อาจไม่ครบถ้วนและไม่สามารถคาดเดาได้
 */
 
 func f1(name string) {
-	for index := 0; index < 10; index++ {
-		fmt.Printf("%v: index %d\n", name, index) // แสดงผลค่า name และ index
-		time.Sleep(1 * time.Second)               // หน่วงเวลา goroutine เป็นเวลา 1 วินาที
+	// ฟังก์ชัน f1 รับพารามิเตอร์ name เป็นสตริง
+	for i := 0; i < 10; i++ {
+		// ลูป for วนซ้ำ 10 ครั้งตั้งแต่ 0 ถึง 9
+		fmt.Println(name, ":", i)
+		// พิมพ์ค่า name และ i ของแต่ละรอบลูป
+		time.Sleep(time.Second)
+		// หยุดพักเป็นเวลา 1 วินาที
 	}
 }
 
 func main() {
 
-	/*
-		จะเห็นว่ามีการเรียกฟังก์ชัน f1 สองครั้งโดยใช้ goroutines ทำให้มีการทำงานแบบ concurrent ซึ่งผลลัพธ์ที่ได้จะไม่สามารถคาดเดาได้ และอาจแตกต่างกันในแต่ละครั้งที่รันโปรแกรม
-	*/
-
-	go f1("F1") // เริ่มต้น goroutine ใหม่เพื่อเรียกฟังก์ชัน f1 โดยส่งค่า "F1"
-	go f1("F2") // เริ่มต้น goroutine ใหม่เพื่อเรียกฟังก์ชัน f1 โดยส่งค่า "F2"
-
-	fmt.Println("Sleeping for 5 second")
-	time.Sleep(10 * time.Second) // การเพิ่มเวลาหน่วงใน main goroutine เป็น 10 วินาทีจะทำให้ goroutines มีเวลาเพียงพอในการทำงานจนครบ loop ก่อนที่ main goroutine จะจบการทำงานและ terminate goroutines ลูก
-	fmt.Println("Main completed")
+	// ฟังก์ชัน main เป็นจุดเริ่มต้นของโปรแกรม
+	go f1("F1")
+	// เรียกฟังก์ชัน f1 เป็น goroutine โดยส่ง "F1" เป็นอาร์กิวเมนต์
+	go f1("F2")
+	// เรียกฟังก์ชัน f1 เป็น goroutine โดยส่ง "F2" เป็นอาร์กิวเมนต์
+	time.Sleep(time.Second * 5)
+	// ฟังก์ชัน main หยุดพักเป็นเวลา 5 วินาที เพื่อให้ goroutines มีเวลาทำงาน
+	fmt.Println("Main Terminated")
+	// พิมพ์ข้อความ "Main Terminated" เมื่อฟังก์ชัน main จบการทำงาน
 
 }
 
