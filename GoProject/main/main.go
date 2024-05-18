@@ -5,51 +5,30 @@ import (
 )
 
 /*
-Map Literal และการใช้ฟังก์ชัน `make(map[string]int)` เป็นวิธีการสร้าง Map ใน Go ที่แตกต่างกันดังนี้
-
-1. การกำหนดค่าเริ่มต้น:
-   - Map Literal: สามารถกำหนดค่าเริ่มต้นให้กับ Map ได้ในขณะที่ประกาศ โดยระบุคู่ Key-Value ภายในเครื่องหมายปีกกา `{}`
-   - `make(map[string]int)`: ไม่สามารถกำหนดค่าเริ่มต้นให้กับ Map ได้ในขณะที่ประกาศ Map จะถูกสร้างเป็น Empty Map
-
-2. ความสะดวกในการสร้าง:
-   - Map Literal: เป็นวิธีที่สะดวกในการสร้างและกำหนดค่าเริ่มต้นให้กับ Map ในคำสั่งเดียว
-   - `make(map[string]int)`: ต้องสร้าง Map ก่อน แล้วจึงกำหนดค่าให้กับ Map ในภายหลัง
-
-3. การระบุขนาดเริ่มต้น:
-   - Map Literal: ไม่สามารถระบุขนาดเริ่มต้นของ Map ได้ ขนาดของ Map จะถูกกำหนดโดยจำนวนคู่ Key-Value ที่กำหนดในขณะสร้าง
-   - `make(map[string]int)`: สามารถระบุขนาดเริ่มต้นของ Map ได้โดยการส่งพารามิเตอร์เพิ่มเติม เช่น `make(map[string]int, 10)` จะสร้าง Map ที่มีขนาดเริ่มต้นเป็น 10
-
-   ตัวอย่างการสร้าง Map ด้วย Map Literal:
-
-   m := map[string]int{"A": 1, "B": 2, "C": 3}
-
-   ตัวอย่างการสร้าง Map ด้วยฟังก์ชัน `make`:
-    m := make(map[string]int)
-	m["A"] = 1
-	m["B"] = 2
-	m["C"] = 3
+วิธีการเข้าถึงข้อมูลใน Map โดยใช้ Key ที่สอดคล้องกันในวงเล็บเหลี่ยม [] นอกจากนี้ เรายังสามารถตรวจสอบได้ว่า Key ที่ต้องการมีอยู่ใน Map หรือไม่ โดยการใช้ [] กับ Map จะคืนค่า 2 ค่า โดยค่าที่สองจะบอกว่า Key นั้นมีอยู่หรือไม่ เราสามารถตรวจสอบค่าตัวแปรนั้นก่อนที่จะใช้ Value
 */
 
-func Create_Map() {
-	// สร้าง Map โดยใช้ฟังก์ชัน make โดยระบุประเภทของ Key เป็น string และประเภทของ Value เป็น int
-	m := make(map[string]int)
-
-	// แสดงค่าของ Map ที่สร้างขึ้น
-	fmt.Println(m)
-}
-
-func Create_Map_Using_Map_Literals() {
-	// สร้าง Map โดยใช้ Map Literal โดยระบุประเภทของ Key เป็น int และประเภทของ Value เป็น string
-	// และกำหนดค่าเริ่มต้นให้กับ Map โดยใช้ Key เป็น 1 และ 2 และ Value เป็น "Udit" และ "Raju" ตามลำดับ
+func main() {
+	// สร้าง Map โดยใช้ Map Literal
 	m := map[int]string{1: "Udit", 2: "Raju"}
 
-	// แสดงค่าของ Map ที่สร้างขึ้น
-	fmt.Println(m)
-}
+	// เข้าถึงและแสดงค่าใน Map โดยใช้ Key ในวงเล็บเหลี่ยม []
+	fmt.Println(m[1], m[2])
 
-func main() {
-	Create_Map()
-	Create_Map_Using_Map_Literals()
+	// เข้าถึงค่าใน Map โดยใช้ Key ในวงเล็บเหลี่ยม [] และกำหนดให้ตัวแปร data และ itExists
+	data, itExists := m[3]
+
+	// แสดงค่าของตัวแปร data และ itExists
+	fmt.Println(data, itExists)
+
+	// ตรวจสอบว่า Key มีอยู่ใน Map หรือไม่
+	if itExists {
+		// ถ้ามีอยู่ ให้แสดงค่า Value ที่สอดคล้องกับ Key
+		fmt.Println(data)
+	} else {
+		// ถ้าไม่มีอยู่ ให้แสดงข้อความว่าข้อมูลไม่มีอยู่
+		fmt.Println("the data does not exists")
+	}
 }
 
 /*
