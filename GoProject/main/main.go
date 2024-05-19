@@ -2,41 +2,41 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"sync"
 )
 
 /*
-แก้ไขปัญหา race condition จากตัวอย่างก่อนหน้า โดยใช้ sync.Mutex เพื่อควบคุมการเข้าถึงตัวแปรร่วม amount ในช่วง critical section
+การใช้ฟังก์ชัน runtime.GOMAXPROCS() ในการกำหนดจำนวน logical processor ที่ Go runtime จะใช้ในการประมวลผล Goroutine
 */
 
-var amount = 1000 // ตัวแปรร่วม amount
-
-func withDraw(wg *sync.WaitGroup, mu *sync.Mutex) {
-	defer wg.Done()     // ลด counter ของ WaitGroup เมื่อฟังก์ชันทำงานเสร็จ
-	mu.Lock()           // ล็อก mutex ก่อนเข้าถึง critical section
-	amount = amount - 1 // critical section ลบค่า amount
-	mu.Unlock()         // ปลดล็อก mutex หลังจากทำงานใน critical section เสร็จ
+func f1(name string, wg *sync.WaitGroup) {
+	defer wg.Done() // ลด counter ของ WaitGroup เมื่อฟังก์ชันทำงานเสร็จ
+	for index := 0; index < 10; index++ {
+		fmt.Printf("%v: index %d\n", name, index) // พิมพ์ข้อความ
+	}
 }
 
 func main() {
+	runtime.GOMAXPROCS(2) // กำหนดให้ใช้ logical processor 2 ตัว
 	var wg sync.WaitGroup
-	var mu sync.Mutex // สร้างตัวแปร mutex
-	wg.Add(100)       // สร้าง Goroutine 100 ตัว
-	for index := 0; index < 100; index++ {
-		go withDraw(&wg, &mu) // ส่งค่าอ้างอิงของ mutex ไปยัง withdraw
-	}
+	wg.Add(2)        // สร้าง Goroutine 2 ตัว
+	go f1("F1", &wg) // Goroutine 1
+	go f1("F2", &wg) // Goroutine 2
 
-	wg.Wait()           // รอให้ Goroutine ทั้งหมดทำงานเสร็จ
-	fmt.Println(amount) // พิมพ์ค่า amount หลังจบการทำงาน
+	fmt.Println("Main: Waiting for Goroutines to finish")
+	wg.Wait() // รอจนกว่า Goroutine ทั้งหมดจะทำงานเสร็จ
+	fmt.Println("Main completed")
 }
 
 /*
-1. สร้างตัวแปร `mu` ประเภท `sync.Mutex` ในฟังก์ชัน `main()`
-2. ส่งค่าอ้างอิง (address) ของ `mu` ไปยังฟังก์ชัน `withdraw()` ด้วย
-3. ในฟังก์ชัน `withdraw()` ใช้ `mu.Lock()` เพื่อล็อกการเข้าถึง critical section ก่อนจะลบค่า `amount`
-4. หลังจากลบค่า `amount` เสร็จแล้ว ให้ปลดล็อกด้วย `mu.Unlock()`
+1. `runtime.GOMAXPROCS(2)` กำหนดให้ Go runtime ใช้ logical processor 2 ตัวในการประมวลผล Goroutine
+2. สร้าง Goroutine 2 ตัว โดยแต่ละตัวเรียกใช้ฟังก์ชัน `f1()`
+3. `wg.Wait()` ในฟังก์ชัน `main()` จะรอจนกว่า Goroutine ทั้งสองตัวจะทำงานเสร็จ
 
-เมื่อใช้ mutex lock แล้ว จะมี Goroutine เพียงตัวเดียวเท่านั้นที่สามารถผ่านเข้าไปทำงานใน critical section ได้ในขณะนั้น ทำให้ไม่เกิดปัญหา race condition ขึ้น และจะได้ผลลัพธ์ที่ถูกต้องคงที่คือ `amount = 900` หลังจากทุก Goroutine ทำงานเสร็จ
+เนื่องจากมีการกำหนด `GOMAXPROCS` เป็น 2 ดังนั้นถ้าเครื่องมี CPU มากกว่า 1 core Goroutine ทั้งสองจะสามารถทำงานแบบขนานกัน (parallel) ได้ แต่ถ้าเครื่องมี CPU เพียง 1 core Goroutine จะทำงานแบบ concurrency โดยใช้ multi-threading
 
-อย่างไรก็ตาม การใช้ mutex lock มีข้อเสียคือจะชะลอประสิทธิภาพการทำงานของโปรแกรมลง เนื่องจากมีการรอคิวในการเข้าถึง critical section ดังนั้นจึงควรใช้ให้น้อยที่สุดเท่าที่จำเป็น
+ผลลัพธ์ของโปรแกรมจะไม่แน่นอน เนื่องจากการประมวลผลของ Goroutine ขึ้นอยู่กับการจัดสรรทรัพยากรของระบบ แต่จะสังเกตได้ว่าข้อความจาก Goroutine ทั้งสองจะถูกพิมพ์ออกมาแบบสลับกันไปมา
+
+การกำหนดค่า `GOMAXPROCS` เป็นวิธีหนึ่งในการควบคุมว่า Go runtime จะใช้ CPU กี่ตัวในการประมวลผล ซึ่งมีผลต่อประสิทธิภาพในการรันโปรแกรมแบบ parallel
 */
