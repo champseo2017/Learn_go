@@ -6,39 +6,33 @@ import (
 )
 
 /*
-นำ sync.WaitGroup มาใช้ในการจัดการ Goroutine ให้รันจนเสร็จสิ้นก่อนที่จะออกจากโปรแกรม
+ปัญหา race condition ที่เกิดขึ้นเมื่อมีการเข้าถึงและแก้ไขตัวแปรร่วมกัน (shared variable) จากหลาย Goroutine พร้อมกัน ซึ่งอาจทำให้ผลลัพธ์ไม่ตรงตามที่คาดหวัง
 */
 
-// จัดการ Goroutine ด้วย sync.WaitGroup
-var wg sync.WaitGroup
+var amount = 1000 // ตัวแปรร่วม amount มีค่าเริ่มต้นเท่ากับ 1000
 
-func hello() {
-	defer wg.Done() // ถ้ากระบวนการในฟังก์ชันเสร็จแล้วให้ลด counter ของ WaitGroup
-	/*
-		เมื่อออกจากฟังก์ชัน hello() แล้ว ระบบจะมาทำงานคำสั่งที่ถูก defer ไว้คือ wg.Done() ซึ่งจะลดค่า counter ของ sync.WaitGroup ลง 1
-
-		การใช้ defer ในที่นี้ช่วยให้เราสามารถลด counter ของ sync.WaitGroup ได้หลังจากฟังก์ชัน hello() ทำงานเสร็จสิ้นแล้ว ซึ่งเป็นสิ่งสำคัญในการควบคุมการทำงานของ Goroutine ให้ทำงานจนเสร็จสมบูรณ์ก่อนจะจบโปรแกรม
-	*/
-	fmt.Println("Hello Gophers!")
+func withdraw(wg *sync.WaitGroup) {
+	defer wg.Done()     // ลด counter ของ WaitGroup เมื่อฟังก์ชันทำงานเสร็จ
+	amount = amount - 1 // ลด amount ลง 1
 }
 
 func main() {
-	wg.Add(2) // เพิ่มค่า counter ของ WaitGroup เป็น 2
+	var wg sync.WaitGroup
+	wg.Add(100) // สร้าง Goroutine 100 ตัว
 
-	go hello() // สร้าง Goroutine แรก
-	go hello() // สร้าง Goroutine ที่สอง
+	for index := 0; index < 100; index++ {
+		go withdraw(&wg) // แต่ละ Goroutine เรียกใช้ฟังก์ชัน withdraw
+	}
 
-	wg.Wait() // รอจนกว่า counter ของ WaitGroup จะเป็น 0 ค่อยจบการทำงาน
-
-	fmt.Println("All Goes completed.")
+	wg.Wait()           // รอให้ Goroutine ทั้งหมดทำงานเสร็จ
+	fmt.Println(amount) // พิมพ์ค่า amount หลังจากทุก Goroutine ทำงานเสร็จ
 }
 
 /*
-1. `var wg sync.WaitGroup` สร้างตัวแปร `wg` เป็น struct `sync.WaitGroup` ใช้ในการจัดการ Goroutine
-2. ในฟังก์ชัน `hello()` มีการเรียกใช้ `wg.Done()` ผ่าน `defer` เพื่อลด counter ของ WaitGroup หลังจากทำงานในฟังก์ชันเสร็จแล้ว
-3. ในฟังก์ชัน `main()` เรียกใช้ `wg.Add(2)` เพื่อตั้งค่า counter ของ WaitGroup เป็น 2 เนื่องจากมี 2 Goroutine ที่จะสร้างขึ้น
-4. สร้าง Goroutine 2 ตัว ด้วยคำสั่ง `go hello()`
-5. `wg.Wait()` จะรอจนกว่า counter ของ WaitGroup จะลดลงเป็น 0 ค่อยจบการทำงาน ซึ่งจะถูกลดลงเมื่อฟังก์ชัน `hello()` เสร็จสิ้นและเรียก `wg.Done()`
+1. ตัวแปร `amount` ถูกสร้างขึ้นมาเป็นตัวแปรร่วม (shared variable) ที่มีค่าเริ่มต้นเท่ากับ 1000
+2. ในฟังก์ชัน `main()` จะสร้าง Goroutine 100 ตัว โดยแต่ละ Goroutine จะเรียกใช้ฟังก์ชัน `withdraw()`
+3. ฟังก์ชัน `withdraw()` จะลบค่า `amount` ลง 1 ทีละ Goroutine
+4. หลังจากทุก Goroutine ทำงานเสร็จ จะพิมพ์ค่า `amount` ออกมา
 
-การใช้ sync.WaitGroup ทำให้สามารถรอจนกว่า Goroutine ทั้งหมดจะทำงานเสร็จก่อนจบโปรแกรม หลีกเลี่ยงปัญหา race condition ได้
+เนื่องจากมีการเข้าถึงและแก้ไขค่า `amount` พร้อมกันจากหลาย Goroutine โดยไม่มีการควบคุม ทำให้เกิดปัญหา race condition ค่า `amount` ที่ได้จึงไม่แน่นอน อาจได้ค่าระหว่าง 900 ถึง 1000 แทนที่จะได้ 900 ตามที่คาดหวังไว้
 */
