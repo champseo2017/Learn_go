@@ -1,32 +1,34 @@
 package main
 
 import (
-	"fmt"
+	"sync"
 )
 
 /*
-buffer ในการประกาศ channel ด้วยฟังก์ชัน make:
+เกี่ยวกับการปิด channel:
 
-- ถ้าไม่กำหนดขนาด buffer หรือกำหนดเป็น 0 จะได้ unbuffered channel
-  - การส่งและรับข้อมูลผ่าน unbuffered channel จะเกิดขึ้นแบบ synchronous
-- ถ้ากำหนดขนาด buffer มากกว่า 0 จะได้ buffered channel
-  - การส่งและรับข้อมูลผ่าน buffered channel สามารถทำได้โดยไม่ต้องรอกัน (ภายใต้ขีดจำกัดของ buffer)
-- ค่าเริ่มต้นของขนาด buffer คือ 0 ดังนั้นหากต้องการประกาศ unbuffered channel สามารถละการกำหนดขนาด buffer ได้
+- เราสามารถปิด channel ได้โดยใช้ฟังก์ชัน close
+- เมื่อ channel ถูกปิดแล้ว จะไม่สามารถส่งข้อมูลเข้าไปใน channel นั้นได้อีก
+- หากพยายามส่งข้อมูลเข้าไปใน channel ที่ปิดแล้ว โค้ดจะเกิด panic
+- การรับข้อมูลจาก channel ที่ปิดแล้วยังสามารถทำได้ โดยจะได้รับค่า zero value ของประเภทข้อมูลที่ channel เก็บ
+- การปิด channel ที่ปิดไปแล้วจะไม่เกิดข้อผิดพลาดใดๆ
+- การปิด channel เป็นวิธีการบอกผู้รับว่าจะไม่มีข้อมูลส่งมาอีกแล้ว
 
-การอ่านค่าจาก channel ในฟังก์ชัน main จะถูก block จนกว่าฟังก์ชัน writeVal จะเขียนค่าลงใน channel เสร็จ ดังนั้นฟังก์ชัน main จะรอจนกว่าจะมีค่าใน channel
-เนื่องจากการอ่านและเขียนค่าใน channel เป็น blocking call หากฟังก์ชัน main กำลังรอการอ่านค่าจาก channel แต่ไม่มี goroutine ที่เขียนค่าลงใน channel Go runtime จะตรวจพบว่าเป็น deadlock
+การปิด channel เป็นการสื่อสารระหว่างผู้ส่งและผู้รับว่าไม่มีข้อมูลที่จะส่งผ่าน channel นั้นอีกต่อไป ซึ่งเป็นประโยชน์ในการควบคุมการทำงานของโปรแกรมที่ใช้ goroutine และ channel ในการสื่อสารและประสานงานกัน
 */
 
-func writeVal(ch chan int) {
-	ch <- 10 // เขียนค่า 10 ลงใน channel
+func writeVal(ch chan int, wg *sync.WaitGroup) {
+	ch <- 10  // พยายามส่งค่า 10 เข้าไปใน channel ที่ปิดแล้ว (เกิด panic)
+	wg.Done() // ลดจำนวน goroutine ใน WaitGroup
 }
 
 func main() {
-	ch := make(chan int, 0) // ประกาศ channel ที่เก็บค่า int และมีขนาด buffer เป็น 0
-	go writeVal(ch)         // สร้าง goroutine เพื่อเรียกฟังก์ชัน writeVal และส่ง channel เข้าไป
-
-	a := <-ch      // อ่านค่าจาก channel และเก็บไว้ในตัวแปร a (จะถูก block จนกว่าจะมีค่าใน channel)
-	fmt.Println(a) // แสดงค่าของตัวแปร a
+	var wg sync.WaitGroup
+	wg.Add(1)            // เพิ่มจำนวน goroutine ใน WaitGroup
+	ch := make(chan int) // สร้าง channel
+	close(ch)            // ปิด channel
+	go writeVal(ch, &wg) // สร้าง goroutine เพื่อเรียกฟังก์ชัน writeVal และส่ง channel และ pointer ของ WaitGroup เข้าไป
+	wg.Wait()            // รอให้ทุก goroutine ใน WaitGroup ทำงานเสร็จ
 }
 
 /*
