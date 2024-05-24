@@ -1,52 +1,43 @@
 package main
 
 import (
-	"GoProject/module" // นำเข้าชื่อของ module ที่มีสตรักเจอร์ Person และ Address
 	"fmt"
 )
 
 /*
-แสดงวิธีการเข้าถึงข้อมูลจากสตรักเจอร์ (Struct) และวิธีการสร้างสตรักเจอร์และกำหนดค่าเริ่มต้นให้กับ ของสตรักเจอร์
+ตัวอย่างของการใช้ unbuffered channel ในการสื่อสารระหว่าง goroutine ของ producer และ consumer โดย producer จะทำการส่งข้อมูลเข้าไปใน channel และ consumer จะทำการอ่านข้อมูลจาก channel ซึ่งการอ่านและเขียนข้อมูลผ่าน unbuffered channel จะเกิดขึ้นแบบ synchronous กล่าวคือ เมื่อ producer ส่งข้อมูล จะต้องรอให้ consumer อ่านข้อมูลก่อน จึงจะสามารถส่งข้อมูลต่อไปได้ และในทำนองเดียวกัน consumer จะต้องรอให้ producer ส่งข้อมูลเข้ามาก่อน จึงจะสามารถอ่านข้อมูลได้
 */
 
-// ฟังก์ชันสำหรับเข้าถึงข้อมูลจากสตรักเจอร์
-func Access_Data_From_Struct() {
-	// สร้างออบเจ็กต์ Person
-	p := module.Person{
-		Name: "Udit",
-		Age:  30,
-		Address: module.Address{
-			HouseNo: "A8",
-			City:    "Delhi",
-		},
+func producer(ch chan int, done chan bool) {
+	for index := 0; index < 10; index++ {
+		fmt.Printf("PRODUCER: sending %v\n", index)
+		ch <- index // ส่งค่า index เข้าไปใน channel
 	}
-
-	// เข้าถึงข้อมูลในสนามของสตรักเจอร์ด้วยนอเทชัน .
-	name := p.Name
-	address := p.Address
-
-	// แสดงข้อมูลที่เข้าถึงได้
-	fmt.Println(name, address)
+	close(ch)    // ปิด channel เมื่อส่งข้อมูลครบแล้ว
+	done <- true // ส่งสัญญาณว่า producer ทำงานเสร็จแล้ว
 }
 
-// ฟังก์ชันสำหรับสร้างสตรักเจอร์และกำหนดค่าเริ่มต้น
-func Initialize_The_Struct_To_Default() {
-	// สร้างสตรักเจอร์ Person และกำหนดค่าเริ่มต้นด้วยคีย์เวิร์ด new
-	// คีย์เวิร์ด new จะสร้างหน่วยความจำสำหรับสตรักเจอร์และคืนค่าเป็นพอยเตอร์
-	// *(new(Person)) จะเป็นการ dereference พอยเตอร์เพื่อให้ได้สตรักเจอร์ Person
-	p := *(new(module.Person))
-
-	// แสดงค่าของสตรักเจอร์ที่ถูกสร้างขึ้น
-	// ซึ่งจะเป็นค่าเริ่มต้นของแต่ละสนาม (ค่าว่างสำหรับสตริงและ 0 สำหรับจำนวนเต็ม)
-	fmt.Println(p)
+func consumer(ch chan int) {
+	for val := range ch { // อ่านข้อมูลจาก channel จนกว่าจะปิด
+		fmt.Printf("CONSUMER: read %v\n", val)
+	}
 }
+
 func main() {
-	// Access_Data_From_Struct()
-	Initialize_The_Struct_To_Default()
+	ch := make(chan int)    // สร้าง unbuffered channel สำหรับส่งข้อมูลชนิด int
+	done := make(chan bool) // สร้าง channel สำหรับส่งสัญญาณเมื่อ producer ทำงานเสร็จ
+
+	go producer(ch, done) // สร้าง goroutine สำหรับ producer
+	go consumer(ch)       // สร้าง goroutine สำหรับ consumer
+
+	<-done // รอจนกว่า producer จะทำงานเสร็จ
+	/*
+		<-done ในฟังก์ชัน main() มีความสำคัญในการรอให้ goroutine ของ producer ทำงานเสร็จก่อนที่โปรแกรมจะจบการทำงาน
+		เนื่องจากในภาษา Go เมื่อเรียกใช้ goroutine โปรแกรมจะไม่รอให้ goroutine นั้นทำงานเสร็จ แต่จะทำงานต่อไปเรื่อยๆ จนกว่าจะจบฟังก์ชัน main() ดังนั้น หากไม่มีบรรทัด <-done โปรแกรมอาจจบการทำงานก่อนที่ producer จะทำงานเสร็จ ทำให้ไม่ได้ผลลัพธ์ตามที่ต้องการ
+		บรรทัด <-done เป็นการรอรับสัญญาณจาก done channel ซึ่ง producer จะส่งสัญญาณมาเมื่อทำงานเสร็จแล้ว การรอรับสัญญาณนี้จะทำให้ goroutine ของ main() หยุดรอจนกว่าจะได้รับสัญญาณ ซึ่งก็คือรอจนกว่า producer จะทำงานเสร็จนั่นเอง
+	*/
 }
 
 /*
-1. `Access_Data_From_Struct()` ทำงานโดยการสร้างออบเจ็กต์ `Person` และกำหนดค่าชื่อ อายุ และที่อยู่ จากนั้นเข้าถึงข้อมูลในสนามต่างๆ ของสตรักเจอร์ด้วยนอเทชัน `.` และแสดงข้อมูลที่เข้าถึงได้
 
-2. `Initialize_The_Struct_To_Default()` ทำงานโดยการสร้างสตรักเจอร์ `Person` และกำหนดค่าเริ่มต้นให้กับสนามต่างๆ ด้วยคีย์เวิร์ด `new` จากนั้นแสดงค่าของสตรักเจอร์ที่ถูกสร้างขึ้น ซึ่งจะเป็นค่าเริ่มต้นของแต่ละสนาม (ค่าว่างสำหรับสตริงและ 0 สำหรับจำนวนเต็ม)
-*/
+ */
