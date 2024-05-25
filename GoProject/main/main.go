@@ -3,38 +3,63 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 /*
-Goroutines สามารถใช้เขียนโปรแกรมแบบ concurrent ใน Golang ได้ เมื่อ goroutines หลายตัวทำงานพร้อมกัน ลำดับการทำงานของมันจะคาดเดาไม่ได้ goroutine ไหนก็ได้สามารถเริ่มก่อนหรือจบก่อนก็ได้ เมื่อ main goroutine จบการทำงาน goroutines ลูกทั้งหมดก็จะจบตามไปด้วย ถ้าต้องการให้ goroutine แม่รอ goroutine ลูกทำงานให้เสร็จก่อน สามารถใช้ WaitGroup ในการควบคุมได้
-
-WaitGroup มี 3 method ที่ใช้บ่อยคือ Add, Done และ Wait นอกจากนี้ยังสามารถใช้ MutexLock ในการป้องกัน critical section เพื่อให้มีแค่ goroutine เดียวเข้าไปทำงานใน critical section ได้
-
-Channel ใช้สำหรับการสื่อสารระหว่าง goroutines สองตัว โดยใช้ operator <- ในการส่งหรืออ่านข้อความเข้าหรือออกจาก channel เมื่อปิด channel แล้วจะไม่สามารถส่งข้อความเข้า channel ได้อีก และสามารถใช้ range clause อ่านข้อความจาก channel ได้ เมื่อ channel ถูกปิดและอ่านข้อความครบแล้ว for loop จะจบการทำงาน
-
-Channel มีสองแบบคือ buffered และ unbuffered ในการกำหนด channel เป็น argument ของ function สามารถกำหนดเป็น read-only หรือ write-only channel ได้ และยังสามารถใช้ select statement เมื่อต้องการสื่อสารระหว่าง channel หลายตัว
+โจทย์ให้เขียนโปรแกรม producer-consumer ที่มี producer 2 ตัว ผลิตข้อมูลทุก 300 และ 400 มิลลิวินาที และมี consumer 1 ตัว โดย producer ผลิตข้อมูลแค่ 100 ครั้ง
 */
 
-var wg sync.WaitGroup
+func producer(id int, ch chan<- int, wg *sync.WaitGroup) {
+	defer wg.Done() // เรียก wg.Done() เมื่อ producer ทำงานเสร็จ
 
-func printNumbers(prefix string) {
-	defer wg.Done() // แจ้ง WaitGroup ว่า goroutine นี้เสร็จแล้ว
-	/*
-		สรุปได้ว่า defer จะเป็นคำสั่งที่ทำให้ฟังก์ชันที่อยู่ในคำสั่ง defer ถูกเรียกทุกครั้งหลังจากฟังก์ชันที่มีคำสั่ง defer นั้นจบการทำงาน ไม่ว่าฟังก์ชันนั้นจะจบการทำงานปกติหรือจบด้วยการเกิด panic ก็ตาม
-	*/
+	interval := 300 // กำหนดช่วงเวลาเริ่มต้นเป็น 300 มิลลิวินาที
+	if id == 2 {
+		interval = 400 // ถ้า id เป็น 2 ให้กำหนดช่วงเวลาเป็น 400 มิลลิวินาที
+	}
 
-	for i := 1; i <= 5; i++ {
-		fmt.Printf("%s: %d\n", prefix, i)
+	for i := 1; i <= 100; i++ {
+		ch <- i                                                // ส่งข้อมูล i ไปยัง channel ch
+		fmt.Printf("Producer %d produced data: %d\n", id, i)   // แสดงข้อความว่า producer ผลิตข้อมูลอะไร
+		time.Sleep(time.Duration(interval) * time.Millisecond) // หยุดพักเป็นเวลา interval มิลลิวินาที
+	}
+}
+
+func consumer(ch <-chan int, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	for data := range ch {
+		fmt.Printf("Consumer consumed data: %d\n", data)
 	}
 }
 
 func main() {
-	wg.Add(2) // เพิ่มจำนวน goroutine ที่ต้องรอใน WaitGroup
+	ch := make(chan int)
+	/*
+		   ch := make(chan int, 100) ใช้ buffered channel เพื่อเพิ่มประสิทธิภาพ
+			ทำงานแบบ asynchronous โดยที่ producer สามารถส่งข้อมูลเข้า channel ได้แม้ว่า consumer จะยังไม่ได้รับข้อมูลนั้นในทันที และจะทำงานได้อย่างราบรื่นขึ้นเพราะ buffered channel ที่ใช้ในการเก็บข้อมูลชั่วคราว
+	*/
+	var wg sync.WaitGroup
 
-	go printNumbers("Goroutine 1") // สร้าง goroutine แรก
-	go printNumbers("Goroutine 2") // สร้าง goroutine ที่สอง
+	// สร้าง goroutine ของ producer 2 ตัว
+	wg.Add(2)
+	go producer(1, ch, &wg)
+	go producer(2, ch, &wg)
 
-	wg.Wait() // รอจนกว่าทุก goroutine จะเสร็จ
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
+
+	/*
+		ใช้อีกหนึ่ง WaitGroup (consumerWg) เพื่อจัดการการรอคอยของ consumer หลังจากที่ producer ทั้งหมดทำงานเสร็จ เราจะปิด channel เพื่อให้ consumer หยุดทำงานอย่างถูกต้องและไม่มี deadlock เกิดขึ้น
+	*/
+	var consumerWg sync.WaitGroup
+	consumerWg.Add(1)
+	go consumer(ch, &consumerWg)
+
+	// รอให้ consumer ทำงานเสร็จ
+	consumerWg.Wait()
 }
 
 /*
