@@ -1,50 +1,55 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"time"
 )
 
 /*
-เกี่ยวกับ Ticker ในแพ็คเกจ time ของภาษา Go:
-
-- Ticker เป็นช่องสัญญาณที่ส่งเหตุการณ์ต่อเนื่องในช่วงเวลาที่กำหนด
-- สร้าง Ticker ได้โดยใช้ฟังก์ชัน `time.NewTicker(duration)`
-- อ่านเหตุการณ์จากช่องสัญญาณของ Ticker ได้โดยใช้ตัวดำเนินการ `<-`
-- ปิดช่องสัญญาณของ Ticker ได้โดยเรียกใช้เมธอด `Stop()`
-- ตัวอย่างโปรแกรมแสดงการใช้งาน Ticker ร่วมกับ goroutine และ select statement เพื่อจัดการเหตุการณ์จากหลาย Ticker พร้อมกัน
-
-Ticker เป็นเครื่องมือที่มีประโยชน์สำหรับการสร้างเหตุการณ์ที่เกิดขึ้นเป็นระยะๆ ตามช่วงเวลาที่กำหนด ช่วยให้สามารถควบคุมการทำงานของโปรแกรมได้อย่างเป็นระบบ
+แสดงการใช้งานฟังก์ชัน json.Marshal และ json.Unmarshal ในการแปลงข้อมูลจากและไปยังรูปแบบ JSON ตามลำดับ โดยมีการสร้างข้อมูลประเภท Student ขึ้นมาก่อน แล้วจึงแปลงข้อมูลนั้นให้อยู่ในรูปแบบ JSON ด้วย json.Marshal และแสดงผลลัพธ์ออกมา จากนั้นจะนำผลลัพธ์ที่ได้ไปแปลงกลับเป็นข้อมูลประเภท Student ด้วย json.Unmarshal และแสดงผลลัพธ์สุดท้ายออกมา
 */
 
-func receiver(ticker1 *time.Ticker, ticker2 *time.Ticker) {
-	for {
-		select {
-		case msg := <-ticker1.C:
-			// อ่านเหตุการณ์จาก ticker1 และพิมพ์ค่าที่ได้รับ
-			fmt.Println("Message from ticker1", msg)
-		case msg := <-ticker2.C:
-			// อ่านเหตุการณ์จาก ticker2 และพิมพ์ค่าที่ได้รับ
-			fmt.Println("Message from ticker2", msg)
-		}
+// ประกาศ struct ชื่อ Student ที่มีฟิลด์ Name และ Subject
+type Student struct {
+	Name    string
+	Subject string
+}
+
+// ฟังก์ชัน JSON_Data_Marshalling() ทำหน้าที่แปลงข้อมูล Student ให้อยู่ในรูปแบบ JSON
+func JSON_Data_Marshalling() []byte {
+	// สร้างข้อมูล Student
+	s := Student{"Udit", "Physics"}
+
+	// แปลงข้อมูล Student ให้อยู่ในรูปแบบ JSON ด้วย json.Marshal
+	d, err := json.Marshal(s)
+	if err != nil {
+		fmt.Println("the error is as follows")
+		return nil
+	} else {
+		fmt.Println(d)
+		return d
 	}
 }
 
+// ฟังก์ชัน JSON_Data_UnMarshalling() ทำหน้าที่แปลงข้อมูลที่อยู่ในรูปแบบ JSON กลับมาเป็นข้อมูลประเภท Student
+func JSON_Data_UnMarshalling() Student {
+	// เรียกใช้ฟังก์ชัน JSON_Data_Marshalling() เพื่อได้ข้อมูลในรูปแบบ JSON
+	d := JSON_Data_Marshalling()
+
+	// สร้างตัวแปรเก็บข้อมูลประเภท Student
+	var s Student
+
+	// แปลงข้อมูลที่อยู่ในรูปแบบ JSON กลับมาเป็นข้อมูลประเภท Student ด้วย json.Unmarshal
+	json.Unmarshal(d, &s)
+
+	// ส่งคืนข้อมูลประเภท Student
+	return s
+}
+
 func main() {
-	// สร้าง Ticker สองตัวที่ส่งเหตุการณ์ทุก 1000 และ 1300 มิลลิวินาทีตามลำดับ
-	ticker1 := time.NewTicker(time.Millisecond * 1000)
-	ticker2 := time.NewTicker(time.Millisecond * 1300)
-
-	// เรียกใช้ฟังก์ชัน receiver แบบ goroutine
-	go receiver(ticker1, ticker2)
-
-	// รอ 3000 มิลลิวินาที
-	time.Sleep(time.Millisecond * 3000)
-	// หยุดการทำงานของ ticker1
-	ticker1.Stop()
-
-	// รอ 10000 มิลลิวินาที
-	time.Sleep(time.Millisecond * 10000)
+	// เรียกใช้ฟังก์ชัน JSON_Data_UnMarshalling() และแสดงผลลัพธ์
+	s := JSON_Data_UnMarshalling()
+	fmt.Println("This is student", s)
 }
 
 /*
