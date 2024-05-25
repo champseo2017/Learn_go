@@ -6,48 +6,45 @@ import (
 )
 
 /*
-โค้ดที่ไม่ใช้ Select Statement
+เกี่ยวกับ Ticker ในแพ็คเกจ time ของภาษา Go:
 
-1. ฟังก์ชัน `receiver` ถูกเรียกใช้แยกกันสำหรับแต่ละ channel ทำให้ต้องสร้าง goroutine เพิ่มเติม และโค้ดยาวขึ้น
+- Ticker เป็นช่องสัญญาณที่ส่งเหตุการณ์ต่อเนื่องในช่วงเวลาที่กำหนด
+- สร้าง Ticker ได้โดยใช้ฟังก์ชัน `time.NewTicker(duration)`
+- อ่านเหตุการณ์จากช่องสัญญาณของ Ticker ได้โดยใช้ตัวดำเนินการ `<-`
+- ปิดช่องสัญญาณของ Ticker ได้โดยเรียกใช้เมธอด `Stop()`
+- ตัวอย่างโปรแกรมแสดงการใช้งาน Ticker ร่วมกับ goroutine และ select statement เพื่อจัดการเหตุการณ์จากหลาย Ticker พร้อมกัน
 
-2. ในฟังก์ชัน `receiver` การรับข้อมูลจาก channel จะเป็นแบบ blocking ถ้า channel ยังไม่มีข้อมูลส่งมา goroutine จะหยุดรอ ทำให้ไม่สามารถตรวจสอบ channel อื่นๆ ได้ในขณะที่รอ
-
-3. ไม่สามารถกำหนดลำดับความสำคัญในการรับข้อมูลจาก channel ได้ ขึ้นอยู่กับว่า channel ใดมีข้อมูลส่งมาก่อน
-
-4. ในฟังก์ชัน `main` ต้องใช้ `time.Sleep` เพื่อรอให้ goroutine ทำงานเสร็จ ซึ่งไม่ใช่วิธีที่ดีนัก เพราะไม่สามารถกำหนดเวลาที่แน่นอนได้ และอาจทำให้โปรแกรมรอนานเกินไป
+Ticker เป็นเครื่องมือที่มีประโยชน์สำหรับการสร้างเหตุการณ์ที่เกิดขึ้นเป็นระยะๆ ตามช่วงเวลาที่กำหนด ช่วยให้สามารถควบคุมการทำงานของโปรแกรมได้อย่างเป็นระบบ
 */
 
-func receiver(ch chan string) {
+func receiver(ticker1 *time.Ticker, ticker2 *time.Ticker) {
 	for {
-		msg, ok := <-ch
-		if !ok {
-			// ถ้า channel ถูกปิด ให้ออกจากลูป
-			break
+		select {
+		case msg := <-ticker1.C:
+			// อ่านเหตุการณ์จาก ticker1 และพิมพ์ค่าที่ได้รับ
+			fmt.Println("Message from ticker1", msg)
+		case msg := <-ticker2.C:
+			// อ่านเหตุการณ์จาก ticker2 และพิมพ์ค่าที่ได้รับ
+			fmt.Println("Message from ticker2", msg)
 		}
-		fmt.Println("Message from channel:", msg)
 	}
-}
-
-func producer(ch chan string, name string, sleep time.Duration) {
-	for index := 0; index < 10; index++ {
-		time.Sleep(sleep)
-		ch <- fmt.Sprintf("%v: %v", name, index)
-	}
-	close(ch)
 }
 
 func main() {
-	ch1 := make(chan string)
-	ch2 := make(chan string)
+	// สร้าง Ticker สองตัวที่ส่งเหตุการณ์ทุก 1000 และ 1300 มิลลิวินาทีตามลำดับ
+	ticker1 := time.NewTicker(time.Millisecond * 1000)
+	ticker2 := time.NewTicker(time.Millisecond * 1300)
 
-	go producer(ch1, "P1", time.Millisecond*1000)
-	go producer(ch2, "P2", time.Millisecond*1300)
+	// เรียกใช้ฟังก์ชัน receiver แบบ goroutine
+	go receiver(ticker1, ticker2)
 
-	go receiver(ch1)
-	go receiver(ch2)
+	// รอ 3000 มิลลิวินาที
+	time.Sleep(time.Millisecond * 3000)
+	// หยุดการทำงานของ ticker1
+	ticker1.Stop()
 
-	// รอเพื่อให้ goroutine ทำงานเสร็จ
-	time.Sleep(time.Second * 15)
+	// รอ 10000 มิลลิวินาที
+	time.Sleep(time.Millisecond * 10000)
 }
 
 /*
