@@ -2,25 +2,44 @@ package main
 
 import (
 	"fmt"
-	"sync"
 )
 
 /*
-หาข้อผิดพลาดในโปรแกรม
+โจทย์ข้อที่ 4: กำหนด read-only channel เป็น argument ของฟังก์ชัน
 */
 
-func main() {
-	wg := sync.WaitGroup{}
-	wg.Add(2)
+func read(ch <-chan int) {
+	// ใช้ <-chan แสดงว่าเป็น receive-only channel
+	// ไม่สามารถส่งข้อมูลเข้า channel ได้
+	// วนลูปอ่านข้อมูลจาก channel จนกว่า channel จะถูกปิด
+	for {
+		select {
+		case data, ok := <-ch:
+			if !ok {
+				// channel ถูกปิดแล้ว ออกจากลูป
+				fmt.Println("Channel closed")
+				return
+			}
+			fmt.Println("Received data:", data)
+		}
+	}
+}
 
+func main() {
+	ch := make(chan int)
+
+	// สร้าง goroutine เพื่อส่งข้อมูลเข้า channel
 	go func() {
-		fmt.Println("Running go routine")
-		wg.Done()
+		ch <- 10
+		ch <- 20
+		ch <- 30
+		close(ch)
 	}()
 
-	wg.Wait()
+	// เรียกใช้ฟังก์ชัน read เพื่ออ่านข้อมูลจาก channel
+	read(ch)
 }
 
 /*
-ข้อผิดพลาดคือ มีการเรียกใช้ wg.Add(2) แต่สร้าง goroutine เพียงตัวเดียว ทำให้โปรแกรมไม่จบการทำงาน
-*/
+
+ */
