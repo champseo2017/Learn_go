@@ -1,55 +1,27 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 )
 
 /*
-แสดงการใช้งานฟังก์ชัน json.Marshal และ json.Unmarshal ในการแปลงข้อมูลจากและไปยังรูปแบบ JSON ตามลำดับ โดยมีการสร้างข้อมูลประเภท Student ขึ้นมาก่อน แล้วจึงแปลงข้อมูลนั้นให้อยู่ในรูปแบบ JSON ด้วย json.Marshal และแสดงผลลัพธ์ออกมา จากนั้นจะนำผลลัพธ์ที่ได้ไปแปลงกลับเป็นข้อมูลประเภท Student ด้วย json.Unmarshal และแสดงผลลัพธ์สุดท้ายออกมา
+แสดงให้เห็นถึงการสร้างฟังก์ชันในภาษา Go โดยใช้คีย์เวิร์ด func ชื่อฟังก์ชันคือ Give_Greetings ซึ่งรับพารามิเตอร์ชื่อประเภทสตริง และส่งคืนค่าประเภทสตริงเช่นกัน ภายในฟังก์ชันจะทำการรวมสตริงคำว่า "Hi" กับพารามิเตอร์ชื่อที่ส่งเข้ามา แล้วส่งค่ากลับไป
+การใช้ฟังก์ชันมีจุดประสงค์หลักเพื่อให้สามารถนำโค้ดไปใช้ซ้ำได้ และให้ความสามารถในการเรียกใช้ได้จากที่ต่างๆ ภายในแพคเกจหรือจากภายนอกแพคเกจ ฟังก์ชันยังให้ความสามารถในการซ่อนรายละเอียดการทำงานภายในจากผู้ใช้งาน ผู้ใช้งานเพียงแค่ต้องรู้ชื่อฟังก์ชัน พารามิเตอร์ที่ต้องส่งเข้าไป และชนิดของค่าที่จะได้รับกลับมา
 */
 
-// ประกาศ struct ชื่อ Student ที่มีฟิลด์ Name และ Subject
-type Student struct {
-	Name    string
-	Subject string
-}
-
-// ฟังก์ชัน JSON_Data_Marshalling() ทำหน้าที่แปลงข้อมูล Student ให้อยู่ในรูปแบบ JSON
-func JSON_Data_Marshalling() []byte {
-	// สร้างข้อมูล Student
-	s := Student{"Udit", "Physics"}
-
-	// แปลงข้อมูล Student ให้อยู่ในรูปแบบ JSON ด้วย json.Marshal
-	d, err := json.Marshal(s)
-	if err != nil {
-		fmt.Println("the error is as follows")
-		return nil
-	} else {
-		fmt.Println(d)
-		return d
-	}
-}
-
-// ฟังก์ชัน JSON_Data_UnMarshalling() ทำหน้าที่แปลงข้อมูลที่อยู่ในรูปแบบ JSON กลับมาเป็นข้อมูลประเภท Student
-func JSON_Data_UnMarshalling() Student {
-	// เรียกใช้ฟังก์ชัน JSON_Data_Marshalling() เพื่อได้ข้อมูลในรูปแบบ JSON
-	d := JSON_Data_Marshalling()
-
-	// สร้างตัวแปรเก็บข้อมูลประเภท Student
-	var s Student
-
-	// แปลงข้อมูลที่อยู่ในรูปแบบ JSON กลับมาเป็นข้อมูลประเภท Student ด้วย json.Unmarshal
-	json.Unmarshal(d, &s)
-
-	// ส่งคืนข้อมูลประเภท Student
-	return s
+// ประกาศฟังก์ชันชื่อ Give_Greetings
+// รับพารามิเตอร์ name ประเภท string
+// และส่งคืนค่าประเภท string
+func Give_Greetings(name string) string {
+	// รวมสตริง "Hi" กับ name ที่ส่งเข้ามาเป็นพารามิเตอร์
+	// และส่งคืนค่าสตริงที่ได้
+	return "Hi" + " " + name
 }
 
 func main() {
-	// เรียกใช้ฟังก์ชัน JSON_Data_UnMarshalling() และแสดงผลลัพธ์
-	s := JSON_Data_UnMarshalling()
-	fmt.Println("This is student", s)
+	// เรียกใช้ฟังก์ชัน Give_Greetings พร้อมส่งค่า "Raju" เข้าไปเป็นพารามิเตอร์
+	// และแสดงผลลัพธ์ที่ได้รับกลับมา
+	fmt.Println(Give_Greetings("Raju"))
 }
 
 /*
