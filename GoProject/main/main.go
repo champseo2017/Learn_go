@@ -6,46 +6,33 @@ import (
 )
 
 /*
-เกี่ยวกับ Select Statement ในภาษา Go:
-- Select Statement ใช้สำหรับจัดการ goroutine ที่ส่งข้อมูลผ่านหลาย channel พร้อมกัน
-- มีไวยากรณ์คล้ายกับ Switch Statement โดยมีหลาย case ที่แต่ละ case จะมีการดำเนินการกับ channel
-- เมื่อ case ใดสามารถรับข้อมูลจาก channel ได้ case นั้นจะถูกเลือกให้ทำงาน
-- สามารถมี default case เมื่อไม่มี case ใดสามารถรับข้อมูลจาก channel ได้
-- ตัวอย่างโปรแกรมประกอบด้วย:
-  - ฟังก์ชัน `producer` ทำหน้าที่ส่งข้อมูลเข้า channel
-  - ฟังก์ชัน `receiver` ทำหน้าที่รับข้อมูลจาก channel ด้วย select statement
-- Select Statement ช่วยให้จัดการและประมวลผลข้อมูลจากหลาย channel ได้อย่างมีประสิทธิภาพ
+โค้ดที่ไม่ใช้ Select Statement
+
+1. ฟังก์ชัน `receiver` ถูกเรียกใช้แยกกันสำหรับแต่ละ channel ทำให้ต้องสร้าง goroutine เพิ่มเติม และโค้ดยาวขึ้น
+
+2. ในฟังก์ชัน `receiver` การรับข้อมูลจาก channel จะเป็นแบบ blocking ถ้า channel ยังไม่มีข้อมูลส่งมา goroutine จะหยุดรอ ทำให้ไม่สามารถตรวจสอบ channel อื่นๆ ได้ในขณะที่รอ
+
+3. ไม่สามารถกำหนดลำดับความสำคัญในการรับข้อมูลจาก channel ได้ ขึ้นอยู่กับว่า channel ใดมีข้อมูลส่งมาก่อน
+
+4. ในฟังก์ชัน `main` ต้องใช้ `time.Sleep` เพื่อรอให้ goroutine ทำงานเสร็จ ซึ่งไม่ใช่วิธีที่ดีนัก เพราะไม่สามารถกำหนดเวลาที่แน่นอนได้ และอาจทำให้โปรแกรมรอนานเกินไป
 */
 
-func receiver(ch1 chan string, ch2 chan string) {
+func receiver(ch chan string) {
 	for {
-		select {
-		case msg, ok := <-ch1:
-			// รับข้อมูลจาก ch1
-			fmt.Println("Message from ch1", msg)
-			if !ok {
-				// ถ้า ch1 ถูกปิด ให้ออกจากฟังก์ชัน
-				return
-			}
-		case msg, ok := <-ch2:
-			// รับข้อมูลจาก ch2
-			fmt.Println("Message from ch2", msg)
-			if !ok {
-				// ถ้า ch2 ถูกปิด ให้ออกจากฟังก์ชัน
-				return
-			}
+		msg, ok := <-ch
+		if !ok {
+			// ถ้า channel ถูกปิด ให้ออกจากลูป
+			break
 		}
+		fmt.Println("Message from channel:", msg)
 	}
 }
 
 func producer(ch chan string, name string, sleep time.Duration) {
 	for index := 0; index < 10; index++ {
-		// หน่วงเวลาตามค่า sleep ที่กำหนด
 		time.Sleep(sleep)
-		// ส่งข้อมูลเข้า channel
 		ch <- fmt.Sprintf("%v: %v", name, index)
 	}
-	// ปิด channel เมื่อส่งข้อมูลครบ
 	close(ch)
 }
 
@@ -53,12 +40,14 @@ func main() {
 	ch1 := make(chan string)
 	ch2 := make(chan string)
 
-	// สร้าง goroutine สำหรับ producer ที่ส่งข้อมูลผ่าน ch1 และ ch2 ตามลำดับ
 	go producer(ch1, "P1", time.Millisecond*1000)
 	go producer(ch2, "P2", time.Millisecond*1300)
 
-	// เรียกใช้ฟังก์ชัน receiver เพื่อรับข้อมูลจาก ch1 และ ch2
-	receiver(ch1, ch2)
+	go receiver(ch1)
+	go receiver(ch2)
+
+	// รอเพื่อให้ goroutine ทำงานเสร็จ
+	time.Sleep(time.Second * 15)
 }
 
 /*
