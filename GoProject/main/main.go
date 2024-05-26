@@ -5,42 +5,7 @@ import (
 )
 
 /*
-แสดง interface `error` และการ implement โดย struct `errorString` ในแพ็คเกจ `errors`
-
-// ตัวอย่าง code ของแพ็คเกจ errors
-
-package errors
-
-// error interface มีเพียงเมธอด Error() ที่คืนค่าเป็น string
-type error interface {
-    Error() string
-}
-
-// struct errorString ที่เป็นแบบ unexported
-// มีฟิลด์ s เป็น string เพื่อเก็บข้อความ error
-type errorString struct {
-    s string
-}
-
-// errorString implement interface error โดยมีเมธอด Error() ที่คืนค่า s
-func (e *errorString) Error() string {
-    return e.s
-}
-
-// ฟังก์ชัน New สร้างค่า error จาก string ที่รับเข้ามา
-// โดยจะสร้าง struct errorString และคืนค่าเป็น pointer ไปยัง errorString
-func New(text string) error {
-    return &errorString{text}
-}
-
-- มีการประกาศ interface `error` ที่มีเพียงเมธอด `Error()` ซึ่งคืนค่าเป็น string
-- มีการประกาศ struct `errorString` แบบ unexported ที่มีฟิลด์ `s` เป็น string เพื่อเก็บข้อความ error
-- `errorString` implement interface `error` โดยมีเมธอด `Error()` ที่คืนค่า `s`
-- มีฟังก์ชัน `New` ที่รับ string `text` เพื่อสร้างค่า error โดยจะสร้าง struct `errorString` และคืนค่าเป็น pointer ไปยัง `errorString`
-
-เนื่องจาก struct `errorString` เป็นแบบ unexported เราจึงไม่สามารถสร้างค่าของ `errorString` ได้โดยตรงจากภายนอกแพ็คเกจ `errors` ดังนั้นจึงต้องใช้ฟังก์ชัน `New()` เพื่อสร้างค่า error ผ่านการสร้าง `errorString` และคืนค่าเป็น `error` interface
-
-เมื่อต้องการสร้างค่า error ในแพ็คเกจอื่น เราสามารถเรียกใช้ฟังก์ชัน `errors.New("error message")` เพื่อสร้างค่า error ได้
+โปรแกรม 12.1 เป็นตัวอย่างการจัดการข้อผิดพลาดในภาษา Go โดยมีฟังก์ชัน create() ที่ใช้สำหรับสร้างข้อมูลนักเรียนและเพิ่มลงใน (map)
 */
 
 type student struct {
@@ -49,27 +14,37 @@ type student struct {
 	age  int
 }
 
-var students = make(map[int]student)
+var stuMap = make(map[int]student)
 
-func create(id int, name string, age int) (int, error) {
-	if name == "" || age <= 0 {
-		// ถ้าชื่อว่างหรืออายุน้อยกว่าหรือเท่ากับ 0 จะคืนค่า error
-		return 0, fmt.Errorf("Invalid Input: name: %s, age: %d", name, age)
+func create(name string, age int) (int, error) {
+	if name == "" {
+		// ถ้าชื่อว่างเปล่า ให้คืนค่า error
+		return 0, fmt.Errorf("Invalid Name, Name can't be Empty")
+	} else if age <= 0 {
+		// ถ้าอายุน้อยกว่าหรือเท่ากับ 0 ให้คืนค่า error
+		return 0, fmt.Errorf("Invalid Age %v, Age can't be <= 0", age)
 	}
-	students[id] = student{id, name, age}
-	// คืนค่า id ของนักเรียนและ nil error
+	// สร้าง id ใหม่จากความยาวของ stuMap บวก 1
+	id := len(stuMap) + 1
+	// สร้างข้อมูลนักเรียนใหม่
+	stu := student{id, name, age}
+	// เพิ่มข้อมูลนักเรียนลงใน stuMap โดยใช้ id เป็น key
+	stuMap[id] = stu
+	// คืนค่า id และ nil error
 	return id, nil
 }
 
 func main() {
-	id, err := create(1, "", -1)
+	// เรียกใช้ฟังก์ชัน create() และรับค่าที่คืนมาเป็น id และ error
+	id, err := create("John", 10)
 	if err != nil {
-		// ถ้ามี error จะแสดงข้อความ error และจบการทำงาน
+		// ถ้ามี error ให้แสดงข้อความแจ้งเตือนและ error message
+		fmt.Println("Error while creating student")
 		fmt.Println(err)
 		return
 	}
-	// ถ้าไม่มี error จะแสดงข้อมูลนักเรียน
-	fmt.Println(students[id])
+	// ถ้าไม่มี error ให้แสดงข้อความยืนยันการสร้างนักเรียนพร้อม id
+	fmt.Println("Student created with Id=", id)
 }
 
 /*
