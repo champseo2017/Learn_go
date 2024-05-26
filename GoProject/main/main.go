@@ -2,42 +2,74 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
 )
 
 /*
+แสดง interface `error` และการ implement โดย struct `errorString` ในแพ็คเกจ `errors`
 
-เกี่ยวกับ error ต่อ ในภาษา Go:
+// ตัวอย่าง code ของแพ็คเกจ errors
 
-- ภาษา Go มี error type ในตัว ซึ่งสามารถกำหนดให้กับตัวแปรและส่งคืนจากฟังก์ชันได้
-- ฟังก์ชันหรือเมธอดที่อาจทำให้เกิดข้อผิดพลาดมักจะส่งคืน error เป็นค่าสุดท้าย แต่ไม่จำเป็นต้องเป็นเช่นนั้นเสมอไป
-- ในไลบรารีมาตรฐานของ Go มีฟังก์ชันหลายตัวที่ส่งคืน error เช่น `os.Open` และ `os.Mkdir`
-- เมื่อเรียกใช้ฟังก์ชันที่ส่งคืน error ผู้เรียกใช้ควรตรวจสอบว่า error มีค่าเป็น nil หรือไม่ ถ้าไม่เป็น nil แสดงว่ามีข้อผิดพลาดเกิดขึ้น
-- ถ้าฟังก์ชันไม่ส่งคืนค่าที่มีความหมายอื่นๆ นอกจาก error สามารถส่งคืนเพียง error อย่างเดียวได้
+package errors
 
-การจัดการ error ในภาษา Go ทำได้โดยการตรวจสอบค่า error ที่ส่งคืนจากฟังก์ชัน ถ้ามีค่าไม่เป็น nil ควรแสดงข้อผิดพลาดและจัดการตามความเหมาะสม แต่ถ้าเป็น nil แสดงว่าไม่มีข้อผิดพลาด สามารถดำเนินการต่อไปได้ตามปกติ
+// error interface มีเพียงเมธอด Error() ที่คืนค่าเป็น string
+type error interface {
+    Error() string
+}
+
+// struct errorString ที่เป็นแบบ unexported
+// มีฟิลด์ s เป็น string เพื่อเก็บข้อความ error
+type errorString struct {
+    s string
+}
+
+// errorString implement interface error โดยมีเมธอด Error() ที่คืนค่า s
+func (e *errorString) Error() string {
+    return e.s
+}
+
+// ฟังก์ชัน New สร้างค่า error จาก string ที่รับเข้ามา
+// โดยจะสร้าง struct errorString และคืนค่าเป็น pointer ไปยัง errorString
+func New(text string) error {
+    return &errorString{text}
+}
+
+- มีการประกาศ interface `error` ที่มีเพียงเมธอด `Error()` ซึ่งคืนค่าเป็น string
+- มีการประกาศ struct `errorString` แบบ unexported ที่มีฟิลด์ `s` เป็น string เพื่อเก็บข้อความ error
+- `errorString` implement interface `error` โดยมีเมธอด `Error()` ที่คืนค่า `s`
+- มีฟังก์ชัน `New` ที่รับ string `text` เพื่อสร้างค่า error โดยจะสร้าง struct `errorString` และคืนค่าเป็น pointer ไปยัง `errorString`
+
+เนื่องจาก struct `errorString` เป็นแบบ unexported เราจึงไม่สามารถสร้างค่าของ `errorString` ได้โดยตรงจากภายนอกแพ็คเกจ `errors` ดังนั้นจึงต้องใช้ฟังก์ชัน `New()` เพื่อสร้างค่า error ผ่านการสร้าง `errorString` และคืนค่าเป็น `error` interface
+
+เมื่อต้องการสร้างค่า error ในแพ็คเกจอื่น เราสามารถเรียกใช้ฟังก์ชัน `errors.New("error message")` เพื่อสร้างค่า error ได้
 */
 
-func main() {
-	// ตัวอย่างการใช้ฟังก์ชัน os.Open
-	file, err := os.Open("myfile.txt")
-	if err != nil {
-		// ถ้ามี error เกิดขึ้น จะแสดง error และจบการทำงาน
-		log.Fatal(err)
-	}
-	// ถ้าไม่มี error เราจะใช้คำสั่ง defer เพื่อปิดไฟล์หลังจบการทำงาน จากนั้นเราสามารถทำงานอย่างอื่นกับไฟล์ต่อไป
-	defer file.Close()
-	// ทำงานอย่างอื่นกับไฟล์ต่อไป...
+type student struct {
+	id   int
+	name string
+	age  int
+}
 
-	// ตัวอย่างการใช้ฟังก์ชัน os.Mkdir
-	err = os.Mkdir("mydir", 0755)
-	if err != nil {
-		// ถ้ามี error เกิดขึ้น จะแสดง error และจบการทำงาน
-		log.Fatal(err)
+var students = make(map[int]student)
+
+func create(id int, name string, age int) (int, error) {
+	if name == "" || age <= 0 {
+		// ถ้าชื่อว่างหรืออายุน้อยกว่าหรือเท่ากับ 0 จะคืนค่า error
+		return 0, fmt.Errorf("Invalid Input: name: %s, age: %d", name, age)
 	}
-	// ถ้าไม่มี error แสดงว่าสร้างไดเรกทอรีสำเร็จ
-	fmt.Println("Directory created successfully")
+	students[id] = student{id, name, age}
+	// คืนค่า id ของนักเรียนและ nil error
+	return id, nil
+}
+
+func main() {
+	id, err := create(1, "", -1)
+	if err != nil {
+		// ถ้ามี error จะแสดงข้อความ error และจบการทำงาน
+		fmt.Println(err)
+		return
+	}
+	// ถ้าไม่มี error จะแสดงข้อมูลนักเรียน
+	fmt.Println(students[id])
 }
 
 /*
