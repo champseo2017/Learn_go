@@ -5,76 +5,35 @@ import (
 )
 
 /*
-ฟังก์ชัน recover ที่มีอยู่ในตัว Go ช่วยให้เราสามารถกู้คืนจากการเกิด panic ได้ โปรแกรมจะดำเนินการต่อหลังจากเรียก recover ควรเรียก recover จากฟังก์ชันที่ถูก defer ไว้ มิฉะนั้นจะไม่ส่งผลใดๆ
-
-ฟังก์ชัน recover สามารถถูกเรียกจากฟังก์ชันใดๆ ใน call stack ไม่จำเป็นต้องเรียกจากฟังก์ชันเดียวกับที่เกิด panic ในตัวอย่างโค้ดด้านล่าง ฟังก์ชัน recover ถูกเรียกในฟังก์ชัน fn2 หลังจากเรียก fn2 โปรแกรมจะไม่หยุดทำงาน แต่จะดำเนินการต่อจนจบโปรแกรมอย่างถูกต้อง
+คำสั่ง defer ใน Go จะสร้างฟังก์ชันขึ้นมาแต่จะไม่เรียกใช้จนกว่าฟังก์ชันที่สร้าง defer จะจบลง โดยจะเรียกใช้ตามลำดับกลับกันจากการสร้าง
 */
 
+// ฟังก์ชัน fn1()
 func fn1() {
-	// เริ่มฟังก์ชัน fn1
-	fmt.Println("Start of Fn1 Func")
+	fmt.Println("Start of Fn1 Func") // พิมพ์ "Start of Fn1 Func" ก่อน
 
-	// ฟังก์ชัน defer ที่จะถูกเรียกเมื่อสิ้นสุดฟังก์ชัน fn1
+	// defer ฟังก์ชันถูกสร้างขึ้นและจะถูกเรียกเมื่อ fn1() จบลง
 	defer func() {
-		fmt.Println("Defer in Fn1 func")
+		fmt.Println("Defer in Fn1 func")     // พิมพ์ "Defer in Fn1 func" ก่อน
+		fmt.Println("Recovered:", recover()) // พิมพ์ "Recovered: <nil>" เนื่องจากไม่มี panic เกิดขึ้น
 	}()
 
-	// เรียกฟังก์ชัน fn2
-	fn2()
-
-	// แสดงข้อความเมื่อสิ้นสุดฟังก์ชัน fn1
-	fmt.Println("End of Fn1 Func")
-}
-
-func fn2() {
-	// เริ่มฟังก์ชัน fn2
-	fmt.Println("Start of Fn2 Func")
-
-	// ฟังก์ชัน defer ที่จะถูกเรียกเมื่อสิ้นสุดฟังก์ชัน fn2
-	defer func() {
-		fmt.Println("Defer in Fn2 func")
-		// กู้คืนจาก panic ถ้ามีการเรียก panic
-		if rec := recover(); rec != nil {
-			fmt.Println("Recovered:", rec)
-		}
-	}()
-
-	// เรียกฟังก์ชัน fn3
-	fn3()
-
-	// ข้อความนี้จะไม่ถูกแสดงเนื่องจากฟังก์ชัน recover จะไม่ทำให้โปรแกรมหยุด
-	fmt.Println("End of Fn2 Func")
-}
-
-func fn3() {
-	// เริ่มฟังก์ชัน fn3
-	fmt.Println("Start of Fn3 Func")
-
-	// ฟังก์ชัน defer ที่จะถูกเรียกเมื่อสิ้นสุดฟังก์ชัน fn3
-	defer func() {
-		fmt.Println("Defer in Fn3 func")
-	}()
-
-	// เรียกใช้ panic ทำให้โปรแกรมหยุดทำงานทันทีด้วยข้อความ "Calling panic explicitly in Fn3"
-	panic("Calling panic explicitly in Fn3")
+	fmt.Println("End of Fn1 Func") // พิมพ์ "End of Fn1 Func" ออกมาก่อนจบ fn1()
 }
 
 func main() {
-	// แสดงข้อความเมื่อเริ่มฟังก์ชัน main
-	fmt.Println("Start of Main Func")
+	fmt.Println("Start of Main Func") // พิมพ์ "Start of Main Func" ออกมาก่อน
 
-	// ฟังก์ชัน defer ที่จะถูกเรียกเมื่อสิ้นสุดฟังก์ชัน main
+	// defer ฟังก์ชันถูกสร้างขึ้นและจะถูกเรียกเมื่อ main() จบลง
 	defer func() {
 		fmt.Println("Defer in Main func")
 	}()
 
-	// เรียกฟังก์ชัน fn1
-	fn1()
+	fn1() // เรียกใช้ fn1()
 
-	// แสดงข้อความเมื่อสิ้นสุดฟังก์ชัน main
-	fmt.Println("End of Main Func")
+	fmt.Println("End of Main Func") // พิมพ์ "End of Main Func" ออกมาก่อนจบ main()
 }
 
 /*
-หลังจาก Recovered: Calling panic explicitly in Fn3 ข้อความ Defer in Fn3 func ถูกแสดงก่อนการกู้คืน (recover) เนื่องจาก defer ใน fn3 ถูกเรียกก่อนที่ panic จะถูกกู้คืนใน fn2 นั่นเอง
-*/
+
+ */
