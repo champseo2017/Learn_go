@@ -5,31 +5,23 @@ import (
 )
 
 /*
-เรียกใช้ฟังก์ชัน recover โดยไม่ได้ใช้ร่วมกับ defer มันจะไม่มีผลอะไรเลย และจะ return ค่า nil เสมอ
+แก้ไขโค้ดให้โปรแกรมทำงานจนจบได้อย่างสมบูรณ์โดยการแสดง error โดยห้ามแก้ไขค่า index ของ array
 */
 
-func fn1() {
-	fmt.Println("Start of Fn1 Func")
-	fmt.Println("Recovered", recover()) // recover จะ return nil เพราะไม่ได้ใช้ร่วมกับ defer
-	defer func() {
-		fmt.Println("Defer in Fn1 func")
-	}()
-	panic("Panicing from fn1") // เรียก panic ใน fn1
-}
-
 func main() {
-	fmt.Println("Start of Main Func")
-	defer func() {
-		fmt.Println("Defer in Main func")
-	}()
-	fn1()
-	fmt.Println("End of Main Func")
+	arr := [5]int{10, 20, 30, 40, 50}
+	index := 5
+
+	// ตรวจสอบว่า index อยู่ในช่วงของ array หรือไม่
+	if index < 0 || index >= len(arr) {
+		// ถ้า index ไม่อยู่ในช่วง ให้แสดง error และจบการทำงาน
+		panic(fmt.Errorf("index out of range: %d", index))
+	}
+
+	// ถ้า index อยู่ในช่วง ให้แสดงค่าใน array ตาม index นั้น
+	fmt.Println(arr[index])
 }
 
 /*
-- ฟังก์ชัน `recover` จะไม่มีผลใดๆ หากเรียกใช้โดยไม่ได้ใช้ร่วมกับ `defer` และจะ return ค่า `nil` เสมอ
-- ใน `main` มีการเรียกใช้ `defer` เพื่อแสดงข้อความหลังจาก `main` จบการทำงาน
-- เรียกใช้ `fn1` ซึ่งมีการเรียก `recover` แต่ไม่มีผล เพราะไม่ได้ใช้ร่วมกับ `defer`
-- ใน `fn1` มีการเรียก `defer` เพื่อแสดงข้อความก่อนจบฟังก์ชัน และเรียก `panic` ทำให้โปรแกรมหยุดทำงานทันที
-- `defer` ใน `main` จะทำงานก่อนโปรแกรมจบการทำงาน
-*/
+
+ */
