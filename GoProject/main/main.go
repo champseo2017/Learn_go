@@ -1,19 +1,54 @@
 package main
 
+import "fmt"
+
 /*
-1. เพื่อสร้าง custom error type เราต้อง define method ชื่อ `Error()` ในtype นั้นๆ
+การเขียนฟังก์ชันที่ดีสำหรับ Developer ดังนี้
 
-2. ข้อความใดเกี่ยวกับ `defer` ถูกต้อง?
-   ตอบ: Defer function จะถูก execute เมื่อ parent function ทำงานจบ เมื่อ parent function จบการทำงานแล้วเท่านั้น defer function จึงจะทำงาน
+1. ตั้งชื่อฟังก์ชันและพารามิเตอร์ให้สื่อความหมาย เข้าใจง่าย และไม่ยาวเกินไป
+2. ฟังก์ชันควรทำหน้าที่เพียงอย่างเดียว (Functional Cohesion) ไม่ทำหลายอย่างในฟังก์ชันเดียว
+3. ใช้พารามิเตอร์ให้น้อยที่สุด ถ้ามีเยอะให้รวมเป็น Struct
+4. จำนวนบรรทัดในฟังก์ชันไม่ควรเกิน 15-20 บรรทัด
 
-3. จำเป็นไหมที่ต้องเรียกใช้ฟังก์ชัน `recover` ใน defer function?
-   ตอบ: ใช่ จำเป็นต้องเรียกใช้ `recover` ใน defer function ถ้าต้องการดักจับและจัดการ panic ที่อาจเกิดขึ้นใน parent function
+ด้วยหลักการเหล่านี้ จะช่วยให้เขียนฟังก์ชันที่อ่านง่าย เข้าใจได้ชัดเจน และง่ายต่อการบำรุงรักษาโค้ด
 */
 
-func main() {
+// ตัวอย่างฟังก์ชันที่ดี
+func calculateAverage(numbers []int) float64 {
+	// ตรวจสอบว่า Slice ว่างหรือไม่
+	if len(numbers) == 0 {
+		return 0
+	}
 
+	// คำนวณผลรวมของตัวเลขใน Slice
+	sum := 0
+	for _, num := range numbers {
+		sum += num
+	}
+
+	// คำนวณค่าเฉลี่ยโดยหารผลรวมด้วยจำนวนสมาชิกใน Slice
+	average := float64(sum) / float64(len(numbers))
+
+	return average
+}
+
+func main() {
+	numbers := []int{10, 20, 30, 40, 50}
+	avg := calculateAverage(numbers)
+	fmt.Printf("Average: %.2f\n", avg)
+
+	emptySlice := []int{}
+	emptyAvg := calculateAverage(emptySlice)
+	fmt.Printf("Average of empty slice: %.2f\n", emptyAvg)
 }
 
 /*
+เป็นฟังก์ชัน `calculateAverage` ที่ทำหน้าที่คำนวณค่าเฉลี่ยของตัวเลขใน Slice ของ int
 
- */
+1. ฟังก์ชันมีชื่อที่ชัดเจนและสื่อถึงการทำงาน คือคำนวณค่าเฉลี่ย
+2. มีพารามิเตอร์เพียงตัวเดียว คือ `numbers` ซึ่งเป็น Slice ของ int
+3. ฟังก์ชันทำงานเพียงอย่างเดียว คือคำนวณค่าเฉลี่ย ไม่ได้ทำงานอย่างอื่นเพิ่มเติม
+4. มีจำนวนบรรทัดโค้ดไม่มากเกินไป
+
+ดังนั้น ฟังก์ชันนี้ถือว่ามีคุณสมบัติของฟังก์ชันที่ดีครบถ้วน
+*/
