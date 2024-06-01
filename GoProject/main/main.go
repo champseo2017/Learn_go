@@ -3,29 +3,32 @@ package main
 import "fmt"
 
 /*
-เกี่ยวกับฟังก์ชันใน Go:
+Go เราสามารถ Assign ฟังก์ชันให้กับตัวแปรได้
 
-1. ฟังก์ชันใน Go เป็น First-class สามารถปฏิบัติได้เหมือนกับชนิดข้อมูลอื่นๆ
-2. ตัวแปรสามารถ Assign ด้วยฟังก์ชันได้ และฟังก์ชันสามารถส่งผ่านแบบ Dynamic ได้
-3. ฟังก์ชันสามารถส่งเป็น Argument และส่งค่ากลับเป็น Return value ได้
-4. ฟังก์ชันสามารถเก็บไว้ในตัวแปร รวมถึง Array หรือ Slice ได้
+Go เราสามารถ Assign ฟังก์ชันให้กับตัวแปรได้ นั่นหมายความว่าตัวแปรสามารถเก็บฟังก์ชันไว้เหมือนกับเก็บค่าชนิดข้อมูลอื่นๆ เช่น int, string เป็นต้น เมื่อตัวแปรถูก Assign ด้วยฟังก์ชัน เราสามารถเรียกใช้ฟังก์ชันผ่านตัวแปรนั้นได้
 */
 
-func PrintName(name string) {
-	fmt.Println("Person name is", name)
-}
-
-func GetPrintPersonDetails(printName func(string), name string, age int) {
-	// เรียกใช้ฟังก์ชันที่ส่งเข้ามาเป็น Argument โดยส่งชื่อเป็น Argument
-	printName(name)
-	fmt.Println("Person age is", age)
+func add(a, b int) int {
+	return a + b
 }
 
 func main() {
-	// ส่งฟังก์ชัน PrintName เป็น Argument ให้กับฟังก์ชัน GetPrintPersonDetails
-	GetPrintPersonDetails(PrintName, "Udit", 29)
+	// Assign ฟังก์ชัน add ให้กับตัวแปร sum
+	sum := add
+
+	// เรียกใช้ฟังก์ชัน add ผ่านตัวแปร sum
+	result := sum(5, 3)
+	fmt.Println("Result:", result)
 }
 
 /*
-ในตัวอย่าง ฟังก์ชัน `PrintName` ถูกส่งเป็น Argument ให้กับฟังก์ชัน `GetPrintPersonDetails` และถูกเรียกใช้งานภายในฟังก์ชันนั้น แสดงให้เห็นถึงความสามารถในการส่งฟังก์ชันเป็น Argument ในภาษา Go
+1. สร้างฟังก์ชัน `add` ที่รับ Argument สองตัวเป็น `a` และ `b` และ Return ผลรวมของ `a` และ `b`
+2. ในฟังก์ชัน `main` สร้างตัวแปร `sum` และ Assign ฟังก์ชัน `add` ให้กับตัวแปร `sum`
+3. เรียกใช้ฟังก์ชัน `add` ผ่านตัวแปร `sum` โดยส่ง Argument เป็น 5 และ 3 และเก็บผลลัพธ์ไว้ในตัวแปร `result`
+4. แสดงผลค่าของตัวแปร `result`
+
+
+เราสามารถ Assign ฟังก์ชัน `add` ให้กับตัวแปร `sum` ได้ และเรียกใช้ฟังก์ชัน `add` ผ่านตัวแปร `sum` โดยส่ง Argument เข้าไปเหมือนกับเรียกใช้ฟังก์ชันโดยตรง ซึ่งแสดงให้เห็นว่าตัวแปรสามารถเก็บฟังก์ชันไว้และเรียกใช้งานได้ในภายหลัง
+
+การที่ตัวแปรสามารถ Assign ด้วยฟังก์ชันได้ ทำให้เราสามารถส่งฟังก์ชันเป็น Argument ให้กับฟังก์ชันอื่น หรือเก็บฟังก์ชันไว้ในตัวแปร เพื่อเรียกใช้งานได้อย่างยืดหยุ่นและ Dynamic มากขึ้น
 */
