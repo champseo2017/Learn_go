@@ -3,24 +3,35 @@ package main
 import "fmt"
 
 /*
-เราสามารถส่งองค์ประกอบที่อยู่ใน slice เข้าไปในฟังก์ชันแบบ variadic ได้ โดยใช้เทคนิคที่เรียกว่า "Slice Destructuring"
+Go มีคำสั่ง `defer` ที่ใช้สำหรับเลื่อนการทำงานของโค้ดบางส่วนไปทำหลังจากที่ฟังก์ชันทำงานเสร็จ
 */
 
-func Variable_Arguments(s ...int) {
-	fmt.Println(s)                // พิมพ์ค่าของอาร์กิวเมนต์ที่รับเข้ามาทั้งหมด
-	fmt.Println(s[0], s[1], s[2]) // พิมพ์ค่าของอาร์กิวเมนต์ตัวที่ 1, 2, และ 3
-	fmt.Println(len(s))           // พิมพ์จำนวนอาร์กิวเมนต์ที่รับเข้ามา
+func Defer_demo() {
+	fmt.Println("this is 1 statement")
+	defer fmt.Println("this is 2 statement") // เลื่อนการทำงานไปทำหลังจากฟังก์ชันเสร็จสิ้น
+	defer fmt.Println("this is 3 statement") // เลื่อนการทำงานไปทำหลังจากฟังก์ชันเสร็จสิ้น
+	fmt.Println("this is 4 statement")
+	fmt.Println("this is 5 statement")
 }
 
 func main() {
-	d := []int{10, 20, 30, 40, 50, 60} // สร้าง slice ชื่อ d ที่เก็บค่า int
-	Variable_Arguments(d...)           // เรียกใช้ฟังก์ชัน Variable_Arguments โดยส่ง slice d เข้าไปแบบ destructuring
+	defer fmt.Println("Defer statement") // เลื่อนการทำงานไปทำหลังจากฟังก์ชัน main เสร็จสิ้น
+	Defer_demo()
 }
 
 /*
-1. เราประกาศฟังก์ชัน `Variable_Arguments` ที่รับอาร์กิวเมนต์แบบ variadic โดยใช้ `...int` เป็นพารามิเตอร์ (เหมือนตัวอย่างก่อนหน้า)
-2. ในฟังก์ชัน `main` เราสร้าง slice ชื่อ `d` ที่เก็บค่า int โดยมีค่าเป็น 10, 20, 30, 40, 50, และ 60
-3. เราเรียกใช้ฟังก์ชัน `Variable_Arguments` โดยส่ง slice `d` เข้าไป แต่เราใช้ `...` ต่อท้าย `d` เพื่อทำ slice destructuring
-   - การใช้ `d...` จะเป็นการแยกองค์ประกอบใน slice `d` ออกเป็นอาร์กิวเมนต์แยกกัน และส่งเข้าไปในฟังก์ชัน `Variable_Arguments`
-   - ดังนั้น `Variable_Arguments(d...)` จะเทียบเท่ากับ `Variable_Arguments(10, 20, 30, 40, 50, 60)`
+1. ในฟังก์ชัน `Defer_demo` มีการใช้คำสั่ง `defer` กับ statement ที่ 2 และ 3
+   - `defer fmt.Println("this is 2 statement")` จะเลื่อนการทำงานของ statement นี้ไปทำหลังจากที่ฟังก์ชัน `Defer_demo` ทำงานเสร็จแล้ว
+   - `defer fmt.Println("this is 3 statement")` ก็เช่นเดียวกัน จะเลื่อนการทำงานไปทำหลังจากฟังก์ชันเสร็จสิ้น
+2. ในฟังก์ชัน `main` มีการใช้คำสั่ง `defer` กับ statement `fmt.Println("Defer statement")`
+   - statement นี้จะถูกเลื่อนการทำงานไปทำหลังจากที่ฟังก์ชัน `main` ทำงานเสร็จแล้ว
+3. เมื่อรันโค้ด ลำดับการทำงานจะเป็นดังนี้
+   - ฟังก์ชัน `main` เริ่มทำงาน
+   - เจอคำสั่ง `defer` ใน `main` แต่ยังไม่ทำงานตอนนี้
+   - เรียกใช้ฟังก์ชัน `Defer_demo`
+   - ฟังก์ชัน `Defer_demo` ทำงาน โดยพิมพ์ "this is 1 statement", "this is 4 statement", "this is 5 statement" ตามลำดับ
+   - เจอคำสั่ง `defer` ใน `Defer_demo` แต่ยังไม่ทำงานตอนนี้
+   - ฟังก์ชัน `Defer_demo` ทำงานเสร็จ เริ่มทำงาน `defer` ใน `Defer_demo` โดยพิมพ์ "this is 3 statement" และ "this is 2 statement" ตามลำดับ (สังเกตว่าทำงานแบบ LIFO - Last In, First Out)
+   - กลับมาทำงานใน `main` ต่อ
+   - ฟังก์ชัน `main` ทำงานเสร็จ เริ่มทำงาน `defer` ใน `main` โดยพิมพ์ "Defer statement"
 */
