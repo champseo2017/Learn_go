@@ -1,30 +1,28 @@
 package main
 
-import "fmt"
+import (
+	oops "GoProject/package"
+	"fmt"
+)
 
 /*
-- สร้างชนิดข้อมูลใหม่ชื่อ `Int` จากชนิด `int`
-- สร้างฟังก์ชัน `Add_One` โดยใช้ `*Int` เป็น Receiver เพื่อเพิ่มค่าของตัวแปรชนิด `Int` ขึ้น 1 หน่วย
-- ในฟังก์ชัน `main`:
-    - ประกาศตัวแปร `a` ชนิด `oops.Int` และกำหนดค่าเริ่มต้นเป็น 10
-    - เรียกใช้ฟังก์ชัน `Add_One()` ผ่านตัวแปร `a` เพื่อเพิ่มค่าขึ้นอีก 1 หน่วย
-    - แสดงค่า `a` ออกทางหน้าจอ (ได้ผลลัพธ์เป็น 11)
+เกี่ยวกับ Receiver Function ในภาษา Go
+
+- มี 2 แบบ คือ Pointer Receiver และ Normal Receiver
+- Pointer Receiver จะแก้ไขค่าของตัวแปรต้นฉบับได้โดยตรง
+- Normal Receiver ทำงานกับสำเนาของตัวแปรต้นฉบับ ต้อง return ค่ากลับไปเพื่อให้เกิดการเปลี่ยนแปลง
+- เรียกใช้งาน Receiver Function ด้วย Dot Notation
 */
 
-type Int int // กำหนดชนิดข้อมูลใหม่ชื่อ Int จากชนิด int
-
-func (a *Int) Add_One() { // สร้างฟังก์ชัน Add_One โดยใช้ *Int เป็น Receiver
-	*a = *a + 1 // เพิ่มค่าของ a ขึ้น 1 ผ่านการใช้ Pointer
-}
-
 func main() {
-	var a Int = 10 // ประกาศตัวแปร a ชนิด oops.Int และกำหนดค่าเริ่มต้นเป็น 10
+	var a oops.Int = 10 // ประกาศตัวแปร a เป็นชนิด oops.Int และกำหนดค่าเริ่มต้น 10
 
-	a.Add_One() // เรียกใช้ฟังก์ชัน Add_One ผ่าน a
+	a.Add_One()    // เรียกใช้ Add_One เพื่อเพิ่มค่า a ขึ้น 1 เป็น 11
+	fmt.Println(a) // แสดงค่า a ซึ่งขณะนี้เท่ากับ 11
 
-	fmt.Println(a) // แสดงค่า a ออกทางหน้าจอ
+	fmt.Println(a.Double()) // เรียกใช้ Double เพื่อคูณ a ด้วย 2 และแสดงผลทันที โดยค่า a ยังคงเป็น 11 ไม่เปลี่ยนแปลง
 }
 
 /*
-การสร้าง Custom Type และ Receiver Function ช่วยจัดระเบียบโค้ดตามหลัก OOP ใน Go ได้ง่ายขึ้น
+สรุปคือ Pointer Receiver เหมาะกับการแก้ไขค่าตัวแปรโดยตรง ส่วน Normal Receiver ใช้เมื่อต้องการคืนค่าใหม่โดยไม่เปลี่ยนตัวแปรต้นฉบับ
 */
