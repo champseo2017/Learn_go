@@ -3,29 +3,28 @@ package main
 import "fmt"
 
 /*
-- Golang ไม่มีไวยากรณ์ Class แบบภาษา OOP ทั่วไป แต่ใช้ Struct และ Receiver Function แทน
-- Struct เปรียบเสมือน Class ใช้กำหนดโครงสร้างข้อมูล
-- Receiver Function คือการประกาศฟังก์ชันให้ทำงานกับ Struct เฉพาะ เหมือน Method ใน Class
+- สร้างชนิดข้อมูลใหม่ชื่อ `Int` จากชนิด `int`
+- สร้างฟังก์ชัน `Add_One` โดยใช้ `*Int` เป็น Receiver เพื่อเพิ่มค่าของตัวแปรชนิด `Int` ขึ้น 1 หน่วย
+- ในฟังก์ชัน `main`:
+    - ประกาศตัวแปร `a` ชนิด `oops.Int` และกำหนดค่าเริ่มต้นเป็น 10
+    - เรียกใช้ฟังก์ชัน `Add_One()` ผ่านตัวแปร `a` เพื่อเพิ่มค่าขึ้นอีก 1 หน่วย
+    - แสดงค่า `a` ออกทางหน้าจอ (ได้ผลลัพธ์เป็น 11)
 */
 
-type Person struct {
-	Name string
-	Age  int
-}
+type Int int // กำหนดชนิดข้อมูลใหม่ชื่อ Int จากชนิด int
 
-func (p Person) SayHello() {
-	fmt.Printf("สวัสดี ฉันชื่อ %s อายุ %d ปี\n", p.Name, p.Age)
+func (a *Int) Add_One() { // สร้างฟังก์ชัน Add_One โดยใช้ *Int เป็น Receiver
+	*a = *a + 1 // เพิ่มค่าของ a ขึ้น 1 ผ่านการใช้ Pointer
 }
 
 func main() {
-	p := Person{Name: "ก้อง", Age: 30}
-	p.SayHello()
+	var a Int = 10 // ประกาศตัวแปร a ชนิด oops.Int และกำหนดค่าเริ่มต้นเป็น 10
+
+	a.Add_One() // เรียกใช้ฟังก์ชัน Add_One ผ่าน a
+
+	fmt.Println(a) // แสดงค่า a ออกทางหน้าจอ
 }
 
 /*
-- ประกาศ Struct `Person` เก็บข้อมูล `Name` และ `Age`
-- สร้างฟังก์ชัน `SayHello` ใช้ `(p Person)` เป็น Receiver เพื่อเข้าถึงข้อมูลใน `Person`
-- สร้าง Object `p` จาก Struct `Person` และเรียกใช้ฟังก์ชัน `SayHello()`
-
-สรุป Golang จำลองแนวคิด OOP ผ่าน Struct และ Receiver Function
+การสร้าง Custom Type และ Receiver Function ช่วยจัดระเบียบโค้ดตามหลัก OOP ใน Go ได้ง่ายขึ้น
 */
