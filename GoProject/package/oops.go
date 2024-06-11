@@ -1,22 +1,21 @@
 package oops
 
-import "fmt"
-
-type Int int // ประกาศชนิดข้อมูล Int
-
-func (a *Int) Add_One() { // Pointer Receiver Function
-	*a = *a + 1 // เปลี่ยนแปลงค่าของ a โดยตรงผ่าน Pointer
+type Shape interface {
+	Area() float64
 }
 
-func (a Int) Double() Int { // Normal Receiver Function
-	return (a * 2) // คืนค่า a * 2 กลับไป
+type Square struct {
+	Side float64
 }
 
-type Player struct {
-	Name, Sports string
-	Age          int
+func (sq Square) Area() float64 {
+	return sq.Side * sq.Side
 }
 
-func (p *Player) Print_Details() {
-	fmt.Println(p.Name, p.Age, p.Sports)
+type Rectangle struct {
+	Width, Height float64
+}
+
+func (r Rectangle) Area() float64 {
+	return r.Width * r.Height
 }
