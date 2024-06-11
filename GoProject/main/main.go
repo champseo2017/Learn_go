@@ -2,27 +2,23 @@ package main
 
 import (
 	oops "GoProject/package"
-	"fmt"
 )
 
 /*
-เกี่ยวกับ Receiver Function ในภาษา Go
-
-- มี 2 แบบ คือ Pointer Receiver และ Normal Receiver
-- Pointer Receiver จะแก้ไขค่าของตัวแปรต้นฉบับได้โดยตรง
-- Normal Receiver ทำงานกับสำเนาของตัวแปรต้นฉบับ ต้อง return ค่ากลับไปเพื่อให้เกิดการเปลี่ยนแปลง
-- เรียกใช้งาน Receiver Function ด้วย Dot Notation
+Go สามารถจัดกลุ่มข้อมูลต่างๆ เข้าด้วยกันได้โดยใช้ struct ซึ่งเหมือนกับ class ในภาษาอื่นๆ ภายใน struct เราสามารถประกาศ properties และ methods ได้
 */
 
 func main() {
-	var a oops.Int = 10 // ประกาศตัวแปร a เป็นชนิด oops.Int และกำหนดค่าเริ่มต้น 10
-
-	a.Add_One()    // เรียกใช้ Add_One เพื่อเพิ่มค่า a ขึ้น 1 เป็น 11
-	fmt.Println(a) // แสดงค่า a ซึ่งขณะนี้เท่ากับ 11
-
-	fmt.Println(a.Double()) // เรียกใช้ Double เพื่อคูณ a ด้วย 2 และแสดงผลทันที โดยค่า a ยังคงเป็น 11 ไม่เปลี่ยนแปลง
+	p1 := oops.Player{
+		Name:   "Udit",
+		Age:    29,
+		Sports: "football",
+	}
+	p1.Print_Details()
 }
 
 /*
-สรุปคือ Pointer Receiver เหมาะกับการแก้ไขค่าตัวแปรโดยตรง ส่วน Normal Receiver ใช้เมื่อต้องการคืนค่าใหม่โดยไม่เปลี่ยนตัวแปรต้นฉบับ
+ตัวอย่างนี้ Player เป็น struct มี properties Name, Age, Sports และ method Print_Details() ที่แสดงข้อมูลเหล่านี้
+
+ด้วย struct และ receiver functions เราสามารถใช้หลักการ encapsulation และ abstraction ได้ในการพัฒนาแบบ OOP
 */
