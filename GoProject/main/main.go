@@ -6,36 +6,35 @@ import (
 )
 
 /*
-Channel ซึ่งเป็นวิธีการส่งข้อมูลระหว่างส่วนต่างๆ ของแอปพลิเคชัน ไม่ว่าจะเป็นระหว่าง Package หรือ Function
-*/
+สรุปสั้นๆ เกี่ยวกับการใช้งาน Channel ในภาษา Go
 
-func addNumberToChannel(numChannel chan int) {
-	// กำหนดให้ numChannel มีค่าเท่ากับ 100
-	numChannel <- 100
-}
+- สร้าง Channel ด้วย `make(chan data_type)`
+- ปิด Channel ด้วย `close(channel_name)` มักใช้คู่กับ `defer` เพื่อปิดเมื่อฟังก์ชันทำงานเสร็จ
+- ใส่ข้อมูลลงใน Channel ด้วย `channel_name <- data`
+- อ่านข้อมูลจาก Channel ด้วย `variable := <-channel_name`
+
+Channel ช่วยให้เราสื่อสารและส่งข้อมูลระหว่าง Goroutine (ฟังก์ชันที่ทำงานพร้อมกัน) ได้อย่างมีประสิทธิภาพ ทำให้การเขียนโปรแกรมแบบ Concurrent ในภาษา Go เป็นเรื่องง่ายและสะดวกยิ่งขึ้นครับ
+*/
 
 func main() {
 	// สร้าง Channel ชื่อ numChannel ที่เก็บข้อมูลประเภท int
 	numChannel := make(chan int)
 
-	// เรียกใช้ฟังก์ชัน addNumberToChannel และส่ง numChannel เข้าไป
-	go addNumberToChannel(numChannel)
+	go func(numChannel chan int) {
+		// ปิด Channel เมื่อฟังก์ชันทำงานเสร็จ
+		defer close(numChannel)
 
-	// อ่านค่าจาก numChannel มาเก็บไว้ในตัวแปร num
+		// ใส่ข้อมูล 100 ลงใน numChannel
+		numChannel <- 100
+	}(numChannel)
+
+	// อ่านข้อมูลจาก numChannel มาเก็บไว้ในตัวแปร num
 	num := <-numChannel
 
-	// แสดงข้อความ "the number is printed from channel" ตามด้วยค่าของ num
-	fmt.Println("the number is printed from channel", num)
+	// แสดงค่าของ num
+	fmt.Println(num)
 }
 
 /*
-ใน `func main()` เราสร้าง Channel ชื่อ `numChannel` ที่ใช้เก็บข้อมูลประเภท `int` ด้วยคำสั่ง `make(chan int)`
 
-จากนั้นเรียกใช้ฟังก์ชัน `addNumberToChannel` โดยส่ง `numChannel` เข้าไป และใช้คีย์เวิร์ด `go` เพื่อให้ฟังก์ชันทำงานแบบ Goroutine (ทำงานพร้อมกันโดยไม่ต้องรอให้ฟังก์ชันอื่นทำงานเสร็จก่อน)
-
-ภายในฟังก์ชัน `addNumberToChannel` เรากำหนดให้ `numChannel` มีค่าเท่ากับ 100 ด้วยคำสั่ง `numChannel <- 100`
-
-กลับมาที่ `func main()` อีกครั้ง หลังจากที่ `addNumberToChannel` ทำงานเสร็จ เราจะอ่านค่าจาก `numChannel` ด้วยคำสั่ง `num := <-numChannel` ซึ่งค่าที่อ่านได้จะถูกเก็บไว้ในตัวแปร `num`
-
-สุดท้ายเราแสดงข้อความ "the number is printed from channel" ตามด้วยค่าของ `num` ด้วย `fmt.Println()`
-*/
+ */
