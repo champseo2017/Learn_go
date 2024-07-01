@@ -6,40 +6,50 @@ import (
 )
 
 /*
-สรุปสั้นๆ เกี่ยวกับ Error Handling ในภาษา Go
+สรุปตัวอย่างการใช้งานฟังก์ชัน `deferExample()` และ `demoErrorHandling()` สั้นๆ ดังนี้
 
-- เมื่อเกิดข้อผิดพลาดขึ้นระหว่างการทำงานของโปรแกรม Go จะสร้าง Panic ขึ้นมา
-- เราสามารถใช้ `defer` และ `recover()` เพื่อดักจับและจัดการกับ Panic ได้
-- `defer` จะทำให้โค้ดภายในทำงานทันทีเมื่อฟังก์ชันเสร็จสิ้น ไม่ว่าจะเกิด Panic หรือไม่ก็ตาม
-- `recover()` จะคืนค่า `nil` ถ้าไม่เกิด Panic แต่ถ้าเกิด Panic จะคืนค่า Error ที่เกิดขึ้น
-- เราสามารถแสดงข้อความ Error ให้ผู้ใช้เห็นได้ เมื่อเกิด Panic ขึ้น
+1. ฟังก์ชัน `deferExample()`:
+   - แสดงลำดับการทำงานของคำสั่ง `defer`
+   - คำสั่งที่อยู่หลัง `defer` จะถูกเลื่อนไปทำหลังสุด
 
-ด้วยวิธีนี้ โปรแกรมจะไม่หยุดทำงานกะทันหันเมื่อเจอข้อผิดพลาด และเราสามารถจัดการกับ Error ได้อย่างเหมาะสมครับ
+2. ฟังก์ชัน `demoErrorHandling()`:
+   - แสดงการจัดการ Error ด้วย `defer` และ `recover()`
+   - เมื่อเกิด Panic (เช่น หารด้วย 0) `defer` จะทำงานทันทีและแสดงข้อความ Error
+
+3. ฟังก์ชัน `main()`:
+   - เรียกใช้ฟังก์ชัน `deferExample()` และ `demoErrorHandling()` เพื่อแสดงตัวอย่างการทำงาน
+
+สรุปคือ `defer` ใช้เพื่อเลื่อนการทำงานของคำสั่งและใช้จัดการ Error ร่วมกับ `recover()` ส่วน `recover()` ใช้ดักจับ Panic ที่เกิดขึ้นระหว่างการทำงานของโปรแกรม
+
+defer จะถูกจัดเก็บเป็น Stack และทำงานแบบ Last In First Out (LIFO) นั่นคือ defer ที่ถูกเรียกทีหลังสุดจะทำงานก่อน
 */
 
-func calculate() {
-	// ใช้ defer และ recover() เพื่อดักจับและจัดการกับ Panic
-	defer func() {
+func deferExample() {
+	fmt.Println("This is example 1")
+	defer fmt.Println("This is example 2") // ถูกเรียกเป็นลำดับที่ 2
+	fmt.Println("This is example 3")
+}
+
+func demoErrorHandling() {
+	fmt.Println("----Demo Error Handling----")
+	defer func() { // ถูกเรียกเป็นลำดับแรก
 		if err := recover(); err != nil {
-			fmt.Println("----demo error handling----")
-			fmt.Println(err)
+			fmt.Println("Error:", err)
 		}
 	}()
 
-	a := 10
-	b := 0
-	c := 0
-
-	// คำนวณ c = a / b ซึ่งจะเกิด Panic เพราะหารด้วย 0 ไม่ได้
-	c = a / b
-	fmt.Println(c)
+	// เกิด Panic เนื่องจากหารด้วย 0
+	valZero := 0
+	result := 10 / valZero
+	fmt.Println("Result:", result)
 }
 
 func main() {
-	fmt.Println("Error handling")
+	fmt.Println("==== defer Example ====")
+	deferExample()
 
-	// เรียกใช้ฟังก์ชัน calculate() ภายใน Goroutine
-	go calculate()
+	fmt.Println("\n==== Error Handling Example ====")
+	demoErrorHandling()
 }
 
 /*
